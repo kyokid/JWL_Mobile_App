@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/menu_personal"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/your_profile"
+            android:title="Your Profile" />
+    </group>
+    <group
+        android:id="@+id/menu_navigation"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/sign_out"
+            android:title="Sign out" />
+    </group>
+</menu>

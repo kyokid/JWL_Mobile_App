@@ -1,0 +1,57 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppTheme.TextColor" parent="AppTheme">
+        <item name="android:textColorPrimary">#212121</item>
+        <item name="android:textColorSecondary">#757575</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!--<item name="android:windowFullscreen">true</item>-->
+    </style>
+
+    <style name="AppTheme.NoActionBar.Translusent" parent="AppTheme.NoActionBar">
+        <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
+    </style>
+
+    <style name="CustomEditText">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlNormal">#00FA9A</item>
+        <item name="android:textColorHint">#00FA9A</item>
+    </style>
+
+    <style name="BlueButton">
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/medium_space</item>
+        <item name="android:textSize">@dimen/size_normal_x</item>
+        <item name="android:background">@drawable/blue_button</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:elevation" tools:targetApi="lollipop">4dp</item>
+    </style>
+    <style name="RedButton">
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/medium_space</item>
+        <item name="android:textSize">@dimen/size_normal_x</item>
+        <item name="android:background">@drawable/red_button</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:elevation" tools:targetApi="lollipop">4dp</item>
+    </style>
+
+    <style name="Toolbar">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#FFFFFF</item>
+    </style>
+
+
+</resources>
