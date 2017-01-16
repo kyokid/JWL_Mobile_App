@@ -19,7 +19,7 @@ public class PagerFragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if(position == 0){
-            return NFCPagerFragment.newInstance("NFC");
+            return NFCPagerFragment.newInstance();
         }
         return QRCodePagerFragment.newInstance(String.valueOf(position));
     }
