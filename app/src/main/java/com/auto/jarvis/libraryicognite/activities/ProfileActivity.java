@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.auto.jarvis.libraryicognite.R;
 
+import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
+
 public class ProfileActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +19,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public static Intent getIntentNewTask(Context context) {
         Intent intent = new Intent(context, ProfileActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | FLAG_ACTIVITY_PREVIOUS_IS_TOP);
         return intent;
     }
 }

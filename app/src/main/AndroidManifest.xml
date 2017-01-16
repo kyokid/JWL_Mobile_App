@@ -21,9 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BarCodeActivity"
+            android:name=".activities.BarCodeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".BorrowCartActivity"></activity>
     </application>
 
 </manifest>

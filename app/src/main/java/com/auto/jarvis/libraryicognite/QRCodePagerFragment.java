@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,16 +16,16 @@ import butterknife.Unbinder;
  * Created by Nguyen.D.Hoang on 1/11/2017.
  */
 
-public class PagerFragment extends Fragment {
+public class QRCodePagerFragment extends Fragment {
 
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
+    @BindView(R.id.ivQrCode)
+    ImageView ivQrCode;
     private Unbinder unbinder;
 
-    public static PagerFragment newInstance(String title) {
+    public static QRCodePagerFragment newInstance(String title) {
         Bundle args = new Bundle();
         args.putString("title", title);
-        PagerFragment fragment = new PagerFragment();
+        QRCodePagerFragment fragment = new QRCodePagerFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,18 +41,26 @@ public class PagerFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+
+        initView();
         return rootView;
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String title = getArguments().getString("title");
-        tvTitle.setText(title);
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+
+    private void initView() {
+
+
     }
 }

@@ -26,9 +26,9 @@
     </style>
 
     <style name="CustomEditText">
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="colorControlNormal">#00FA9A</item>
-        <item name="android:textColorHint">#00FA9A</item>
+        <item name="colorAccent">#fafafa</item>
+        <item name="colorControlNormal">#dcef0f</item>
+        <item name="android:textColorHint">#dcef0f</item>
     </style>
 
     <style name="BlueButton">
@@ -53,5 +53,9 @@
         <item name="android:textColorSecondary">#FFFFFF</item>
     </style>
 
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.auto.jarvis.libraryicognite;
+package com.auto.jarvis.libraryicognite.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.auto.jarvis.libraryicognite.BorrowCartActivity;
+import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
-import com.auto.jarvis.libraryicognite.models.input.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +50,7 @@ public class BarCodeActivity extends AppCompatActivity {
     private void initView() {
 
         Intent intent = getIntent();
-        User user = intent.getParcelableExtra(MainActivity.USER_TAG);
+//        User user = intent.getParcelableExtra(MainActivity.USER_TAG);
         tabTitle = getResources().getStringArray(R.array.tab_title);
         // Toolbar
         setSupportActionBar(toolbar);
@@ -67,7 +68,7 @@ public class BarCodeActivity extends AppCompatActivity {
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-        tvUsername.setText(user.getUsername());
+//        tvUsername.setText(user.getUsername());
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -89,6 +90,14 @@ public class BarCodeActivity extends AppCompatActivity {
     }
 
     private void selectDrawerItem(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.your_profile:
+                startActivity(ProfileActivity.getIntentNewTask(this));
+                break;
+            case R.id.borrow_list:
+                startActivity(BorrowCartActivity.getIntentNewTask(this));
+                break;
+        }
         drawerLayout.closeDrawers();
     }
 

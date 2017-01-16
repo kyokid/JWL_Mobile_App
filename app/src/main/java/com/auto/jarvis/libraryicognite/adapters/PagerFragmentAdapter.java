@@ -4,7 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.auto.jarvis.libraryicognite.PagerFragment;
+import com.auto.jarvis.libraryicognite.NFCPagerFragment;
+import com.auto.jarvis.libraryicognite.QRCodePagerFragment;
 
 /**
  * Created by Nguyen.D.Hoang on 1/11/2017.
@@ -17,7 +18,10 @@ public class PagerFragmentAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int position) {
-        return PagerFragment.newInstance(String.valueOf(position));
+        if(position == 0){
+            return NFCPagerFragment.newInstance("NFC");
+        }
+        return QRCodePagerFragment.newInstance(String.valueOf(position));
     }
 
     @Override
