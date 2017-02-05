@@ -12,16 +12,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.auto.jarvis.libraryicognite.BorrowCartActivity;
+import com.auto.jarvis.libraryicognite.MainActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
+import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
+import com.auto.jarvis.libraryicognite.models.input.User;
+import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
 
 public class BarCodeActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
@@ -37,19 +46,30 @@ public class BarCodeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
 
+    ApiInterface apiService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
 
-        initView();
+
+        if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
+            Intent intent = new Intent(BarCodeActivity.this, MainActivity.class);
+            startActivity(intent);
+        } else {
+
+            initView();
+        }
+
+//        Call<List<InitBorrow>> call = apiService.initBorrow()
 
     }
 
     private void initView() {
 
-        Intent intent = getIntent();
+//        Intent intent = getIntent();
 //        User user = intent.getParcelableExtra(MainActivity.USER_TAG);
         tabTitle = getResources().getStringArray(R.array.tab_title);
         // Toolbar
@@ -119,4 +139,6 @@ public class BarCodeActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
