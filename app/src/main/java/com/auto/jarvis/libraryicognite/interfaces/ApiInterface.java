@@ -20,7 +20,7 @@ public interface ApiInterface {
     @GET("getAll/")
     Call<List<User>> getAllUser();
 
-    @POST("login/")
+    @POST("users/login/")
     Call<RestService<User>> login(@Body User user);
 
     @POST("init/borrow")

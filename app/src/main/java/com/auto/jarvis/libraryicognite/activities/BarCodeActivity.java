@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -21,18 +20,30 @@ import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.MainActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
+import com.auto.jarvis.libraryicognite.estimote.BeaconID;
+import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
-import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
-import com.auto.jarvis.libraryicognite.models.input.User;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
+import com.estimote.sdk.SystemRequirementsChecker;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
 
 public class BarCodeActivity extends AppCompatActivity {
+
+    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
+    public static final String DEFAULT_IDENTIFIER = "rid";
+    private static final Region ALL_ESTIMOTE_BEACON_REGION  = new Region(DEFAULT_IDENTIFIER,
+            UUID.fromString(DEFAULT_UUID), null, null);
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.viewPager)
@@ -48,11 +59,16 @@ public class BarCodeActivity extends AppCompatActivity {
 
     ApiInterface apiService;
 
+    private BeaconManager beaconManager;
+    private List<Beacon> beacons = new ArrayList<>();
+    private CheckOutProcess checkout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
+        final String username = SaveSharedPreference.getUsername(BarCodeActivity.this);
 
 
         if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
@@ -62,10 +78,34 @@ public class BarCodeActivity extends AppCompatActivity {
 
             initView();
         }
+        checkout = new CheckOutProcess();
+        beaconManager = new BeaconManager(this);
+        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+            @Override
+            public void onBeaconsDiscovered(Region region, final List<Beacon> list) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<BeaconID> beaconIDs = new ArrayList<BeaconID>();
+                        for (Beacon beacon: list) {
+                            beaconIDs.add(BeaconID.fromEstimote(beacon));
+                        }
+                        checkout.startCheckout(beaconIDs, username);
+                    }
+                });
+            }
+        });
 
+
+
+//        String macAddress =
 //        Call<List<InitBorrow>> call = apiService.initBorrow()
 
     }
+
+
+
+
 
     private void initView() {
 
@@ -138,6 +178,33 @@ public class BarCodeActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (beaconManager == null) {
+            beaconManager.disconnect();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
+            startScanning();
+        }
+    }
+
+    private void startScanning() {
+        if ( beaconManager != null) {
+            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+                @Override
+                public void onServiceReady() {
+                    beaconManager.startRanging(ALL_ESTIMOTE_BEACON_REGION);
+                }
+            });
+        }
     }
 
 

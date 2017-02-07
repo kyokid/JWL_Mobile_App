@@ -9,18 +9,18 @@ import android.os.Parcelable;
 
 public class User implements Parcelable{
     int id;
-    String username;
+    String userId;
     String password;
     boolean gender;
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 
     protected User(Parcel in) {
         id = in.readInt();
-        username = in.readString();
+        userId = in.readString();
         password = in.readString();
         gender = in.readByte() != 0;
     }
@@ -46,11 +46,11 @@ public class User implements Parcelable{
     }
 
     public String getUsername() {
-        return username;
+        return userId;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userId = username;
     }
 
     public String getPassword() {
@@ -82,7 +82,7 @@ public class User implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeString(username);
+        parcel.writeString(userId);
         parcel.writeString(password);
         parcel.writeByte((byte) (gender ? 1 : 0));
     }
