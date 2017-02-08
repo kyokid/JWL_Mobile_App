@@ -1,6 +1,7 @@
 package com.auto.jarvis.libraryicognite.interfaces;
 
 import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
+import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.models.input.User;
 
@@ -25,6 +26,9 @@ public interface ApiInterface {
 
     @POST("init/borrow")
     Call<RestService<InitBorrow>> initBorrow(@Body InitBorrow initBorrow);
+
+    @POST("checkout/")
+    Call<RestService<List<InformationBookBorrowed>>> checkout(@Body InitBorrow checkout);
 
 
 

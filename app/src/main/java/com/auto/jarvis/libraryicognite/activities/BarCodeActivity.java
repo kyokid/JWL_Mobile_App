@@ -40,10 +40,10 @@ import butterknife.ButterKnife;
 
 public class BarCodeActivity extends AppCompatActivity {
 
-    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
-    public static final String DEFAULT_IDENTIFIER = "rid";
-    private static final Region ALL_ESTIMOTE_BEACON_REGION  = new Region(DEFAULT_IDENTIFIER,
-            UUID.fromString(DEFAULT_UUID), null, null);
+//    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
+//    public static final String DEFAULT_IDENTIFIER = "rid";
+//    private static final Region ALL_ESTIMOTE_BEACON_REGION  = new Region(DEFAULT_IDENTIFIER,
+//            UUID.fromString(DEFAULT_UUID), null, null);
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.viewPager)
@@ -59,9 +59,9 @@ public class BarCodeActivity extends AppCompatActivity {
 
     ApiInterface apiService;
 
-    private BeaconManager beaconManager;
+//    private BeaconManager beaconManager;
     private List<Beacon> beacons = new ArrayList<>();
-    private CheckOutProcess checkout;
+//    private CheckOutProcess checkout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,23 +78,23 @@ public class BarCodeActivity extends AppCompatActivity {
 
             initView();
         }
-        checkout = new CheckOutProcess();
-        beaconManager = new BeaconManager(this);
-        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-            @Override
-            public void onBeaconsDiscovered(Region region, final List<Beacon> list) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<BeaconID> beaconIDs = new ArrayList<BeaconID>();
-                        for (Beacon beacon: list) {
-                            beaconIDs.add(BeaconID.fromEstimote(beacon));
-                        }
-                        checkout.startCheckout(beaconIDs, username);
-                    }
-                });
-            }
-        });
+//        checkout = new CheckOutProcess();
+//        beaconManager = new BeaconManager(this);
+//        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+//            @Override
+//            public void onBeaconsDiscovered(Region region, final List<Beacon> list) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        List<BeaconID> beaconIDs = new ArrayList<BeaconID>();
+//                        for (Beacon beacon: list) {
+//                            beaconIDs.add(BeaconID.fromEstimote(beacon));
+//                        }
+//                        checkout.startCheckout(beaconIDs, username);
+//                    }
+//                });
+//            }
+//        });
 
 
 
@@ -180,32 +180,32 @@ public class BarCodeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (beaconManager == null) {
-            beaconManager.disconnect();
-        }
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (beaconManager == null) {
+//            beaconManager.disconnect();
+//        }
+//    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
-            startScanning();
-        }
-    }
-
-    private void startScanning() {
-        if ( beaconManager != null) {
-            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-                @Override
-                public void onServiceReady() {
-                    beaconManager.startRanging(ALL_ESTIMOTE_BEACON_REGION);
-                }
-            });
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
+//            startScanning();
+//        }
+//    }
+//
+//    private void startScanning() {
+//        if ( beaconManager != null) {
+//            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+//                @Override
+//                public void onServiceReady() {
+//                    beaconManager.startRanging(ALL_ESTIMOTE_BEACON_REGION);
+//                }
+//            });
+//        }
+//    }
 
 
 }

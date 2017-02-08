@@ -1,5 +1,6 @@
 package com.auto.jarvis.libraryicognite;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.auto.jarvis.libraryicognite.activities.InsideLibraryActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +37,7 @@ public class QRCodePagerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
@@ -51,6 +56,13 @@ public class QRCodePagerFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String title = getArguments().getString("title");
+        ivQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), InsideLibraryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override public void onDestroyView() {

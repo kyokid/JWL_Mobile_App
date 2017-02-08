@@ -9,17 +9,17 @@ import android.os.Parcelable;
 
 public class InitBorrow implements Parcelable{
     private String userId;
-    private String iBeaconMacAddress;
+    private String ibeaconId;
 
-    public InitBorrow(String userId, String iBeaconMacAddress) {
+    public InitBorrow(String userId, String ibeaconId) {
         this.userId = userId;
-        this.iBeaconMacAddress = iBeaconMacAddress;
+        this.ibeaconId = ibeaconId;
     }
 
 
     protected InitBorrow(Parcel in) {
         userId = in.readString();
-        iBeaconMacAddress = in.readString();
+        ibeaconId = in.readString();
     }
 
     public static final Creator<InitBorrow> CREATOR = new Creator<InitBorrow>() {
@@ -42,6 +42,6 @@ public class InitBorrow implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(userId);
-        parcel.writeString(iBeaconMacAddress);
+        parcel.writeString(ibeaconId);
     }
 }

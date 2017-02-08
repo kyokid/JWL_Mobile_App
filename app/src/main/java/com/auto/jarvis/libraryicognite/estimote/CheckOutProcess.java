@@ -26,34 +26,34 @@ public class CheckOutProcess extends Application{
     private BeaconID beaconID;
     ApiInterface apiService;
 
-    public void startCheckout(List<BeaconID> beaconIDs, String username) {
-        if (beaconIDs.size() > 0) {
-            beaconID = beaconIDs.get(0);
-            apiService = ApiClient.getClient().create(ApiInterface.class);
-            String macAddress = beaconID.getMacAddress();
-            String useId = username;
-            InitBorrow initBorrow = new InitBorrow(useId, macAddress);
-            double distance = beaconID.getDistance();
-            if (distance <= 1.0) {
-
-                Call<RestService<InitBorrow>> callCheckoutInit = apiService.initBorrow(initBorrow);
-                callCheckoutInit.enqueue(new Callback<RestService<InitBorrow>>() {
-                    @Override
-                    public void onResponse(Call<RestService<InitBorrow>> call, Response<RestService<InitBorrow>> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body().isSucceed()) {
-//                                Toast.makeText(getApplicationContext(), "Init Checkout", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<RestService<InitBorrow>> call, Throwable t) {
-
-                    }
-                });
-            }
-
-        }
-    }
+//    public void startCheckout(List<BeaconID> beaconIDs, String username) {
+//        if (beaconIDs.size() > 0) {
+//            beaconID = beaconIDs.get(0);
+//            apiService = ApiClient.getClient().create(ApiInterface.class);
+//            String macAddress = beaconID.getMacAddress();
+//            String useId = username;
+//            InitBorrow initBorrow = new InitBorrow(useId, macAddress);
+//            double distance = beaconID.getDistance();
+//            if (distance <= 1.0) {
+//
+//                Call<RestService<InitBorrow>> callCheckoutInit = apiService.initBorrow(initBorrow);
+//                callCheckoutInit.enqueue(new Callback<RestService<InitBorrow>>() {
+//                    @Override
+//                    public void onResponse(Call<RestService<InitBorrow>> call, Response<RestService<InitBorrow>> response) {
+//                        if (response.isSuccessful()) {
+//                            if (response.body().isSucceed()) {
+////                                Toast.makeText(getApplicationContext(), "Init Checkout", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<RestService<InitBorrow>> call, Throwable t) {
+//
+//                    }
+//                });
+//            }
+//
+//        }
+//    }
 }
