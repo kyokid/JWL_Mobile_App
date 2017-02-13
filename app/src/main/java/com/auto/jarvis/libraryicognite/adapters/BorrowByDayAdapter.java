@@ -58,7 +58,7 @@ public class BorrowByDayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         public void bind(BookByDay bookByDay) {
-            tvDate.setText(bookByDay.getDate());
+            tvDate.setText(bookByDay.getBorrowedDate());
 
             BorrowListAdapter adapter = new BorrowListAdapter(bookByDay.getBooks());
             rvBookByDay.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, false));

@@ -1,6 +1,7 @@
 package com.auto.jarvis.libraryicognite;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.auto.jarvis.libraryicognite.adapters.BorrowByDayAdapter;
 import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.BookByDay;
+import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,25 +48,34 @@ public class BorrowListFragment extends Fragment {
     private void initView() {
 //
         List<BookByDay> booksByDay = new ArrayList<>();
+        Intent intent = getActivity().getIntent();
+        if (intent == null) {
+            return;
+        } else {
+            ArrayList<InformationBookBorrowed> borroweds = intent.getParcelableArrayListExtra("BORROW_LIST");
+//
+            List<Book> book1 = new ArrayList<>();
+            for (InformationBookBorrowed bookBorrowed : borroweds) {
+                book1.add(Book.fromBorrowedList(bookBorrowed));
+            }
+//        book1.add(new Book("Android", "Mark", 0));
+//        book1.add(new Book("Android", "Mark", 0));
+//        book1.add(new Book("Android", "Mark", 0));
+//        book1.add(new Book("Android", "Mark", 0));
+//        book1.add(new Book("Android", "Mark", 0));
+//        book1.add(new Book("Android", "Mark", 0));
+//        book1.add(new Book("Android", "Mark", 0));
+            BookByDay bookbyDayItem1 = new BookByDay("02/14/2017", book1);
+//        BookByDay bookbyDayItem2 = new BookByDay("02/01/2017", book1);
+//
+            booksByDay.add(bookbyDayItem1);
+//        booksByDay.add(bookbyDayItem2);
 
-        List<Book> book1 = new ArrayList<>();
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        book1.add(new Book("Android", "Mark", 0));
-        BookByDay bookbyDayItem1 = new BookByDay("01/01/2017", book1);
-        BookByDay bookbyDayItem2 = new BookByDay("02/01/2017", book1);
+            BorrowByDayAdapter adapter = new BorrowByDayAdapter(booksByDay);
 
-        booksByDay.add(bookbyDayItem1);
-        booksByDay.add(bookbyDayItem2);
-
-        BorrowByDayAdapter adapter = new BorrowByDayAdapter(booksByDay);
-        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rvBooks.setAdapter(adapter);
+            rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+            rvBooks.setAdapter(adapter);
+        }
 
     }
 

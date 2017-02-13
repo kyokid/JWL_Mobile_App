@@ -46,19 +46,19 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return mBooks.size();
     }
 
-    public class BookViewHolder extends RecyclerView.ViewHolder {
+    class BookViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvAuthor)
         TextView tvAuthor;
 
 
-        public BookViewHolder(View itemView) {
+        BookViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Book book) {
+        void bind(Book book) {
             tvTitle.setText(book.getTitle());
             tvAuthor.setText(book.getAuthor());
         }

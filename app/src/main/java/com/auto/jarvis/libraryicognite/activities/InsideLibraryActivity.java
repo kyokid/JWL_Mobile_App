@@ -1,10 +1,13 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
@@ -24,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,12 +45,16 @@ public class InsideLibraryActivity extends AppCompatActivity {
     private BeaconID beaconID;
     ApiInterface apiService, apiCheckout;
     boolean isInit = false;
+    @BindView(R.id.tv_location)
+    TextView tvLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inside_library);
 
+        ButterKnife.bind(this);
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
             @Override
@@ -115,7 +125,8 @@ public class InsideLibraryActivity extends AppCompatActivity {
             public void onResponse(Call<RestService<InitBorrow>> call, Response<RestService<InitBorrow>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
-                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        tvLocation.setText("You are in Library");
+//                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         isInit = true;
                     }
                 }
@@ -137,7 +148,15 @@ public class InsideLibraryActivity extends AppCompatActivity {
             public void onResponse(Call<RestService<List<InformationBookBorrowed>>> call, Response<RestService<List<InformationBookBorrowed>>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
-                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent borrowIntent = new Intent(InsideLibraryActivity.this, BorrowCartActivity.class);
+                        ArrayList<InformationBookBorrowed> borroweds = (ArrayList<InformationBookBorrowed>) response.body().getData();
+                        if (borroweds.size() == 0) {
+                            tvLocation.setText("Thank for coming, see you again");
+                        } else {
+                            borrowIntent.putParcelableArrayListExtra("BORROW_LIST", borroweds);
+                            startActivity(borrowIntent);
+                        }
+//                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }

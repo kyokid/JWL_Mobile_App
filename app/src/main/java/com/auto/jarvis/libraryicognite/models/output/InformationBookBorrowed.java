@@ -20,6 +20,53 @@ public class InformationBookBorrowed implements Parcelable {
     private String deadlineDate;
     private int extendNumber;
     private int rootId;
+    private String bookCopyBookTitle;
+    private String bookCopyBookPublisher;
+
+    protected InformationBookBorrowed(Parcel in) {
+        id = in.readInt();
+        bookCopyRfid = in.readString();
+        accountUserId = in.readString();
+        borrowLimitDays = in.readInt();
+        extendTimes = in.readInt();
+        extendTimesLimit = in.readInt();
+        daysPerExtend = in.readInt();
+        borrowedDate = in.readString();
+        returnDate = in.readString();
+        deadlineDate = in.readString();
+        extendNumber = in.readInt();
+        rootId = in.readInt();
+        bookCopyBookTitle = in.readString();
+        bookCopyBookPublisher = in.readString();
+    }
+
+    public static final Creator<InformationBookBorrowed> CREATOR = new Creator<InformationBookBorrowed>() {
+        @Override
+        public InformationBookBorrowed createFromParcel(Parcel in) {
+            return new InformationBookBorrowed(in);
+        }
+
+        @Override
+        public InformationBookBorrowed[] newArray(int size) {
+            return new InformationBookBorrowed[size];
+        }
+    };
+
+    public String getBookCopyBookPublisher() {
+        return bookCopyBookPublisher;
+    }
+
+    public String getBookCopyBookTitle() {
+        return bookCopyBookTitle;
+    }
+
+    public void setBookCopyBookTitle(String bookCopyBookTitle) {
+        this.bookCopyBookTitle = bookCopyBookTitle;
+    }
+
+    public void setBookCopyBookPublisher(String bookCopyBookPublisher) {
+        this.bookCopyBookPublisher = bookCopyBookPublisher;
+    }
 
     public int getId() {
         return id;
@@ -117,32 +164,6 @@ public class InformationBookBorrowed implements Parcelable {
         this.rootId = rootId;
     }
 
-    protected InformationBookBorrowed(Parcel in) {
-        id = in.readInt();
-        bookCopyRfid = in.readString();
-        accountUserId = in.readString();
-        borrowLimitDays = in.readInt();
-        extendTimes = in.readInt();
-        extendTimesLimit = in.readInt();
-        daysPerExtend = in.readInt();
-        borrowedDate = in.readString();
-        returnDate = in.readString();
-        deadlineDate = in.readString();
-        extendNumber = in.readInt();
-        rootId = in.readInt();
-    }
-
-    public static final Creator<InformationBookBorrowed> CREATOR = new Creator<InformationBookBorrowed>() {
-        @Override
-        public InformationBookBorrowed createFromParcel(Parcel in) {
-            return new InformationBookBorrowed(in);
-        }
-
-        @Override
-        public InformationBookBorrowed[] newArray(int size) {
-            return new InformationBookBorrowed[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -163,5 +184,7 @@ public class InformationBookBorrowed implements Parcelable {
         parcel.writeString(deadlineDate);
         parcel.writeInt(extendNumber);
         parcel.writeInt(rootId);
+        parcel.writeString(bookCopyBookTitle);
+        parcel.writeString(bookCopyBookPublisher);
     }
 }

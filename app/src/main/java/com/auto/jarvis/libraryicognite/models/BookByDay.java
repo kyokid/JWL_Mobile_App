@@ -7,21 +7,21 @@ import java.util.List;
  */
 
 public class BookByDay {
-    private String date;
+    private String borrowedDate;
     private List<Book> books;
 
     public List<Book> getBooks() {
         return books;
     }
 
-    public String getDate() {
+    public String getBorrowedDate() {
 
-        return date;
+        return borrowedDate;
     }
 
-    public BookByDay(String date, List<Book> books) {
+    public BookByDay(String borrowedDate, List<Book> books) {
 
-        this.date = date;
+        this.borrowedDate = borrowedDate;
         this.books = books;
     }
 }
