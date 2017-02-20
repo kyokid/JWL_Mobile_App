@@ -74,6 +74,7 @@ public class BarCodeActivity extends AppCompatActivity {
         if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
             Intent intent = new Intent(BarCodeActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         } else {
 
             initView();

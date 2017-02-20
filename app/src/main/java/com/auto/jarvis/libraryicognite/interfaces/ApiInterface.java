@@ -30,6 +30,9 @@ public interface ApiInterface {
     @POST("checkout/")
     Call<RestService<List<InformationBookBorrowed>>> checkout(@Body InitBorrow checkout);
 
+    @POST("getBorrowedBooks/")
+    Call<RestService<List<InformationBookBorrowed>>> getBorrowedBook(@Body User userId);
+
 
 
 }
