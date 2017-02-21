@@ -69,7 +69,7 @@
                     android:inputType="text"
                     android:textColor="#fafafa"
                     android:textSize="24sp"
-
+                    android:text="SE61476"
                     tools:text="username" />
             </android.support.design.widget.TextInputLayout>
 
@@ -90,6 +90,7 @@
                     android:inputType="textPassword"
                     android:textColor="#fafafa"
                     android:textSize="24sp"
+                    android:text="123"
                     tools:text="username" />
             </android.support.design.widget.TextInputLayout>
 

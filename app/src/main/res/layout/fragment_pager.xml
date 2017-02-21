@@ -8,6 +8,6 @@
         android:id="@+id/ivQrCode"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:src="@drawable/qr"
+        tools:src="@drawable/qr"
         android:layout_centerInParent="true"/>
 </RelativeLayout>

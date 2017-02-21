@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
 //            @Override
 //            public void onClick(View view) {
 //                Intent intent = new Intent(MainActivity.this, BarCodeActivity.class);
-////                intent.putExtra(USER_TAG, user);
+//                intent.putExtra(USER_TAG, "SE61476");
 //                startActivity(intent);
 //            }
 //        });
@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
         } else {
             Log.d("JWL", "Error: " + response.errorBody());
         }
-
     }
 
     @Override

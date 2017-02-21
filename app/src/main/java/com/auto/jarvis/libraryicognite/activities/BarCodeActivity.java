@@ -23,6 +23,7 @@ import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
 import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.input.User;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -56,7 +57,7 @@ public class BarCodeActivity extends AppCompatActivity {
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
-
+    private String userId;
     ApiInterface apiService;
 
 //    private BeaconManager beaconManager;
@@ -68,16 +69,14 @@ public class BarCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
-        final String username = SaveSharedPreference.getUsername(BarCodeActivity.this);
-
-
+        String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
         if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
             Intent intent = new Intent(BarCodeActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         } else {
-
-            initView();
+//            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
+            initView(userId);
         }
 //        checkout = new CheckOutProcess();
 //        beaconManager = new BeaconManager(this);
@@ -104,21 +103,14 @@ public class BarCodeActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-    private void initView() {
-
-//        Intent intent = getIntent();
-//        User user = intent.getParcelableExtra(MainActivity.USER_TAG);
+    private void initView(String userId) {
         tabTitle = getResources().getStringArray(R.array.tab_title);
         // Toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager(), userId));
         tabLayout.setupWithViewPager(viewPager);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
 //            tabLayout.getTabAt(i).setIcon(icons[i]);
