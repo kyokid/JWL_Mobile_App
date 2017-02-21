@@ -121,7 +121,7 @@ public class BarCodeActivity extends AppCompatActivity {
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-//        tvUsername.setText(user.getUsername());
+        tvUsername.setText(userId);
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

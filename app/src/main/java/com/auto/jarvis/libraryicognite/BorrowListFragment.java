@@ -74,10 +74,11 @@ public class BorrowListFragment extends Fragment {
                         listBorrowed = response.body().getData();
                         List<Book> book1 = new ArrayList<>();
                         List<BookByDay> booksByDay = new ArrayList<>();
-                        for (InformationBookBorrowed bookBorrowed : listBorrowed) {
-                            book1.add(Book.fromBorrowedList(bookBorrowed));
+                        for (int i = 0; i < listBorrowed.size(); i++) {
+                            book1.add(Book.fromBorrowedList(i+1, listBorrowed.get(i)));
                         }
-                        BookByDay bookbyDayItem1 = new BookByDay("02/14/2017", book1);
+//
+                        BookByDay bookbyDayItem1 = new BookByDay("", book1);
                         booksByDay.add(bookbyDayItem1);
                         BorrowByDayAdapter adapter = new BorrowByDayAdapter(booksByDay);
 
@@ -99,25 +100,6 @@ public class BorrowListFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent == null) {
             return;
-        } else {
-            ArrayList<InformationBookBorrowed> borroweds = intent.getParcelableArrayListExtra("BORROW_LIST");
-            if (borroweds == null) {
-                return;
-
-            }
-
-
-            for (InformationBookBorrowed bookBorrowed : borroweds) {
-                book1.add(Book.fromBorrowedList(bookBorrowed));
-            }
-            BookByDay bookbyDayItem1 = new BookByDay("02/14/2017", book1);
-//
-            booksByDay.add(bookbyDayItem1);
-
-            BorrowByDayAdapter adapter = new BorrowByDayAdapter(booksByDay);
-
-            rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            rvBooks.setAdapter(adapter);
         }
 
     }

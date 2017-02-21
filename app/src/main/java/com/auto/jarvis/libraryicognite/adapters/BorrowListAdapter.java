@@ -49,8 +49,8 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     class BookViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTitle)
         TextView tvTitle;
-        @BindView(R.id.tvAuthor)
-        TextView tvAuthor;
+        @BindView(R.id.tvDeadline)
+        TextView tvDeadLine;
 
 
         BookViewHolder(View itemView) {
@@ -60,7 +60,7 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void bind(Book book) {
             tvTitle.setText(book.getTitle());
-            tvAuthor.setText(book.getAuthor());
+            tvDeadLine.setText(book.getDeadLine());
         }
     }
 }

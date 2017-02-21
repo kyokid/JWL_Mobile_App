@@ -10,6 +10,7 @@ public class Book {
     private String title;
     private String publisher;
     private String author;
+    private String deadLine;
     private int id;
 
     public Book() {
@@ -20,6 +21,10 @@ public class Book {
         this.title = title;
         this.author = author;
         this.id = id;
+    }
+
+    public String getDeadLine() {
+        return deadLine;
     }
 
     public String getPublisher() {
@@ -38,10 +43,11 @@ public class Book {
         return id;
     }
 
-    public static Book fromBorrowedList(InformationBookBorrowed bookBorrowed) {
+    public static Book fromBorrowedList(int autoIncre, InformationBookBorrowed bookBorrowed) {
         Book book = new Book();
-        book.title = bookBorrowed.getBookCopyBookTitle();
+        book.title = String.valueOf(autoIncre) + ". " + bookBorrowed.getBookCopyBookTitle();
         book.publisher = bookBorrowed.getBookCopyBookPublisher();
+        book.deadLine = bookBorrowed.getDeadlineDate();
         return book;
     }
 }
