@@ -19,8 +19,6 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET("getAll/")
-    Call<List<User>> getAllUser();
 
     @POST("users/login/")
     Call<RestService<User>> login(@Body User user);

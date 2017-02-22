@@ -23,29 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.BorrowCartActivity;
-import com.auto.jarvis.libraryicognite.MainActivity;
+import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
-import com.auto.jarvis.libraryicognite.estimote.BeaconID;
-import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
-import com.auto.jarvis.libraryicognite.models.input.User;
-import com.auto.jarvis.libraryicognite.service.IntanceNotificationIDService;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.estimote.sdk.Beacon;
-import com.estimote.sdk.BeaconManager;
-import com.estimote.sdk.Region;
-import com.estimote.sdk.SystemRequirementsChecker;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +72,7 @@ public class BarCodeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
         if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
-            Intent intent = new Intent(BarCodeActivity.this, MainActivity.class);
+            Intent intent = new Intent(BarCodeActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
@@ -103,8 +92,11 @@ public class BarCodeActivity extends AppCompatActivity {
                         NotificationUtils.sendNewIdToServer(intent.getStringExtra("token"));
                     } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                         String message = intent.getStringExtra("message");
-                        Toast.makeText(context, "Push notification: " + message, Toast.LENGTH_LONG).show();
                         Log.d("Push notification:", message);
+                        Toast.makeText(context, "Push notification: " + message, Toast.LENGTH_LONG).show();
+                        Intent intentLibrary = new Intent(BarCodeActivity.this, InsideLibraryActivity.class);
+                        startActivity(intentLibrary);
+
                     }
                 }
             };

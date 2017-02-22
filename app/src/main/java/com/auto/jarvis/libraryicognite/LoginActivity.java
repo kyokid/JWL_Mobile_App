@@ -3,22 +3,17 @@ package com.auto.jarvis.libraryicognite;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
-import com.auto.jarvis.libraryicognite.activities.GlobalVariable;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.User;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements Callback<List<User>>{
+public class LoginActivity extends AppCompatActivity{
 
     @BindView(R.id.btnLogin)
     Button btnLogin;
@@ -50,9 +45,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
         ButterKnife.bind(this);
             initView();
 
-        Call<List<User>> call = apiService.getAllUser();
 
-        call.enqueue(this);
 
 
     }
@@ -75,11 +68,11 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
                             if (response.body().isSucceed()) {
                                 User user = response.body().getData();
                                 SaveSharedPreference.setUsername(getApplicationContext(), user.getUsername());
-                                Intent intent = new Intent(MainActivity.this, BarCodeActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
                                 intent.putExtra(USER_TAG, user);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(MainActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -96,25 +89,12 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
 //        btnLogin.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, BarCodeActivity.class);
+//                Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
 //                intent.putExtra(USER_TAG, "SE61476");
 //                startActivity(intent);
 //            }
 //        });
     }
 
-    @Override
-    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-        if (response.isSuccessful()) {
-            List<User> result = response.body();
-            Log.d("JWL", "List User: " + result.size());
-        } else {
-            Log.d("JWL", "Error: " + response.errorBody());
-        }
-    }
 
-    @Override
-    public void onFailure(Call<List<User>> call, Throwable t) {
-        t.printStackTrace();
-    }
 }
