@@ -26,11 +26,13 @@ import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.MainActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
+import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
 import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.User;
+import com.auto.jarvis.libraryicognite.service.IntanceNotificationIDService;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -85,9 +87,12 @@ public class BarCodeActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(getBaseContext(), getResources().getString(R.string.google_api_key), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getBaseContext(), getResources().getString(R.string.google_api_key), Toast.LENGTH_SHORT).show();
             Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
+            NotificationUtils.sendNewIdToServer(FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
+//            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
+//            this.startService(service);
             mRegistrationBroadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -95,12 +100,11 @@ public class BarCodeActivity extends AppCompatActivity {
                     if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
                         Log.d("Registration token:" , intent.getStringExtra("token"));
                         Toast.makeText(context, "New token is generated!", Toast.LENGTH_SHORT).show();
+                        NotificationUtils.sendNewIdToServer(intent.getStringExtra("token"));
                     } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
-                        // new push notification is received
-
                         String message = intent.getStringExtra("message");
-
                         Toast.makeText(context, "Push notification: " + message, Toast.LENGTH_LONG).show();
+                        Log.d("Push notification:", message);
                     }
                 }
             };

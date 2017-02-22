@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by HaVH on 1/13/17.
@@ -32,6 +33,10 @@ public interface ApiInterface {
 
     @POST("getBorrowedBooks/")
     Call<RestService<List<InformationBookBorrowed>>> getBorrowedBook(@Body User userId);
+
+    @GET("users/updateToken")
+    Call<RestService<String>> updateGoogleToken(@Query("userId") String userId,
+                                                @Query("googleToken") String googleToken);
 
 
 
