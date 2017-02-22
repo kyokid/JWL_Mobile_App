@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "359530983319",
-    "firebase_url": "https://capstonelibrary.firebaseio.com",
-    "project_id": "capstonelibrary",
-    "storage_bucket": "capstonelibrary.appspot.com"
+    "project_number": "450244459787",
+    "firebase_url": "https://demofirebasenotification-21a31.firebaseio.com",
+    "project_id": "demofirebasenotification-21a31",
+    "storage_bucket": "demofirebasenotification-21a31.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:359530983319:android:3214c7b1eb31a245",
+        "mobilesdk_app_id": "1:450244459787:android:3214c7b1eb31a245",
         "android_client_info": {
           "package_name": "com.auto.jarvis.libraryicognite"
         }
       },
       "oauth_client": [
         {
-          "client_id": "359530983319-52mi02j9vso5d0pm5lcrv6d7hrs2j73u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.auto.jarvis.libraryicognite",
-            "certificate_hash": "4F39FE9DB7A108A004EF1563BCA37B1FF3FCC57D"
-          }
-        },
-        {
-          "client_id": "359530983319-ooe4n3h88c3t7kb92pujfiqsirj3fm6o.apps.googleusercontent.com",
+          "client_id": "450244459787-5vbggie2lou2gtsa8ealsetnjeu3p0i6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDhnEBTwhijpCKpRJMwwwf1F123ar3KwjI"
+          "current_key": "AIzaSyAk3jPg6cAyRL2DF8LsuNN6v9WXT9ZAOkI"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "359530983319-ooe4n3h88c3t7kb92pujfiqsirj3fm6o.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

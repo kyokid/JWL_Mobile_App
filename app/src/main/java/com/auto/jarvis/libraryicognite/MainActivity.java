@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Use
         ButterKnife.bind(this);
             initView();
 
-
         Call<List<User>> call = apiService.getAllUser();
 
         call.enqueue(this);

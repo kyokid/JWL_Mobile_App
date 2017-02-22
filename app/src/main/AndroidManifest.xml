@@ -46,6 +46,19 @@
                 android:resource="@xml/aid_list"/>
         </service>
         <!-- END_INCLUDE(CardEmulationManifest) -->
+        <!-- Firebase Notifications -->
+        <service android:name=".service.FirebaseNotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".service.IntanceNotificationIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- ./Firebase Notifications -->
     </application>
 
 </manifest>

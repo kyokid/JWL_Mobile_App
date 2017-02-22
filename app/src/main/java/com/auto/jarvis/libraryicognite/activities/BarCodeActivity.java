@@ -1,18 +1,22 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.MainActivity;
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
 import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
@@ -31,6 +36,8 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.SystemRequirementsChecker;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,8 +66,9 @@ public class BarCodeActivity extends AppCompatActivity {
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
-
-
+    private String userId;
+    ApiInterface apiService;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
 //    private BeaconManager beaconManager;
     private List<Beacon> beacons = new ArrayList<>();
@@ -71,14 +79,33 @@ public class BarCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
-
         String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
         if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
             Intent intent = new Intent(BarCodeActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         } else {
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.google_api_key), Toast.LENGTH_SHORT).show();
+            Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
+            mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    // checking for type intent filter
+                    if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+                        Log.d("Registration token:" , intent.getStringExtra("token"));
+                        Toast.makeText(context, "New token is generated!", Toast.LENGTH_SHORT).show();
+                    } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+                        // new push notification is received
+
+                        String message = intent.getStringExtra("message");
+
+                        Toast.makeText(context, "Push notification: " + message, Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+            IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
+            registerReceiver(mRegistrationBroadcastReceiver, filter);
             initView(userId);
         }
 //        checkout = new CheckOutProcess();
@@ -107,11 +134,12 @@ public class BarCodeActivity extends AppCompatActivity {
     }
 
     private void initView(String userId) {
+
         tabTitle = getResources().getStringArray(R.array.tab_title);
         // Toolbar
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager(), userId));
         tabLayout.setupWithViewPager(viewPager);
@@ -124,7 +152,7 @@ public class BarCodeActivity extends AppCompatActivity {
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-        tvUsername.setText(userId);
+//        tvUsername.setText(user.getUsername());
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -172,21 +200,11 @@ public class BarCodeActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.action_settings:
-                startActivity(ProfileActivity.getIntentNewTask(this));
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-
-    //    @Override
+//    @Override
 //    protected void onDestroy() {
 //        super.onDestroy();
 //        if (beaconManager == null) {
@@ -194,13 +212,17 @@ public class BarCodeActivity extends AppCompatActivity {
 //        }
 //    }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.PUSH_NOTIFICATION));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.REGISTRATION_COMPLETE));
 //        if (SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
 //            startScanning();
 //        }
-//    }
+    }
 //
 //    private void startScanning() {
 //        if ( beaconManager != null) {
