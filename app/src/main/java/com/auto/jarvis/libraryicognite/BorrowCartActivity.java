@@ -19,13 +19,6 @@ import butterknife.ButterKnife;
 public class BorrowCartActivity extends AppCompatActivity {
 
 
-    @BindView(R.id.ivBorrowList)
-    ImageView ivBorrowList;
-    @BindView(R.id.ivHistory)
-    ImageView ivHistory;
-    @BindView(R.id.ivOther)
-    ImageView ivOther;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,28 +39,6 @@ public class BorrowCartActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("BORROWED LIST");
 
         initContent();
-        initFooter();
-    }
-
-    private void initFooter() {
-        ivBorrowList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                replaceContent(new BorrowListFragment());
-            }
-        });
-        ivHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                replaceContent(new HistoryFragment());
-            }
-        });
-        ivOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                replaceContent(new HistoryFragment());
-            }
-        });
     }
 
     private void initContent() {

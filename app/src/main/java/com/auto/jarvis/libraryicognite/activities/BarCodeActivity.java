@@ -12,9 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.MainActivity;
@@ -57,8 +59,8 @@ public class BarCodeActivity extends AppCompatActivity {
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
-    private String userId;
-    ApiInterface apiService;
+
+
 
 //    private BeaconManager beaconManager;
     private List<Beacon> beacons = new ArrayList<>();
@@ -69,6 +71,7 @@ public class BarCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
+
         String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
         if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
             Intent intent = new Intent(BarCodeActivity.this, MainActivity.class);
@@ -107,8 +110,8 @@ public class BarCodeActivity extends AppCompatActivity {
         tabTitle = getResources().getStringArray(R.array.tab_title);
         // Toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
 
         viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager(), userId));
         tabLayout.setupWithViewPager(viewPager);
@@ -169,11 +172,21 @@ public class BarCodeActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
+            case R.id.action_settings:
+                startActivity(ProfileActivity.getIntentNewTask(this));
         }
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+
+    //    @Override
 //    protected void onDestroy() {
 //        super.onDestroy();
 //        if (beaconManager == null) {

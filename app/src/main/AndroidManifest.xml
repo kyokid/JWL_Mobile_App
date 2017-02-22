@@ -3,6 +3,7 @@
     package="com.auto.jarvis.libraryicognite">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".activities.GlobalVariable"
@@ -14,7 +15,9 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.Translusent"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+        </activity>
         <activity
             android:name=".activities.BarCodeActivity"
             android:theme="@style/AppTheme.NoActionBar">

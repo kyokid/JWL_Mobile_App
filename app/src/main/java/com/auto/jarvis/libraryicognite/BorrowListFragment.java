@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +76,9 @@ public class BorrowListFragment extends Fragment {
                         List<Book> book1 = new ArrayList<>();
                         List<BookByDay> booksByDay = new ArrayList<>();
                         for (int i = 0; i < listBorrowed.size(); i++) {
-                            book1.add(Book.fromBorrowedList(i+1, listBorrowed.get(i)));
+                            if (TextUtils.isEmpty(listBorrowed.get(i).getReturnDate())) {
+                                book1.add(Book.fromBorrowedList(i + 1, listBorrowed.get(i)));
+                            }
                         }
 //
                         BookByDay bookbyDayItem1 = new BookByDay("", book1);

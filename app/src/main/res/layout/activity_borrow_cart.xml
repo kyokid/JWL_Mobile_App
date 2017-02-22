@@ -17,40 +17,6 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/footer"
         android:layout_marginBottom="4dp"/>
-
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="8dp"
-        android:background="#fafafa"
-        android:elevation="16dp"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:weightSum="3">
-
-        <ImageView
-            android:id="@+id/ivBorrowList"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:src="@drawable/books" />
-
-        <ImageView
-            android:id="@+id/ivHistory"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:src="@drawable/books" />
-
-        <ImageView
-            android:id="@+id/ivOther"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:src="@drawable/books" />
-    </LinearLayout>
 </RelativeLayout>
+
