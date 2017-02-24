@@ -23,4 +23,9 @@ public class SaveSharedPreference {
     public static String getUsername(Context ct) {
         return getSharedPreference(ct).getString(USERNAME, "");
     }
+
+    public static void clearAll(Context ct) {
+        SharedPreferences.Editor editor = getSharedPreference(ct).edit().clear();
+        editor.apply();
+    }
 }

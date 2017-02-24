@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -71,11 +72,6 @@ public class BarCodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
         String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
-        if (SaveSharedPreference.getUsername(BarCodeActivity.this).length() == 0) {
-            Intent intent = new Intent(BarCodeActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
 //            Toast.makeText(getBaseContext(), getResources().getString(R.string.google_api_key), Toast.LENGTH_SHORT).show();
             Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
             NotificationUtils.sendNewIdToServer(FirebaseInstanceId.getInstance().getToken());
@@ -104,30 +100,7 @@ public class BarCodeActivity extends AppCompatActivity {
             registerReceiver(mRegistrationBroadcastReceiver, filter);
             initView(userId);
         }
-//        checkout = new CheckOutProcess();
-//        beaconManager = new BeaconManager(this);
-//        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-//            @Override
-//            public void onBeaconsDiscovered(Region region, final List<Beacon> list) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        List<BeaconID> beaconIDs = new ArrayList<BeaconID>();
-//                        for (Beacon beacon: list) {
-//                            beaconIDs.add(BeaconID.fromEstimote(beacon));
-//                        }
-//                        checkout.startCheckout(beaconIDs, username);
-//                    }
-//                });
-//            }
-//        });
 
-
-
-//        String macAddress =
-//        Call<List<InitBorrow>> call = apiService.initBorrow()
-
-    }
 
     private void initView(String userId) {
 
@@ -177,6 +150,10 @@ public class BarCodeActivity extends AppCompatActivity {
             case R.id.borrow_list:
                 startActivity(BorrowCartActivity.getIntentNewTask(this));
                 break;
+            case R.id.sign_out:
+                SaveSharedPreference.clearAll(this);
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
         }
         drawerLayout.closeDrawers();
     }

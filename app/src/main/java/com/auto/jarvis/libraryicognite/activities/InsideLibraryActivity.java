@@ -1,15 +1,25 @@
 package com.auto.jarvis.libraryicognite.activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.BorrowCartActivity;
+import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
+import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
 import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
@@ -48,6 +58,14 @@ public class InsideLibraryActivity extends AppCompatActivity {
     @BindView(R.id.tv_location)
     TextView tvLocation;
 
+    @BindView(R.id.drawer)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nvView)
+    NavigationView navigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +73,9 @@ public class InsideLibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inside_library);
 
         ButterKnife.bind(this);
+        initView();
+
+
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
             @Override
@@ -169,4 +190,53 @@ public class InsideLibraryActivity extends AppCompatActivity {
     }
 
 
+    private void initView() {
+
+        // Toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+
+        View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
+
+        TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
+//        tvUsername.setText(user.getUsername());
+
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectDrawerItem(item);
+                return true;
+            }
+        });
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+    }
+
+    private void selectDrawerItem(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.your_profile:
+                startActivity(ProfileActivity.getIntentNewTask(this));
+                break;
+            case R.id.borrow_list:
+                startActivity(BorrowCartActivity.getIntentNewTask(this));
+                break;
+            case R.id.sign_out:
+                SaveSharedPreference.clearAll(this);
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
+        }
+        drawerLayout.closeDrawers();
+    }
+
+
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
 }

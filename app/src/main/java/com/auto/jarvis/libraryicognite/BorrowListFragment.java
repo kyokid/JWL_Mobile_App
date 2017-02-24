@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.adapters.BorrowByDayAdapter;
+import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.BookByDay;
@@ -38,8 +40,13 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class BorrowListFragment extends Fragment {
+
+    private static final String TAG = "onTest";
     @BindView(R.id.rvBooks)
     RecyclerView rvBooks;
+
+
+
     public Unbinder unbinder;
 
     List<InformationBookBorrowed> listBorrowed;
@@ -77,13 +84,13 @@ public class BorrowListFragment extends Fragment {
                         List<BookByDay> booksByDay = new ArrayList<>();
                         for (int i = 0; i < listBorrowed.size(); i++) {
                             if (TextUtils.isEmpty(listBorrowed.get(i).getReturnDate())) {
-                                book1.add(Book.fromBorrowedList(i + 1, listBorrowed.get(i)));
+                                book1.add(Book.fromBorrowedList(listBorrowed.get(i)));
                             }
                         }
 //
-                        BookByDay bookbyDayItem1 = new BookByDay("", book1);
-                        booksByDay.add(bookbyDayItem1);
-                        BorrowByDayAdapter adapter = new BorrowByDayAdapter(booksByDay);
+//                        BookByDay bookbyDayItem1 = new BookByDay("", book1);
+//                        booksByDay.add(bookbyDayItem1);
+                        BorrowListAdapter adapter = new BorrowListAdapter(book1);
 
                         rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         rvBooks.setAdapter(adapter);
@@ -98,8 +105,6 @@ public class BorrowListFragment extends Fragment {
             }
         });
 
-        List<BookByDay> booksByDay = new ArrayList<>();
-        List<Book> book1 = new ArrayList<>();
         Intent intent = getActivity().getIntent();
         if (intent == null) {
             return;
@@ -112,6 +117,5 @@ public class BorrowListFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
 
 }

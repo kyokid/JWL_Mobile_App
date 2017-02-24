@@ -43,9 +43,9 @@ public class Book {
         return id;
     }
 
-    public static Book fromBorrowedList(int autoIncre, InformationBookBorrowed bookBorrowed) {
+    public static Book fromBorrowedList(InformationBookBorrowed bookBorrowed) {
         Book book = new Book();
-        book.title = String.valueOf(autoIncre) + ". " + bookBorrowed.getBookCopyBookTitle();
+        book.title = bookBorrowed.getBookCopyBookTitle();
         book.publisher = bookBorrowed.getBookCopyBookPublisher();
         book.deadLine = bookBorrowed.getDeadlineDate();
         return book;
