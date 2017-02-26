@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.activities.InsideLibraryActivity;
+import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -100,7 +101,7 @@ public class QRCodePagerFragment extends Fragment {
         ivQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), InsideLibraryActivity.class);
+                Intent intent = new Intent(getActivity(), LibraryActivity.class);
                 startActivity(intent);
             }
         });

@@ -84,12 +84,10 @@ public class BarCodeActivity extends AppCompatActivity {
                     // checking for type intent filter
                     if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
                         Log.d("Registration token:" , intent.getStringExtra("token"));
-                        Toast.makeText(context, "New token is generated!", Toast.LENGTH_SHORT).show();
                         NotificationUtils.sendNewIdToServer(intent.getStringExtra("token"));
                     } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                         String message = intent.getStringExtra("message");
                         Log.d("Push notification:", message);
-                        Toast.makeText(context, "Push notification: " + message, Toast.LENGTH_LONG).show();
                         Intent intentLibrary = new Intent(BarCodeActivity.this, InsideLibraryActivity.class);
                         startActivity(intentLibrary);
 

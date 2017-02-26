@@ -189,6 +189,10 @@ public class InsideLibraryActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     private void initView() {
 

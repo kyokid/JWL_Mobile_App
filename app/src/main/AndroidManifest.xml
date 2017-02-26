@@ -15,7 +15,9 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar.Translusent"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+        </activity>
         <activity
             android:name=".activities.BarCodeActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -23,6 +25,9 @@
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".BorrowCartActivity" />
         <activity android:name=".activities.InsideLibraryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".activities.LibraryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <!-- BEGIN_INCLUDE(CardEmulationManifest) -->
