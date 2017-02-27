@@ -12,10 +12,10 @@ import com.estimote.sdk.EstimoteSDK;
 
 public class GlobalVariable extends Application {
     private boolean beaconNotificationsEnabled = false;
-    public static String identifier="";
-    public static String major="";
-    public static String minor="";
-    public static String proximity="";
+    public static String identifier = "";
+    public static String major = "";
+    public static String minor = "";
+    public static String proximity = "";
     private String username;
 
     public String getUsername() {
@@ -33,7 +33,9 @@ public class GlobalVariable extends Application {
     }
 
     public void enableBeaconNotifications() {
-        if (beaconNotificationsEnabled) { return; }
+        if (beaconNotificationsEnabled) {
+            return;
+        }
 
         BeaconNotificationManager beaconNotificationsManager = new BeaconNotificationManager(this);
 

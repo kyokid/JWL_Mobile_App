@@ -75,6 +75,8 @@ public class InsideLibraryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
 
+        Intent intentBroadcast = new Intent(InsideLibraryActivity.this, BeaconBroadcast.class);
+        sendBroadcast(intentBroadcast);
 
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {

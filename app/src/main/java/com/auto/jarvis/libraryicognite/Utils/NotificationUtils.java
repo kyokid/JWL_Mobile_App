@@ -1,7 +1,13 @@
 package com.auto.jarvis.libraryicognite.Utils;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
@@ -18,6 +24,9 @@ import static com.estimote.sdk.EstimoteSDK.getApplicationContext;
  */
 
 public class NotificationUtils {
+
+
+
     public static void sendNewIdToServer(String googleToken){
         ApiInterface apiService;
         apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -36,5 +45,20 @@ public class NotificationUtils {
 
             }
         });
+    }
+
+    public static void showNotification(Context context, String message) {
+        int notificationID = 0;
+        Intent resultIntent = new Intent(context, LibraryActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle("The Library")
+                .setContentText(message)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(resultPendingIntent);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationID++, builder.build());
     }
 }

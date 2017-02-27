@@ -23,6 +23,8 @@ public class BorrowCartActivity extends AppCompatActivity {
     Fragment borrowListFragment = new BorrowListFragment();
     Fragment recentListFragment = new RecentBooksFragment();
 
+    int flag = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +65,22 @@ public class BorrowCartActivity extends AppCompatActivity {
     private void initView() {
         getSupportActionBar().setTitle("BORROWED LIST");
 
-        initContent();
+        Intent intent = getIntent();
+        flag = intent.getFlags();
+
+        initContent(flag);
     }
 
-    private void initContent() {
+    private void initContent(int flag) {
         replaceContent(borrowListFragment, false, "BorrowListFragment");
         replaceContent(recentListFragment, false, "BorrowListFragment");
-        hideFragment(recentListFragment);
-        showFragment(borrowListFragment);
+        if (flag == 1) {
+            showFragment(recentListFragment);
+            hideFragment(borrowListFragment);
+        } else {
+            hideFragment(recentListFragment);
+            showFragment(borrowListFragment);
+        }
     }
 
     private void replaceContent(Fragment fragment, boolean exist, String tag) {

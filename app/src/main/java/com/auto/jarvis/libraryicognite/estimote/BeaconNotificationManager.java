@@ -55,6 +55,7 @@ public class BeaconNotificationManager {
         this.context = context;
         beaconManager = new BeaconManager(context);
         final String username = SaveSharedPreference.getUsername(context);
+        beaconManager.setBackgroundScanPeriod(5, 5);
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
@@ -65,7 +66,9 @@ public class BeaconNotificationManager {
                 GlobalVariable.proximity = "" + region.getProximityUUID();
                 String message = enterMessages.get(region.getIdentifier());
                 if (message != null) {
-                    initCheckout(username, message);
+                    if (!isInit) {
+                        initCheckout(username, message);
+                    }
 
                 }
             }
@@ -90,7 +93,7 @@ public class BeaconNotificationManager {
         regionsToMonitor.add(region);
     }
 
-    private void showNotification(String message) {
+    public void showNotification(String message) {
         Intent resultIntent = new Intent(context, LibraryActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)

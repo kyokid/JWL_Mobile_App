@@ -1,11 +1,36 @@
 package com.auto.jarvis.libraryicognite;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
+import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.Book;
+import com.auto.jarvis.libraryicognite.models.BookByDay;
+import com.auto.jarvis.libraryicognite.models.input.User;
+import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
+import com.auto.jarvis.libraryicognite.models.output.RestService;
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
+import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -13,17 +38,56 @@ import android.view.ViewGroup;
  */
 public class RecentBooksFragment extends Fragment {
 
+    @BindView(R.id.rvBookRecent)
+    RecyclerView rvBooks;
+
+    public Unbinder unbinder;
+
+    List<InformationBookBorrowed> listRecent;
+
 
     public RecentBooksFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recent, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
+        initView();
+        return rootView;
     }
+
+
+    private void initView() {
+        Intent intentResult = getActivity().getIntent();
+        if (intentResult != null) {
+            listRecent = intentResult.getParcelableArrayListExtra("RECENT_LIST");
+        }
+
+
+        String username = SaveSharedPreference.getUsername(getActivity());
+        List<Book> book1 = new ArrayList<>();
+        if (listRecent != null &&listRecent.size() > 0) {
+            for (InformationBookBorrowed bookBorrowed : listRecent) {
+                book1.add(Book.fromBorrowedList(bookBorrowed));
+            }
+        }
+        BorrowListAdapter adapter = new BorrowListAdapter(book1);
+
+        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rvBooks.setAdapter(adapter);
+
+
+        Intent intent = getActivity().getIntent();
+        if (intent == null) {
+            return;
+        }
+
+    }
+
+
+
 
 }

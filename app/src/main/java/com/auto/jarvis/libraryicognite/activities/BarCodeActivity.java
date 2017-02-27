@@ -88,7 +88,8 @@ public class BarCodeActivity extends AppCompatActivity {
                     } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                         String message = intent.getStringExtra("message");
                         Log.d("Push notification:", message);
-                        Intent intentLibrary = new Intent(BarCodeActivity.this, InsideLibraryActivity.class);
+                        Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
+                        SaveSharedPreference.setStatusUser(getApplicationContext(), 1);
                         startActivity(intentLibrary);
 
                     }
@@ -97,6 +98,7 @@ public class BarCodeActivity extends AppCompatActivity {
             IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
             registerReceiver(mRegistrationBroadcastReceiver, filter);
             initView(userId);
+
         }
 
 

@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class SaveSharedPreference {
 
     static final String USERNAME = "username";
+    static final String STATUS = "status";
     static SharedPreferences getSharedPreference(Context ct) {
         return PreferenceManager.getDefaultSharedPreferences(ct);
     }
@@ -27,5 +28,15 @@ public class SaveSharedPreference {
     public static void clearAll(Context ct) {
         SharedPreferences.Editor editor = getSharedPreference(ct).edit().clear();
         editor.apply();
+    }
+
+    public static void setStatusUser(Context ct, int status) {
+        SharedPreferences.Editor editor = getSharedPreference(ct).edit();
+        editor.putInt(STATUS, status);
+        editor.apply();
+    }
+
+    public static int getStatusUser(Context ct) {
+        return getSharedPreference(ct).getInt(STATUS, 0);
     }
 }

@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity{
                             if (response.body().isSucceed()) {
                                 User user = response.body().getData();
                                 SaveSharedPreference.setUsername(getApplicationContext(), user.getUsername());
+                                SaveSharedPreference.setStatusUser(getApplicationContext(), 0);
                                 Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
                                 intent.putExtra(USER_TAG, user);
                                 startActivity(intent);
