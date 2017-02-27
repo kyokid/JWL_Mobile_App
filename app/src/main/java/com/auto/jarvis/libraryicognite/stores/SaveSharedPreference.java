@@ -30,6 +30,13 @@ public class SaveSharedPreference {
         editor.apply();
     }
 
+    /*
+    Status of user after doing something
+    default  = 0
+     1 = login
+     2 = check in
+     3 = init
+      */
     public static void setStatusUser(Context ct, int status) {
         SharedPreferences.Editor editor = getSharedPreference(ct).edit();
         editor.putInt(STATUS, status);

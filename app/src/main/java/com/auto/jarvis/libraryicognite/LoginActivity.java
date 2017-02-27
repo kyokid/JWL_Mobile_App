@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.User;
@@ -68,7 +69,7 @@ public class LoginActivity extends AppCompatActivity{
                             if (response.body().isSucceed()) {
                                 User user = response.body().getData();
                                 SaveSharedPreference.setUsername(getApplicationContext(), user.getUsername());
-                                SaveSharedPreference.setStatusUser(getApplicationContext(), 0);
+                                SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.LOGIN);
                                 Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
                                 intent.putExtra(USER_TAG, user);
                                 startActivity(intent);

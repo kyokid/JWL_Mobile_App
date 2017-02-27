@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.activities.InsideLibraryActivity;
 import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
+import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -28,6 +30,8 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.estimote.sdk.EstimoteSDK.getApplicationContext;
 
 /**
  * Created by Nguyen.D.Hoang on 1/11/2017.
@@ -102,6 +106,7 @@ public class QRCodePagerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), LibraryActivity.class);
+                intent.putExtra("IN_LIBRARY", true);
                 startActivity(intent);
             }
         });

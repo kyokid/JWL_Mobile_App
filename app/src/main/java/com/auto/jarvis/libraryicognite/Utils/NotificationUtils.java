@@ -7,11 +7,15 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,9 +51,12 @@ public class NotificationUtils {
         });
     }
 
-    public static void showNotification(Context context, String message) {
+    public static void showNotification(Context context, String message, ArrayList<InformationBookBorrowed> recentList) {
         int notificationID = 0;
-        Intent resultIntent = new Intent(context, LibraryActivity.class);
+        Intent resultIntent = new Intent(context, BorrowCartActivity.class);
+        //flag = 1: go to recent list
+        resultIntent.putExtra("RESULT", true);
+        resultIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)

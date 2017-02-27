@@ -4,6 +4,7 @@ package com.auto.jarvis.libraryicognite;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -45,12 +46,17 @@ public class BorrowListFragment extends Fragment {
     @BindView(R.id.rvBooks)
     RecyclerView rvBooks;
 
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeRefreshLayout;
+
 
 
     public Unbinder unbinder;
 
     List<InformationBookBorrowed> listBorrowed;
     ApiInterface apiService;
+
+    BorrowListAdapter adapter;
 
     public BorrowListFragment() {
         // Required empty public constructor
@@ -67,6 +73,34 @@ public class BorrowListFragment extends Fragment {
     }
 
     private void initView() {
+        //pull to refresh
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getBorrowedBook(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        getBorrowedBook(false);
+
+        Intent intent = getActivity().getIntent();
+        if (intent == null) {
+            return;
+        }
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    private void getBorrowedBook(final boolean isRefreshing) {
         apiService = ApiClient.getClient().create(ApiInterface.class);
         String username = SaveSharedPreference.getUsername(getActivity());
         User user = new User(username);
@@ -81,16 +115,16 @@ public class BorrowListFragment extends Fragment {
                     if (response.body().isSucceed()) {
                         listBorrowed = response.body().getData();
                         List<Book> book1 = new ArrayList<>();
-                        List<BookByDay> booksByDay = new ArrayList<>();
                         for (int i = 0; i < listBorrowed.size(); i++) {
                             if (TextUtils.isEmpty(listBorrowed.get(i).getReturnDate())) {
                                 book1.add(Book.fromBorrowedList(listBorrowed.get(i)));
                             }
                         }
-//
-//                        BookByDay bookbyDayItem1 = new BookByDay("", book1);
-//                        booksByDay.add(bookbyDayItem1);
-                        BorrowListAdapter adapter = new BorrowListAdapter(book1);
+                        if (!isRefreshing) {
+                            adapter = new BorrowListAdapter(book1);
+                        } else {
+                            onLoadItemsComplete(book1);
+                        }
 
                         rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         rvBooks.setAdapter(adapter);
@@ -104,18 +138,12 @@ public class BorrowListFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "FAIL API", Toast.LENGTH_SHORT).show();
             }
         });
-
-        Intent intent = getActivity().getIntent();
-        if (intent == null) {
-            return;
-        }
-
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    private void onLoadItemsComplete(List<Book> books) {
+        adapter.clear();
+        adapter.addAll(books);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
 }

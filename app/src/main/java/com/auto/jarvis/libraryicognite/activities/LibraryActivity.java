@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
@@ -61,9 +62,11 @@ public class LibraryActivity extends AppCompatActivity {
     ConfigurableDevicesScanner deviceScanner;
     DeviceConnectionProvider connectionProvider;
     ConfigurableDevice device;
-    private int status = SaveSharedPreference.getStatusUser(LibraryActivity.this);
+    private int status = Constant.CHECK_IN;
 
     private String username;
+    private boolean inLibrary = false;
+    Intent intentFlag;
 
 
     ApiInterface apiService;
@@ -74,31 +77,53 @@ public class LibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inside_library);
 
         ButterKnife.bind(this);
+        intentFlag = getIntent();
+        inLibrary = intentFlag.getExtras().getBoolean("IN_LIBRARY");
 
         initView();
+//        checkStatusBorrower(username);
 //        startSearching();
         startScan();
     }
 
-    private void startScan() {
-        deviceScanner.scanForDevices(new ConfigurableDevicesScanner.ScannerCallback() {
+    private void checkStatusBorrower(String username) {
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<RestService<Boolean>> result = apiService.inLibrary(username);
+        result.enqueue(new Callback<RestService<Boolean>>() {
             @Override
-            public void onDevicesFound(List<ConfigurableDevicesScanner.ScanResultItem> list) {
-                Log.d("BEACON", "Number of beacon: " + list.size());
-                for (ConfigurableDevicesScanner.ScanResultItem item : list) {
-                    String macAddress = item.device.macAddress.toStandardString();
-                    if (status == 1 && macAddress.equals("D8:CF:F3:6B:8E:01")) {
-                        Log.d("BEACON", "init check out");
-                        initCheckout(username);
-
-                    } else if (status == 2 && macAddress.equals("CC:82:03:75:2B:1A")){
-                        Log.d("BEACON", "Finish");
-                        finishCheckout(username);
-
-                    }
+            public void onResponse(Call<RestService<Boolean>> call, Response<RestService<Boolean>> response) {
+                if (response.isSuccessful()) {
+                    inLibrary = response.body().getData();
                 }
             }
+            @Override
+            public void onFailure(Call<RestService<Boolean>> call, Throwable t) {
+
+            }
         });
+    }
+
+    private void startScan() {
+        if (status == Constant.CHECK_IN && inLibrary) {
+            deviceScanner.scanForDevices(new ConfigurableDevicesScanner.ScannerCallback() {
+                @Override
+                public void onDevicesFound(List<ConfigurableDevicesScanner.ScanResultItem> list) {
+                    Log.d("BEACON", "Number of beacon: " + list.size());
+                    for (ConfigurableDevicesScanner.ScanResultItem item : list) {
+                        String macAddress = item.device.macAddress.toStandardString();
+                        if (status == Constant.CHECK_IN && inLibrary && macAddress.equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
+                            Log.d("BEACON", "init check out");
+                            initCheckout(username);
+
+                        } else if (status == Constant.INIT_CHECKOUT && macAddress.equals(Constant.IBEACON_CHECKOUT_COMPLETE_ADDRESS)) {
+                            Log.d("BEACON", "Finish");
+                            finishCheckout(username);
+
+                        }
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -164,17 +189,17 @@ public class LibraryActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
     }
 
-    private void startSearching() {
-        GlobalVariable app = (GlobalVariable) getApplication();
-        if (!SystemRequirementsChecker.checkWithDefaultDialogs(LibraryActivity.this)) {
-            Log.e(TAG, "Can't scan for beacons, some pre-conditions were not met");
-            Log.e(TAG, "Read more about what's required at: http://estimote.github.io/Android-SDK/JavaDocs/com/estimote/sdk/SystemRequirementsChecker.html");
-            Log.e(TAG, "If this is fixable, you should see a popup on the app's screen right now, asking to enable what's necessary");
-        } else if (!app.isBeaconNotificationsEnabled()) {
-            Log.d(TAG, "Enabling beacon notifications");
-            app.enableBeaconNotifications();
-        }
-    }
+//    private void startSearching() {
+//        GlobalVariable app = (GlobalVariable) getApplication();
+//        if (!SystemRequirementsChecker.checkWithDefaultDialogs(LibraryActivity.this)) {
+//            Log.e(TAG, "Can't scan for beacons, some pre-conditions were not met");
+//            Log.e(TAG, "Read more about what's required at: http://estimote.github.io/Android-SDK/JavaDocs/com/estimote/sdk/SystemRequirementsChecker.html");
+//            Log.e(TAG, "If this is fixable, you should see a popup on the app's screen right now, asking to enable what's necessary");
+//        } else if (!app.isBeaconNotificationsEnabled()) {
+//            Log.d(TAG, "Enabling beacon notifications");
+//            app.enableBeaconNotifications();
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
@@ -198,7 +223,7 @@ public class LibraryActivity extends AppCompatActivity {
                     if (response.body().isSucceed()) {
                         tvLocation.setText("You are in Library");
 //                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        SaveSharedPreference.setStatusUser(getApplicationContext(), 2);
+                        status = Constant.INIT_CHECKOUT;
                     }
                 }
             }
@@ -212,6 +237,7 @@ public class LibraryActivity extends AppCompatActivity {
 
 
     private void finishCheckout(String username) {
+        status = Constant.LOGIN;
         InitBorrow initBorrow = new InitBorrow(username, "1");
         apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<RestService<List<InformationBookBorrowed>>> callCheckoutInit = apiService.checkout(initBorrow);
@@ -221,15 +247,15 @@ public class LibraryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         Intent borrowIntent = new Intent(LibraryActivity.this, BorrowCartActivity.class);
-                        ArrayList<InformationBookBorrowed> borroweds = (ArrayList<InformationBookBorrowed>) response.body().getData();
-                        SaveSharedPreference.setStatusUser(getApplicationContext(), 0);
-                        if (borroweds.size() == 0) {
+                        ArrayList<InformationBookBorrowed> recentList = (ArrayList<InformationBookBorrowed>) response.body().getData();
+
+                        if (recentList.size() == 0) {
                             tvLocation.setText("Thank for coming, see you again");
                         } else {
-                            NotificationUtils.showNotification(getApplicationContext(), "Thank you, Here your books");
-                            borrowIntent.putParcelableArrayListExtra("RECENT_LIST", borroweds);
-                            borrowIntent.setFlags(1);
-                            startActivity(borrowIntent);
+                            NotificationUtils.showNotification(getApplicationContext(), "Thank you, Here your books", recentList);
+//                            borrowIntent.putParcelableArrayListExtra("RECENT_LIST", borroweds);
+//                            borrowIntent.setFlags(1);
+//                            startActivity(borrowIntent);
                         }
 //                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }

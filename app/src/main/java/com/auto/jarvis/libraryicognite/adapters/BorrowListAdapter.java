@@ -82,4 +82,14 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
     }
+
+    public void clear() {
+        mBooks.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Book> books) {
+        mBooks.addAll(books);
+        notifyDataSetChanged();
+    }
 }

@@ -19,4 +19,9 @@ public class Constant {
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
     public static final String SHARED_PREF = "ah_firebase";
+
+    public static final int LOGIN = 0;
+    public static final int CHECK_IN = 1;
+    public static final int INIT_CHECKOUT = 2;
+    public static final int FINISH_CHECKOUT = 3;
 }

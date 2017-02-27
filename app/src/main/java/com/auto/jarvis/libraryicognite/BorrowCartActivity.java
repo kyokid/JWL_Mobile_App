@@ -23,7 +23,7 @@ public class BorrowCartActivity extends AppCompatActivity {
     Fragment borrowListFragment = new BorrowListFragment();
     Fragment recentListFragment = new RecentBooksFragment();
 
-    int flag = 0;
+    boolean flag = false;
 
 
     @Override
@@ -65,16 +65,18 @@ public class BorrowCartActivity extends AppCompatActivity {
     private void initView() {
         getSupportActionBar().setTitle("BORROWED LIST");
 
-        Intent intent = getIntent();
-        flag = intent.getFlags();
+        Bundle intent = getIntent().getExtras();
+        if (intent != null) {
+            flag = intent.getBoolean("RESULT");
+        }
 
         initContent(flag);
     }
 
-    private void initContent(int flag) {
+    private void initContent(boolean flag) {
         replaceContent(borrowListFragment, false, "BorrowListFragment");
         replaceContent(recentListFragment, false, "BorrowListFragment");
-        if (flag == 1) {
+        if (flag) {
             showFragment(recentListFragment);
             hideFragment(borrowListFragment);
         } else {
