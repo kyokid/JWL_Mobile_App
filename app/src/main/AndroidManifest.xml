@@ -25,7 +25,8 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".BorrowCartActivity" />
+        <activity android:name=".BorrowCartActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.InsideLibraryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />

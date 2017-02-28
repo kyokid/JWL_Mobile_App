@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_borrow_cart"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/drawer"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true">
+
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fafafa"
-    tools:context="com.auto.jarvis.libraryicognite.BorrowCartActivity">
+    android:layout_height="match_parent">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <!--<android.support.v7.widget.RecyclerView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_below="@+id/tvHeader"-->
-    <!--android:layout_marginTop="8dp" />-->
+        <include layout="@layout/toolbar" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/appBar"
         android:layout_above="@+id/lnBottom"
         android:layout_marginBottom="4dp"/>
 
@@ -31,24 +40,37 @@
 
         >
 
-    <ImageView
-        android:id="@+id/ivBorrowedList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:src="@drawable/books"
-        />
+        <ImageView
+            android:id="@+id/ivBorrowedList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:src="@drawable/books"
+            />
 
-    <ImageView
-        android:id="@+id/ivRecentBooks"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:src="@drawable/books"
-        />
+        <ImageView
+            android:id="@+id/ivRecentBooks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:src="@drawable/books"
+            />
 
     </LinearLayout>
 
 
 </RelativeLayout>
+
+
+
+
+<android.support.design.widget.NavigationView
+    android:id="@+id/nvView"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+
+    app:menu="@menu/drawer_menu" />
+</android.support.v4.widget.DrawerLayout>
+
 

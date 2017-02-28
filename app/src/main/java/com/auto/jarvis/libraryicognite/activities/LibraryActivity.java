@@ -175,6 +175,9 @@ public class LibraryActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.barCodePage:
+                startActivity(BarCodeActivity.getIntentNewTask(this));
+                break;
             case R.id.your_profile:
                 startActivity(ProfileActivity.getIntentNewTask(this));
                 break;

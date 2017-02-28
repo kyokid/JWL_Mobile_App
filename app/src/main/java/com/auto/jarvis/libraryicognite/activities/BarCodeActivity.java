@@ -40,6 +40,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
+
 public class BarCodeActivity extends AppCompatActivity {
 
 //    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
@@ -135,6 +137,15 @@ public class BarCodeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
+    public static Intent getIntentNewTask(Context context) {
+        Intent intent = new Intent(context, BarCodeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+        return intent;
+    }
+
+
+
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -143,6 +154,9 @@ public class BarCodeActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.barCodePage:
+                startActivity(BarCodeActivity.getIntentNewTask(this));
+                break;
             case R.id.your_profile:
                 startActivity(ProfileActivity.getIntentNewTask(this));
                 break;
