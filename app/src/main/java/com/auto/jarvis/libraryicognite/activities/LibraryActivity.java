@@ -66,7 +66,7 @@ public class LibraryActivity extends AppCompatActivity {
 
     private String username;
     private boolean inLibrary = false;
-    Intent intentFlag;
+    Bundle intentFlag;
 
 
     ApiInterface apiService;
@@ -77,8 +77,10 @@ public class LibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inside_library);
 
         ButterKnife.bind(this);
-        intentFlag = getIntent();
-        inLibrary = intentFlag.getExtras().getBoolean("IN_LIBRARY");
+        intentFlag = getIntent().getExtras();
+        if (intentFlag != null) {
+            inLibrary = intentFlag.getBoolean("IN_LIBRARY");
+        }
 
         initView();
 //        checkStatusBorrower(username);

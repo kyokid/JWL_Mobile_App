@@ -91,6 +91,7 @@ public class BarCodeActivity extends AppCompatActivity {
                         String message = intent.getStringExtra("message");
                         Log.d("Push notification:", message);
                         Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
+                        intentLibrary.putExtra("IN_LIBRARY", true);
                         startActivity(intentLibrary);
 
                     }
