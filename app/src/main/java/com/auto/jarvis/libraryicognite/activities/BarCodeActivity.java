@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -20,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +37,17 @@ import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.estimote.sdk.Beacon;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,10 +63,13 @@ public class BarCodeActivity extends AppCompatActivity {
 //            UUID.fromString(DEFAULT_UUID), null, null);
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-    @BindView(R.id.tablayout)
-    TabLayout tabLayout;
+
+    @BindView(R.id.ivQrCode)
+    ImageView ivQrCode;
+//    @BindView(R.id.viewPager)
+//    ViewPager viewPager;
+//    @BindView(R.id.tablayout)
+//    TabLayout tabLayout;
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
     @BindView(R.id.nvView)
@@ -112,18 +128,18 @@ public class BarCodeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager(), userId));
-        tabLayout.setupWithViewPager(viewPager);
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-//            tabLayout.getTabAt(i).setIcon(icons[i]);
-            tabLayout.getTabAt(i).setText(tabTitle[i].toString());
-
-        }
+//        viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager(), userId));
+//        tabLayout.setupWithViewPager(viewPager);
+//        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+////            tabLayout.getTabAt(i).setIcon(icons[i]);
+//            tabLayout.getTabAt(i).setText(tabTitle[i].toString());
+//
+//        }
 
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-//        tvUsername.setText(user.getUsername());
+        tvUsername.setText(userId);
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -136,6 +152,47 @@ public class BarCodeActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        qrCodeProcess();
+
+
+
+    }
+
+    private void qrCodeProcess() {
+        QRCodeWriter writer = new QRCodeWriter();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            //TODO add userId string here
+            jsonObject.put("userId", userId);
+            jsonObject.put("createDate", new Date(Calendar.getInstance().getTimeInMillis()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            BitMatrix bitMatrix = writer.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 1000, 1000);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            ivQrCode.setImageBitmap(bmp);
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+
+        ivQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BarCodeActivity.this, LibraryActivity.class);
+                intent.putExtra("IN_LIBRARY", true);
+                startActivity(intent);
+            }
+        });
     }
 
     public static Intent getIntentNewTask(Context context) {
