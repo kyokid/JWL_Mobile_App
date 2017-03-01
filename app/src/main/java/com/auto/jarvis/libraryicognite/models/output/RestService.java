@@ -6,13 +6,13 @@ package com.auto.jarvis.libraryicognite.models.output;
 
 public class RestService<T> {
     private boolean succeed;
-    private String message;
+    private String textMessage;
     private String code;
     private T data;
 
-    public RestService(boolean succeed, String message, String code, T data) {
+    public RestService(boolean succeed, String textMessage, String code, T data) {
         this.succeed = succeed;
-        this.message = message;
+        this.textMessage = textMessage;
         this.code = code;
         this.data = data;
     }
@@ -25,12 +25,12 @@ public class RestService<T> {
         this.succeed = succeed;
     }
 
-    public String getMessage() {
-        return message;
+    public String getTextMessage() {
+        return textMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setTextMessage(String textMessage) {
+        this.textMessage = textMessage;
     }
 
     public String getCode() {

@@ -3,6 +3,7 @@ package com.auto.jarvis.libraryicognite.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
@@ -34,23 +35,27 @@ public class HomeActivity extends AppCompatActivity {
             result.enqueue(new Callback<RestService<Boolean>>() {
                 @Override
                 public void onResponse(Call<RestService<Boolean>> call, Response<RestService<Boolean>> response) {
-                    if (response.isSuccessful()) {
-                        inLibrary = response.body().getData();
+                    inLibrary = response.body().getData();
+                    if (inLibrary) {
+                        Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
+                        intentLibrary.putExtra("IN_LIBRARY", true);
+                        startActivity(intentLibrary);
                     }
                 }
+
+
                 @Override
                 public void onFailure(Call<RestService<Boolean>> call, Throwable t) {
 
                 }
             });
-            if (inLibrary) {
-                Intent intentLibrary = new Intent(this, LibraryActivity.class);
-                startActivity(intentLibrary);
-            } else {
+            Log.d("LIBRARY", " " + inLibrary);
+            if (!inLibrary) {
                 Intent barCodeIntent = new Intent(this, BarCodeActivity.class);
                 barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(barCodeIntent);
             }
+
         }
     }
 }

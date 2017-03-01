@@ -227,7 +227,7 @@ public class LibraryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         tvLocation.setText("You are in Library");
-//                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(InsideLibraryActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
                         status = Constant.INIT_CHECKOUT;
                     }
                 }
@@ -262,7 +262,7 @@ public class LibraryActivity extends AppCompatActivity {
 //                            borrowIntent.setFlags(1);
 //                            startActivity(borrowIntent);
                         }
-//                        Toast.makeText(InsideLibraryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(InsideLibraryActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }

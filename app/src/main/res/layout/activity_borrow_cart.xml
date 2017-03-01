@@ -35,8 +35,7 @@ android:fitsSystemWindows="true">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:elevation="8dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="6dp"
 
         >
 
@@ -45,7 +44,7 @@ android:fitsSystemWindows="true">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:src="@drawable/books"
+            android:src="@drawable/ic_history_black_24px"
             />
 
         <ImageView
@@ -53,7 +52,7 @@ android:fitsSystemWindows="true">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:src="@drawable/books"
+            android:src="@drawable/ic_get_app_black_24px"
             />
 
     </LinearLayout>

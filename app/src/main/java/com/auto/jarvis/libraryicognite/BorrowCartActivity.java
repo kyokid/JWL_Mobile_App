@@ -24,6 +24,8 @@ import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.fragment;
+
 public class BorrowCartActivity extends AppCompatActivity {
 
     @BindView(R.id.drawer)
@@ -180,6 +182,11 @@ public class BorrowCartActivity extends AppCompatActivity {
     }
 
     private void showFragment(Fragment fragment) {
+        if (fragment instanceof BorrowListFragment){
+            getSupportActionBar().setTitle("BORROWING BOOKS");
+        }else{
+            getSupportActionBar().setTitle("RECENT BORROWED BOOKS");
+        }
         getSupportFragmentManager().beginTransaction().show(fragment).commit();
     }
 
