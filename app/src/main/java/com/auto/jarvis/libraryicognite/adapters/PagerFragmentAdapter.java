@@ -11,7 +11,7 @@ import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 
 /**
- * Created by Nguyen.D.Hoang on 1/11/2017.
+ * Created by Havh on 1/11/2017.
  */
 
 public class PagerFragmentAdapter extends FragmentPagerAdapter {

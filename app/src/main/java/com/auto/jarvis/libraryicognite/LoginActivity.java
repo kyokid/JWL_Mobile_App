@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity{
                                 intent.putExtra(USER_TAG, user);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

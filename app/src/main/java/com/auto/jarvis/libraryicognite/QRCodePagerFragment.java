@@ -34,7 +34,7 @@ import butterknife.Unbinder;
 import static com.estimote.sdk.EstimoteSDK.getApplicationContext;
 
 /**
- * Created by Nguyen.D.Hoang on 1/11/2017.
+ * Created by Havh on 1/11/2017.
  */
 
 public class QRCodePagerFragment extends Fragment {

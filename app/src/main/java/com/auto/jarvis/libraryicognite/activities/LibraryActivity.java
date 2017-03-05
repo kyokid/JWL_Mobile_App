@@ -107,10 +107,13 @@ public class LibraryActivity extends AppCompatActivity {
 
     private void startScan() {
         if (status == Constant.CHECK_IN && inLibrary) {
+            deviceScanner.setScanPeriodMillis(5000);
             deviceScanner.scanForDevices(new ConfigurableDevicesScanner.ScannerCallback() {
                 @Override
                 public void onDevicesFound(List<ConfigurableDevicesScanner.ScanResultItem> list) {
                     Log.d("BEACON", "Number of beacon: " + list.size());
+                    Log.d("BEACON", "status: " + status);
+
                     for (ConfigurableDevicesScanner.ScanResultItem item : list) {
                         String macAddress = item.device.macAddress.toStandardString();
                         if (status == Constant.CHECK_IN && inLibrary && macAddress.equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
@@ -225,10 +228,13 @@ public class LibraryActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RestService<InitBorrow>> call, Response<RestService<InitBorrow>> response) {
                 if (response.isSuccessful()) {
+                    String message = response.body().getTextMessage();
                     if (response.body().isSucceed()) {
-                        tvLocation.setText("You are in Library");
-//                        Toast.makeText(InsideLibraryActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d("BEACON", "message = " + message);
+                        tvLocation.setText(message);
                         status = Constant.INIT_CHECKOUT;
+                    } else {
+                        tvLocation.setText(message);
                     }
                 }
             }
@@ -250,19 +256,23 @@ public class LibraryActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RestService<List<InformationBookBorrowed>>> call, Response<RestService<List<InformationBookBorrowed>>> response) {
                 if (response.isSuccessful()) {
+                    String message = response.body().getTextMessage();
                     if (response.body().isSucceed()) {
                         Intent borrowIntent = new Intent(LibraryActivity.this, BorrowCartActivity.class);
                         ArrayList<InformationBookBorrowed> recentList = (ArrayList<InformationBookBorrowed>) response.body().getData();
-
                         if (recentList.size() == 0) {
-                            tvLocation.setText("Thank for coming, see you again");
+                            Log.d("BEACON", "message = " + message);
+                            tvLocation.setText(message);
                         } else {
-                            NotificationUtils.showNotification(getApplicationContext(), "Thank you, Here your books", recentList);
+                            Log.d("BEACON", "message = " + message);
+                            NotificationUtils.showNotification(getApplicationContext(), message, recentList);
 //                            borrowIntent.putParcelableArrayListExtra("RECENT_LIST", borroweds);
 //                            borrowIntent.setFlags(1);
 //                            startActivity(borrowIntent);
                         }
 //                        Toast.makeText(InsideLibraryActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        tvLocation.setText(message);
                     }
                 }
             }

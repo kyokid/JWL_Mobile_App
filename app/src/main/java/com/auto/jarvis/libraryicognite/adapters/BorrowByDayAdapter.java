@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Nguyen.D.Hoang on 1/16/2017.
+ * Created by Havh on 1/16/2017.
  */
 
 public class BorrowByDayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

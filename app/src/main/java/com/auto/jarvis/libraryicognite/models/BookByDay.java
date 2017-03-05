@@ -3,7 +3,7 @@ package com.auto.jarvis.libraryicognite.models;
 import java.util.List;
 
 /**
- * Created by Nguyen.D.Hoang on 1/16/2017.
+ * Created by Havh on 1/16/2017.
  */
 
 public class BookByDay {

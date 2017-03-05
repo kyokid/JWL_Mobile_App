@@ -42,6 +42,9 @@ public class BorrowCartActivity extends AppCompatActivity {
     @BindView(R.id.ivRecentBooks)
     ImageView ivRecentBooks;
 
+    @BindView(R.id.tvNewBooks)
+    TextView tvNewBooks;
+
     Fragment borrowListFragment = new BorrowListFragment();
     Fragment recentListFragment = new RecentBooksFragment();
 
@@ -82,6 +85,13 @@ public class BorrowCartActivity extends AppCompatActivity {
                 hideFragment(borrowListFragment);
             }
         });
+        tvNewBooks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showFragment(recentListFragment);
+                hideFragment(borrowListFragment);
+            }
+        });
     }
 
     public static Intent getIntentNewTask(Context context) {
@@ -113,8 +123,6 @@ public class BorrowCartActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
-
 
 
         getSupportActionBar().setTitle("BORROWED LIST");
@@ -182,9 +190,9 @@ public class BorrowCartActivity extends AppCompatActivity {
     }
 
     private void showFragment(Fragment fragment) {
-        if (fragment instanceof BorrowListFragment){
+        if (fragment instanceof BorrowListFragment) {
             getSupportActionBar().setTitle("BORROWING BOOKS");
-        }else{
+        } else {
             getSupportActionBar().setTitle("RECENT BORROWED BOOKS");
         }
         getSupportFragmentManager().beginTransaction().show(fragment).commit();
