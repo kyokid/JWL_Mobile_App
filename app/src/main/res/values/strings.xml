@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LibraryIcognite</string>
+    <string name="app_name">JWL</string>
     <string name="service_name">LoginNFCService</string>
     <string name="card_title">LoginCard</string>
     <string-array name="tab_title">
