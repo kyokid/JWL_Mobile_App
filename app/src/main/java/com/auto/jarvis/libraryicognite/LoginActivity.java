@@ -1,6 +1,9 @@
 package com.auto.jarvis.libraryicognite;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.Utils.Constant;
+import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
 import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.User;
@@ -22,7 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
+
+    private BroadcastReceiver broadcastReceiver;
 
     @BindView(R.id.btnLogin)
     Button btnLogin;
@@ -44,11 +50,8 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-            initView();
-
-
-
-
+        initView();
+        checkInternetConnection();
     }
 
     private void initView() {
@@ -99,4 +102,24 @@ public class LoginActivity extends AppCompatActivity{
     }
 
 
+    private void checkInternetConnection() {
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (InternetConnectionReceiver.checkInternet(context)) {
+                    return;
+                } else {
+                    Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
 }

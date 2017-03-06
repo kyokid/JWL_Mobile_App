@@ -201,8 +201,11 @@ public class BarCodeActivity extends AppCompatActivity {
         return intent;
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mRegistrationBroadcastReceiver);
+    }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
