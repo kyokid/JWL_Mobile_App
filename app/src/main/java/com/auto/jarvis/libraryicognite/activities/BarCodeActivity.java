@@ -76,7 +76,7 @@ public class BarCodeActivity extends AppCompatActivity {
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
-    private String userId;
+//    private String userId;
     ApiInterface apiService;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
@@ -153,13 +153,13 @@ public class BarCodeActivity extends AppCompatActivity {
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        qrCodeProcess();
+        qrCodeProcess(userId);
 
 
 
     }
 
-    private void qrCodeProcess() {
+    private void qrCodeProcess(String userId) {
         QRCodeWriter writer = new QRCodeWriter();
         JSONObject jsonObject = new JSONObject();
         try {
