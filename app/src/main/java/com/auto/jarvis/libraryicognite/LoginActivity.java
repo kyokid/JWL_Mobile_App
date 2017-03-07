@@ -4,16 +4,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
+import com.auto.jarvis.libraryicognite.Utils.NetworkUtils;
 import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
+import com.auto.jarvis.libraryicognite.activities.GlobalVariable;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.User;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
@@ -26,9 +32,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+import static com.auto.jarvis.libraryicognite.Utils.NetworkUtils.getConnectivityStatusString;
 
-    private BroadcastReceiver broadcastReceiver;
+public class LoginActivity extends AppCompatActivity implements InternetConnectionReceiver.ConnectivityReceiverListener {
+
 
     @BindView(R.id.btnLogin)
     Button btnLogin;
@@ -41,9 +48,15 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.etPassword)
     EditText etPassword;
 
+    @BindView(R.id.rlLayout)
+    RelativeLayout relativeLayout;
+
     ApiInterface apiService;
+    Snackbar snackbar;
 
     public static final String USER_TAG = "USER_TAG";
+
+    private boolean internetConnected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
-        checkInternetConnection();
+        checkConnection();
+//        checkInternetConnection();
     }
 
     private void initView() {
@@ -102,24 +116,66 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void checkInternetConnection() {
-        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (InternetConnectionReceiver.checkInternet(context)) {
-                    return;
-                } else {
-                    Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
-        registerReceiver(broadcastReceiver, intentFilter);
-    }
+//    private void checkInternetConnection() {
+//        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+//        broadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                Snackbar snackbar = Snackbar.make(relativeLayout, R.string.no_internet, Snackbar.LENGTH_INDEFINITE);
+//                if (InternetConnectionReceiver.checkInternet(context)) {
+//                    snackbar.dismiss();
+//                } else {
+//                    snackbar.show();
+////                    Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        };
+//        registerReceiver(broadcastReceiver, intentFilter);
+//    }
+
+//    @Override
+//    protected void onDestroy() {
+//        if (broadcastReceiver != null) {
+//            unregisterReceiver(broadcastReceiver);
+//            broadcastReceiver = null;
+//        }
+//        super.onDestroy();
+//    }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
+    protected void onResume() {
+        super.onResume();
+        GlobalVariable.getInstance().setConnectivityListener(this);
+    }
+
+    private void checkConnection() {
+        boolean isConnected = NetworkUtils.checkConnection(getApplicationContext());
+        showSnack(isConnected);
+    }
+
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+
+        snackbar = Snackbar
+                .make(findViewById(R.id.fab), message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
     }
 }

@@ -2,6 +2,7 @@ package com.auto.jarvis.libraryicognite.activities;
 
 import android.app.Application;
 
+import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
 import com.auto.jarvis.libraryicognite.estimote.BeaconNotificationManager;
 import com.estimote.sdk.EstimoteSDK;
@@ -11,6 +12,9 @@ import com.estimote.sdk.EstimoteSDK;
  */
 
 public class GlobalVariable extends Application {
+
+    private static GlobalVariable instance;
+
     private boolean beaconNotificationsEnabled = false;
     public static String identifier = "";
     public static String major = "";
@@ -29,7 +33,12 @@ public class GlobalVariable extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         EstimoteSDK.initialize(getApplicationContext(), "ibeacondemo-el5", "5111290bf074a3ff553336435d3f91bb");
+    }
+
+    public static synchronized GlobalVariable getInstance() {
+        return instance;
     }
 
     public void enableBeaconNotifications() {
@@ -46,5 +55,9 @@ public class GlobalVariable extends Application {
 
     public boolean isBeaconNotificationsEnabled() {
         return beaconNotificationsEnabled;
+    }
+
+    public void setConnectivityListener(InternetConnectionReceiver.ConnectivityReceiverListener listener) {
+        InternetConnectionReceiver.connectivityReceiverListener = listener;
     }
 }

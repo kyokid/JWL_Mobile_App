@@ -19,6 +19,7 @@ import com.auto.jarvis.libraryicognite.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
+import com.auto.jarvis.libraryicognite.Utils.NetworkUtils;
 import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
@@ -83,9 +84,12 @@ public class LibraryActivity extends AppCompatActivity {
         }
 
         initView();
+
 //        checkStatusBorrower(username);
 //        startSearching();
-        startScan();
+        if (NetworkUtils.checkBluetoothConnection(LibraryActivity.this)) {
+            startScan();
+        }
     }
 
     private void checkStatusBorrower(String username) {
@@ -283,4 +287,7 @@ public class LibraryActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 }
