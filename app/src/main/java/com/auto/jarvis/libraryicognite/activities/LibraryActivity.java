@@ -102,6 +102,7 @@ public class LibraryActivity extends AppCompatActivity {
                     inLibrary = response.body().getData();
                 }
             }
+
             @Override
             public void onFailure(Call<RestService<Boolean>> call, Throwable t) {
 
@@ -166,7 +167,7 @@ public class LibraryActivity extends AppCompatActivity {
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-//        tvUsername.setText(user.getUsername());
+//        tvUsername.setText(username);
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -216,13 +217,14 @@ public class LibraryActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         connectionProvider.destroy();
+        deviceScanner.stopScanning();
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        deviceScanner.stopScanning();
+//        deviceScanner.stopScanning();
     }
 
     private void initCheckout(String username) {
@@ -231,8 +233,8 @@ public class LibraryActivity extends AppCompatActivity {
         callCheckoutInit.enqueue(new Callback<RestService<InitBorrow>>() {
             @Override
             public void onResponse(Call<RestService<InitBorrow>> call, Response<RestService<InitBorrow>> response) {
+                String message = response.body().getTextMessage();
                 if (response.isSuccessful()) {
-                    String message = response.body().getTextMessage();
                     if (response.body().isSucceed()) {
                         Log.d("BEACON", "message = " + message);
                         tvLocation.setText(message);
@@ -240,11 +242,14 @@ public class LibraryActivity extends AppCompatActivity {
                     } else {
                         tvLocation.setText(message);
                     }
+                } else {
+                    tvLocation.setText(message);
                 }
             }
 
             @Override
             public void onFailure(Call<RestService<InitBorrow>> call, Throwable t) {
+                call.cancel();
                 Toast.makeText(LibraryActivity.this, "API FAIL WHEN INIT", Toast.LENGTH_SHORT).show();
             }
         });
@@ -264,7 +269,7 @@ public class LibraryActivity extends AppCompatActivity {
                     if (response.body().isSucceed()) {
                         Intent borrowIntent = new Intent(LibraryActivity.this, BorrowCartActivity.class);
                         ArrayList<InformationBookBorrowed> recentList = (ArrayList<InformationBookBorrowed>) response.body().getData();
-                        if (recentList.size() == 0) {
+                        if (recentList == null || recentList.size() == 0) {
                             Log.d("BEACON", "message = " + message);
                             tvLocation.setText(message);
                         } else {
@@ -287,7 +292,6 @@ public class LibraryActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }
