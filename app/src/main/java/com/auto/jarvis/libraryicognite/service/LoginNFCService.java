@@ -7,6 +7,9 @@ import android.util.Log;
 import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
@@ -30,10 +33,18 @@ public class LoginNFCService extends HostApduService {
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
             //String account = "SE61476";
             String account = SaveSharedPreference.getUsername(getApplicationContext());
+            String privateKey = SaveSharedPreference.getPrivateKey(getApplicationContext());
+            JSONObject qrContent = new JSONObject();
+            try {
+                qrContent.put("userId", account);
+                qrContent.put("key", privateKey);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             System.out.println("da toi day");
-            byte[] accountBytes = account.getBytes();
-            Log.i(TAG, "Sending account number: " + account);
-            System.out.println("Sending account number: " + account);
+            byte[] accountBytes = qrContent.toString().getBytes();
+            Log.i(TAG, "Sending account number: " + qrContent.toString());
+            System.out.println("Sending account number: " + qrContent.toString());
             return ConcatArrays(accountBytes, SELECT_OK_SW);
         } else {
             return UNKNOWN_CMD_SW;

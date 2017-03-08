@@ -12,6 +12,9 @@ public class SaveSharedPreference {
 
     static final String USERNAME = "username";
     static final String STATUS = "status";
+    static final String KEY = "private_key";
+    static final String LAST_REQUEST_DATE = "last_request"; // lan request cuoi' cung.
+
     static SharedPreferences getSharedPreference(Context ct) {
         return PreferenceManager.getDefaultSharedPreferences(ct);
     }
@@ -45,5 +48,27 @@ public class SaveSharedPreference {
 
     public static int getStatusUser(Context ct) {
         return getSharedPreference(ct).getInt(STATUS, 0);
+    }
+
+    // return "" - chuoi~ rong neu chua luu truoc do.
+    public static String getPrivateKey(Context context){
+        return getSharedPreference(context).getString(KEY, "");
+    }
+
+    public static void setPrivateKey(Context context, String key){
+        SharedPreferences.Editor editor = getSharedPreference(context).edit();
+        editor.putString(KEY, key);
+        editor.apply();
+    }
+
+    public static void setLastRequestDate(Context context, String date){
+        SharedPreferences.Editor editor = getSharedPreference(context).edit();
+        editor.putString(LAST_REQUEST_DATE, date);
+        editor.apply();
+    }
+
+    // return "" - chuoi~ rong neu chua luu truoc do.
+    public static String getLastRequestDate(Context context){
+        return getSharedPreference(context).getString(LAST_REQUEST_DATE, "");
     }
 }

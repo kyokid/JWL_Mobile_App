@@ -77,39 +77,39 @@ public class QRCodePagerFragment extends Fragment {
         String title = getArguments().getString("title");
         String userId = getArguments().getString("userId");
 
-        QRCodeWriter writer = new QRCodeWriter();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            //TODO add userId string here
-            jsonObject.put("userId", userId);
-            jsonObject.put("createDate", new Date(Calendar.getInstance().getTimeInMillis()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            BitMatrix bitMatrix = writer.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 1000, 1000);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            ivQrCode.setImageBitmap(bmp);
-
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-
-        ivQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), LibraryActivity.class);
-                intent.putExtra("IN_LIBRARY", true);
-                startActivity(intent);
-            }
-        });
+//        QRCodeWriter writer = new QRCodeWriter();
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            //TODO add userId string here
+//            jsonObject.put("userId", userId);
+//            jsonObject.put("createDate", new Date(Calendar.getInstance().getTimeInMillis()));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            BitMatrix bitMatrix = writer.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 1000, 1000);
+//            int width = bitMatrix.getWidth();
+//            int height = bitMatrix.getHeight();
+//            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+//                }
+//            }
+//            ivQrCode.setImageBitmap(bmp);
+//
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ivQrCode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), LibraryActivity.class);
+//                intent.putExtra("IN_LIBRARY", true);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override public void onDestroyView() {

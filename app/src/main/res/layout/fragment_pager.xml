@@ -3,25 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/pbLoadingQRCode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/ivQrCode"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        tools:src="@drawable/qr"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="70dp" />
-    <TextView
-        android:id="@+id/tvNFC"
-        android:text="NFC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_above="@+id/ivQrCode"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="23dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/ivQrCode"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            tools:src="@drawable/qr"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="70dp" />
+        <TextView
+            android:id="@+id/tvNFC"
+            android:text="NFC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_above="@+id/ivQrCode"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="23dp" />
+    </RelativeLayout>
 </RelativeLayout>

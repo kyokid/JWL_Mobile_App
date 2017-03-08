@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.output.RestService;
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.estimote.sdk.Beacon;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -52,6 +56,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
 
@@ -63,7 +70,8 @@ public class BarCodeActivity extends AppCompatActivity {
 //            UUID.fromString(DEFAULT_UUID), null, null);
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
+    @BindView(R.id.pbLoadingQRCode)
+    RelativeLayout pbLoadingQRCode;
     @BindView(R.id.ivQrCode)
     ImageView ivQrCode;
 //    @BindView(R.id.viewPager)
@@ -154,37 +162,65 @@ public class BarCodeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         qrCodeProcess(userId);
-
-
-
     }
 
-    private void qrCodeProcess(String userId) {
-        QRCodeWriter writer = new QRCodeWriter();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            //TODO add userId string here
-            jsonObject.put("userId", userId);
-            jsonObject.put("createDate", new Date(Calendar.getInstance().getTimeInMillis()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            BitMatrix bitMatrix = writer.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 1000, 1000);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
+    private void qrCodeProcess(final String userId) {
+        String lastrequest = SaveSharedPreference.getLastRequestDate(this);
+        Date now = new Date(Calendar.getInstance().getTimeInMillis());
+        Bitmap bmp = null;
+        String privateKey = "";
+        if (lastrequest.equals(now.toString())){
+            privateKey = SaveSharedPreference.getPrivateKey(this);
+            try {
+                JSONObject qrContent = new JSONObject();
+                qrContent.put("userId", userId);
+                qrContent.put("key", privateKey);
+                bmp = fromStringToBitmap(qrContent.toString());
+                ivQrCode.setImageBitmap(bmp);
+                pbLoadingQRCode.setVisibility(View.GONE);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            ivQrCode.setImageBitmap(bmp);
-
-        } catch (WriterException e) {
-            e.printStackTrace();
+        }else{
+            apiService = ApiClient.getClient().create(ApiInterface.class);
+            Call<RestService<String>> result = apiService.requestPrivateKey(userId);
+            result.enqueue(new Callback<RestService<String>>() {
+                @Override
+                public void onResponse(Call<RestService<String>> call, Response<RestService<String>> response) {
+                    String result = response.body().getData();
+                    String privateKey = "";
+                    JSONObject resultJson;
+                    String date = "";
+                    Bitmap bmp;
+                    try {
+                        resultJson = new JSONObject(result);
+                        privateKey = resultJson.getString("key");
+                        date = resultJson.getString("date");
+                        JSONObject qrContent = new JSONObject();
+                        qrContent.put("userId", userId);
+                        qrContent.put("key", privateKey);
+                        bmp = fromStringToBitmap(qrContent.toString());
+                        SaveSharedPreference.setLastRequestDate(BarCodeActivity.this, date);
+                        SaveSharedPreference.setPrivateKey(BarCodeActivity.this, privateKey);
+                        ivQrCode.setImageBitmap(bmp);
+                        pbLoadingQRCode.setVisibility(View.GONE);
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onFailure(Call<RestService<String>> call, Throwable t) {
+                    Toast.makeText(getBaseContext(), "Fail to call requestPrivateKey", Toast.LENGTH_LONG).show();
+                    Log.d("BarCodeActivity", t.getMessage());
+                }
+            });
         }
 
+//        pbLoadingQRCode.setVisibility(View.GONE);
         ivQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,6 +229,20 @@ public class BarCodeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private Bitmap fromStringToBitmap(String content) throws WriterException {
+        QRCodeWriter writer = new QRCodeWriter();
+        BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 1000, 1000);
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        }
+        return bmp;
     }
 
     public static Intent getIntentNewTask(Context context) {
@@ -282,5 +332,13 @@ public class BarCodeActivity extends AppCompatActivity {
 //        }
 //    }
 
-
+//    QRCodeWriter writer = new QRCodeWriter();
+//    JSONObject jsonObject = new JSONObject();
+//        try {
+//        //TODO add userId string here
+//        jsonObject.put("userId", userId);
+//        jsonObject.put("createDate", new Date(Calendar.getInstance().getTimeInMillis()));
+//    } catch (JSONException e) {
+//        e.printStackTrace();
+//    }
 }

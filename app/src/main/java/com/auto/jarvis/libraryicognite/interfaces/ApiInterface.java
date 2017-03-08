@@ -46,6 +46,6 @@ public interface ApiInterface {
     @GET("users/{id}")
     Call<RestService<Data>> getProfile(@Path("id") String userId);
 
-
-
+    @GET("/users/{id}/requestKey")
+    Call<RestService<String>> requestPrivateKey(@Path("id") String userId);
 }
