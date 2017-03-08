@@ -70,6 +70,15 @@ public class BorrowCartActivity extends AppCompatActivity {
     }
 
     private void initFooter() {
+        if (!flag) {
+            ivRecentBooks.setEnabled(false);
+            tvNewBooks.setEnabled(false);
+        } else {
+            ivRecentBooks.setEnabled(true);
+            tvNewBooks.setEnabled(true);
+            tvNewBooks.setVisibility(View.VISIBLE);
+        }
+
         ivBorrowedList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +92,7 @@ public class BorrowCartActivity extends AppCompatActivity {
             public void onClick(View view) {
                 showFragment(recentListFragment);
                 hideFragment(borrowListFragment);
+                tvNewBooks.setVisibility(View.INVISIBLE);
             }
         });
         tvNewBooks.setOnClickListener(new View.OnClickListener() {

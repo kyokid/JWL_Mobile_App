@@ -227,6 +227,16 @@ public class LibraryActivity extends AppCompatActivity {
 //        deviceScanner.stopScanning();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+
+
+
     private void initCheckout(String username) {
         InitBorrow initBorrow = new InitBorrow(username, "1");
         Call<RestService<InitBorrow>> callCheckoutInit = apiService.initBorrow(initBorrow);
@@ -257,6 +267,7 @@ public class LibraryActivity extends AppCompatActivity {
 
 
     private void finishCheckout(String username) {
+        deviceScanner.stopScanning();
         status = Constant.LOGIN;
         InitBorrow initBorrow = new InitBorrow(username, "1");
         apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -275,9 +286,12 @@ public class LibraryActivity extends AppCompatActivity {
                         } else {
                             Log.d("BEACON", "message = " + message);
                             NotificationUtils.showNotification(getApplicationContext(), message, recentList);
-//                            borrowIntent.putParcelableArrayListExtra("RECENT_LIST", borroweds);
+                            borrowIntent.putExtra("RESULT", true);
+                            borrowIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
 //                            borrowIntent.setFlags(1);
-//                            startActivity(borrowIntent);
+                            if (!GlobalVariable.isBackgroundMode()) {
+                                startActivity(borrowIntent);
+                            }
                         }
 //                        Toast.makeText(InsideLibraryActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
                     } else {

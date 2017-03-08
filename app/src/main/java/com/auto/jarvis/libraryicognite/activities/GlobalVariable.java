@@ -1,6 +1,9 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
@@ -11,7 +14,7 @@ import com.estimote.sdk.EstimoteSDK;
  * Created by HaVH on 2/4/17.
  */
 
-public class GlobalVariable extends Application {
+public class GlobalVariable extends Application implements Application.ActivityLifecycleCallbacks {
 
     private static GlobalVariable instance;
 
@@ -22,6 +25,14 @@ public class GlobalVariable extends Application {
     public static String proximity = "";
     private String username;
 
+    private int resume;
+    private int pause;
+    private int start;
+    private int stop;
+
+    String mode = "";
+
+
     public String getUsername() {
         return username;
     }
@@ -30,12 +41,20 @@ public class GlobalVariable extends Application {
         this.username = username;
     }
 
+
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        registerActivityLifecycleCallbacks(this);
         EstimoteSDK.initialize(getApplicationContext(), "ibeacondemo-el5", "5111290bf074a3ff553336435d3f91bb");
     }
+
+
+
 
     public static synchronized GlobalVariable getInstance() {
         return instance;
@@ -59,5 +78,61 @@ public class GlobalVariable extends Application {
 
     public void setConnectivityListener(InternetConnectionReceiver.ConnectivityReceiverListener listener) {
         InternetConnectionReceiver.connectivityReceiverListener = listener;
+    }
+
+    public static boolean backgroundMode;
+
+    public static boolean isBackgroundMode() {
+        return backgroundMode;
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle bundle) {
+        Log.i("BACKGROUND", "create");
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+        Log.i("BACKGROUND", "started");
+        ++start;
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+        Log.i("BACKGROUND", "resumed");
+        ++resume;
+        checkStatusActivity();
+        Log.i("BACKGROUND", "BACKGROUND MODE IS " + backgroundMode);
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+        Log.i("BACKGROUND", "pause");
+        ++pause;
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        Log.i("BACKGROUND", "stopped");
+        ++stop;
+        checkStatusActivity();
+        Log.i("BACKGROUND", "BACKGROUND MODE IS " + backgroundMode);
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+    }
+
+    private void checkStatusActivity() {
+        if (start == stop) {
+            backgroundMode = true;
+        } else if (start > stop) {
+            backgroundMode = false;
+        }
     }
 }

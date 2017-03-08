@@ -47,6 +47,7 @@ android:fitsSystemWindows="true">
             android:src="@drawable/ic_history_black_24px"
             />
 
+
         <ImageView
             android:id="@+id/ivRecentBooks"
             android:layout_width="0dp"
@@ -65,6 +66,7 @@ android:fitsSystemWindows="true">
             android:layout_gravity="center_vertical"
             android:text="New!"
             android:textColor="@android:color/holo_red_dark"
+            android:visibility="invisible"
             />
 
     </LinearLayout>
