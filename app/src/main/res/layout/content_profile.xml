@@ -222,7 +222,7 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/item_divider" />
+        <!--<include layout="@layout/item_divider" />-->
 
 
 
