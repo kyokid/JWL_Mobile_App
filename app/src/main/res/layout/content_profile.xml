@@ -116,80 +116,80 @@
         </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:padding="@dimen/activity_horizontal_margin">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="?attr/selectableItemBackground"-->
+            <!--android:clickable="true"-->
+            <!--android:padding="@dimen/activity_horizontal_margin">-->
 
-        <ImageView
-            android:id="@+id/ivContactItem6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_email_black"
-            android:visibility="invisible" />
+        <!--<ImageView-->
+            <!--android:id="@+id/ivContactItem6"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+            <!--android:src="@drawable/ic_email_black"-->
+            <!--android:visibility="invisible" />-->
 
-        <TextView
-            android:id="@+id/tvPlaceOfWork"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_toEndOf="@id/ivContactItem6"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="221B Baker Street, England"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#212121" />
+        <!--<TextView-->
+            <!--android:id="@+id/tvPlaceOfWork"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_toEndOf="@id/ivContactItem6"-->
+            <!--android:ellipsize="end"-->
+            <!--android:maxLines="1"-->
+            <!--android:text="221B Baker Street, England"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+            <!--android:textColor="#212121" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvPlaceOfWork"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="8dp"
-            android:layout_toEndOf="@id/ivContactItem6"
-            android:text="Work"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="#727272" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/tvPlaceOfWork"-->
+            <!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_toEndOf="@id/ivContactItem6"-->
+            <!--android:text="Work"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
+            <!--android:textColor="#727272" />-->
 
-        </RelativeLayout>
-
-
-
-        <include layout="@layout/item_divider" />
+        <!--</RelativeLayout>-->
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:padding="@dimen/activity_horizontal_margin">
 
-            <ImageView
-                android:id="@+id/ivBirthday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_birthday" />
+        <!--<include layout="@layout/item_divider" />-->
 
-            <TextView
-                android:id="@+id/tvBirthday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/ivBirthday"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="202 Park Street, Los Angeles"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
 
-        </RelativeLayout>
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="?attr/selectableItemBackground"-->
+            <!--android:clickable="true"-->
+            <!--android:padding="@dimen/activity_horizontal_margin">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/ivBirthday"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+                <!--android:src="@drawable/ic_birthday" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tvBirthday"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+                <!--android:layout_toEndOf="@id/ivBirthday"-->
+                <!--android:ellipsize="end"-->
+                <!--android:maxLines="1"-->
+                <!--android:text="202 Park Street, Los Angeles"-->
+                <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+                <!--android:textColor="#212121" />-->
+
+        <!--</RelativeLayout>-->
 
         <include layout="@layout/item_divider" />
 

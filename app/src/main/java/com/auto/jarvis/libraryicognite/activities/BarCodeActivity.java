@@ -189,27 +189,29 @@ public class BarCodeActivity extends AppCompatActivity {
             result.enqueue(new Callback<RestService<String>>() {
                 @Override
                 public void onResponse(Call<RestService<String>> call, Response<RestService<String>> response) {
-                    String result = response.body().getData();
-                    String privateKey = "";
-                    JSONObject resultJson;
-                    String date = "";
-                    Bitmap bmp;
-                    try {
-                        resultJson = new JSONObject(result);
-                        privateKey = resultJson.getString("key");
-                        date = resultJson.getString("date");
-                        JSONObject qrContent = new JSONObject();
-                        qrContent.put("userId", userId);
-                        qrContent.put("key", privateKey);
-                        bmp = fromStringToBitmap(qrContent.toString());
-                        SaveSharedPreference.setLastRequestDate(BarCodeActivity.this, date);
-                        SaveSharedPreference.setPrivateKey(BarCodeActivity.this, privateKey);
-                        ivQrCode.setImageBitmap(bmp);
-                        pbLoadingQRCode.setVisibility(View.GONE);
-                    } catch (WriterException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (response.isSuccessful()) {
+                        String result = response.body().getData();
+                        String privateKey = "";
+                        JSONObject resultJson;
+                        String date = "";
+                        Bitmap bmp;
+                        try {
+                            resultJson = new JSONObject(result);
+                            privateKey = resultJson.getString("key");
+                            date = resultJson.getString("date");
+                            JSONObject qrContent = new JSONObject();
+                            qrContent.put("userId", userId);
+                            qrContent.put("key", privateKey);
+                            bmp = fromStringToBitmap(qrContent.toString());
+                            SaveSharedPreference.setLastRequestDate(BarCodeActivity.this, date);
+                            SaveSharedPreference.setPrivateKey(BarCodeActivity.this, privateKey);
+                            ivQrCode.setImageBitmap(bmp);
+                            pbLoadingQRCode.setVisibility(View.GONE);
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 @Override

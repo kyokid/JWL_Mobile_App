@@ -6,15 +6,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
 import com.auto.jarvis.libraryicognite.Utils.NetworkUtils;
@@ -53,6 +59,11 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
 
     ApiInterface apiService;
     Snackbar snackbar;
+
+    RadioGroup radioGroup;
+    EditText editText;
+    RadioButton heroku, local;
+
 
     public static final String USER_TAG = "USER_TAG";
 
@@ -105,6 +116,14 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
 
             }
         });
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogMaterial();
+
+            }
+        });
 //        btnLogin.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -113,6 +132,59 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+    private void showDialogMaterial() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title("set URL")
+                .customView(R.layout.dialog_customview, true)
+                .positiveText("OK")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String urlServer = "";
+                        int selectedId = radioGroup.getCheckedRadioButtonId();
+                        if (selectedId == heroku.getId()) {
+                            Toast.makeText(LoginActivity.this, "heroku", Toast.LENGTH_SHORT).show();
+                            urlServer = "jwl-api-v0.herokuapp.com";
+
+                        } else if (selectedId == local.getId()) {
+                            urlServer = editText.getText().toString();
+                            Toast.makeText(LoginActivity.this, urlServer, Toast.LENGTH_SHORT).show();
+                        }
+                        ApiClient.setURL(urlServer);
+                        Intent i = getBaseContext().getPackageManager()
+                                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                    }
+                })
+                .negativeText("Cancel");
+
+        MaterialDialog dialog = builder.build();
+        radioGroup = (RadioGroup) dialog.findViewById(R.id.rgUrl);
+        editText = (EditText) dialog.findViewById(R.id.etCustomUrl);
+        heroku = (RadioButton) dialog.findViewById(R.id.rdHeroku);
+        local = (RadioButton) dialog.findViewById(R.id.rdCustomUrl);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (i == R.id.rdHeroku) {
+                    editText.setVisibility(View.GONE);
+                    editText.setEnabled(false);
+                } else if (i == R.id.rdCustomUrl) {
+                    editText.setVisibility(View.VISIBLE);
+                    editText.setEnabled(true);
+                    editText.requestFocus();
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        });
+
+
+        dialog.show();
+
     }
 
 

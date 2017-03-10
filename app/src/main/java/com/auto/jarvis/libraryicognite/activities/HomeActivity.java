@@ -35,11 +35,13 @@ public class HomeActivity extends AppCompatActivity {
             result.enqueue(new Callback<RestService<Boolean>>() {
                 @Override
                 public void onResponse(Call<RestService<Boolean>> call, Response<RestService<Boolean>> response) {
-                    inLibrary = response.body().getData();
-                    if (inLibrary) {
-                        Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
-                        intentLibrary.putExtra("IN_LIBRARY", true);
-                        startActivity(intentLibrary);
+                    if (response.isSuccessful()) {
+                        inLibrary = response.body().getData();
+                        if (inLibrary) {
+                            Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
+                            intentLibrary.putExtra("IN_LIBRARY", true);
+                            startActivity(intentLibrary);
+                        }
                     }
                 }
 

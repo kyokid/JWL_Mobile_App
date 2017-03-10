@@ -38,11 +38,11 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.tvAddress)
     TextView tvAddress;
 
-    @BindView(R.id.tvPlaceOfWork)
-    TextView tvPlaceOfWork;
-
-    @BindView(R.id.tvBirthday)
-    TextView tvBirthday;
+//    @BindView(R.id.tvPlaceOfWork)
+//    TextView tvPlaceOfWork;
+//
+//    @BindView(R.id.tvBirthday)
+//    TextView tvBirthday;
 
     @BindView(R.id.tvPhoneNo)
     TextView tvPhoneNo;
@@ -87,8 +87,8 @@ public class ProfileActivity extends AppCompatActivity {
                     tvFullName.setText(fullName);
                     tvEmail.setText(email);
                     tvAddress.setText(address);
-                    tvPlaceOfWork.setText(placeOfWork);
-                    tvBirthday.setText(birthday);
+//                    tvPlaceOfWork.setText(placeOfWork);
+//                    tvBirthday.setText(birthday);
                     tvPhoneNo.setText(phoneNo);
                 }
 
