@@ -58,6 +58,7 @@ public class NotificationUtils {
         resultIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setAutoCancel(true)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle("The Library")
                 .setContentText(message)

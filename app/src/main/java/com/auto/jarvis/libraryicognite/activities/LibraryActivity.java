@@ -294,7 +294,7 @@ public class LibraryActivity extends AppCompatActivity {
                             NotificationUtils.showNotification(getApplicationContext(), message, recentList);
 
                             PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-                            PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "checkout");
+                            PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.PARTIAL_WAKE_LOCK, "checkout");
                             wl.acquire(5000);
                             wl.release();
 
