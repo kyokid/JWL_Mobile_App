@@ -1,8 +1,5 @@
-package com.auto.jarvis.libraryicognite;
+package com.auto.jarvis.libraryicognite.fragments;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,28 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.auto.jarvis.libraryicognite.Utils.Constant;
-import com.auto.jarvis.libraryicognite.activities.InsideLibraryActivity;
-import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
-import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.Date;
-import java.util.Calendar;
+import com.auto.jarvis.libraryicognite.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.estimote.sdk.EstimoteSDK.getApplicationContext;
 
 /**
  * Created by Havh on 1/11/2017.

@@ -8,10 +8,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.auto.jarvis.libraryicognite.BorrowCartActivity;
-import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
-import com.auto.jarvis.libraryicognite.activities.GlobalVariable;
-import com.auto.jarvis.libraryicognite.activities.InsideLibraryActivity;
+import com.auto.jarvis.libraryicognite.MyApplication;
 import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
@@ -60,10 +57,10 @@ public class BeaconNotificationManager {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
                 Log.d(TAG, "onEnterRegion: " + region.getIdentifier());
-                GlobalVariable.identifier = "" + region.getIdentifier();
-                GlobalVariable.major = "" + region.getMajor();
-                GlobalVariable.minor = "" + region.getMinor();
-                GlobalVariable.proximity = "" + region.getProximityUUID();
+                MyApplication.identifier = "" + region.getIdentifier();
+                MyApplication.major = "" + region.getMajor();
+                MyApplication.minor = "" + region.getMinor();
+                MyApplication.proximity = "" + region.getProximityUUID();
                 String message = enterMessages.get(region.getIdentifier());
                 if (message != null) {
                     if (!isInit) {

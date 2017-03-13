@@ -1,9 +1,6 @@
-package com.auto.jarvis.libraryicognite;
+package com.auto.jarvis.libraryicognite.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,11 +19,11 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auto.jarvis.libraryicognite.MyApplication;
+import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
 import com.auto.jarvis.libraryicognite.Utils.NetworkUtils;
-import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
-import com.auto.jarvis.libraryicognite.activities.GlobalVariable;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.User;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
@@ -38,8 +35,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.auto.jarvis.libraryicognite.Utils.NetworkUtils.getConnectivityStatusString;
 
 public class LoginActivity extends AppCompatActivity implements InternetConnectionReceiver.ConnectivityReceiverListener {
 
@@ -220,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
     @Override
     protected void onResume() {
         super.onResume();
-        GlobalVariable.getInstance().setConnectivityListener(this);
+        MyApplication.getInstance().setConnectivityListener(this);
     }
 
     private void checkConnection() {

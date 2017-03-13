@@ -7,8 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.auto.jarvis.libraryicognite.BorrowCartActivity;
-import com.auto.jarvis.libraryicognite.activities.LibraryActivity;
+import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.models.output.RestService;

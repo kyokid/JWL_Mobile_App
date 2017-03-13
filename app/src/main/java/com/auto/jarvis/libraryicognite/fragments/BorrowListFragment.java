@@ -1,4 +1,4 @@
-package com.auto.jarvis.libraryicognite;
+package com.auto.jarvis.libraryicognite.fragments;
 
 
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.adapters.BorrowByDayAdapter;
 import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;

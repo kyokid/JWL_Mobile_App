@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;

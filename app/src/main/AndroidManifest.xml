@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
-        android:name=".activities.GlobalVariable"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_ver2"
         android:label="@string/app_name"
@@ -31,7 +31,7 @@
         </receiver>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar.Translusent"
             android:windowSoftInputMode="stateHidden|adjustResize">
 
@@ -43,7 +43,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name=".BorrowCartActivity"
+            android:name=".activities.BorrowCartActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.InsideLibraryActivity"

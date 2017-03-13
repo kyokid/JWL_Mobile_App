@@ -1,4 +1,4 @@
-package com.auto.jarvis.libraryicognite;
+package com.auto.jarvis.libraryicognite.fragments;
 
 
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.auto.jarvis.libraryicognite.R;
 import com.skyfishjy.library.RippleBackground;
 
 import butterknife.BindView;

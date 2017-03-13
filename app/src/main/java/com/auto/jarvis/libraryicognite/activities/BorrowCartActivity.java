@@ -1,4 +1,4 @@
-package com.auto.jarvis.libraryicognite;
+package com.auto.jarvis.libraryicognite.activities;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -21,14 +21,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
-import com.auto.jarvis.libraryicognite.activities.ProfileActivity;
+import com.auto.jarvis.libraryicognite.fragments.BorrowListFragment;
+import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.fragments.RecentBooksFragment;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.attr.fragment;
 
 public class BorrowCartActivity extends AppCompatActivity {
 

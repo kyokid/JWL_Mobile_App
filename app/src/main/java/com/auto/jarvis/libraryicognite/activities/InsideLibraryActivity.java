@@ -9,19 +9,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.auto.jarvis.libraryicognite.BorrowCartActivity;
-import com.auto.jarvis.libraryicognite.LoginActivity;
 import com.auto.jarvis.libraryicognite.R;
-import com.auto.jarvis.libraryicognite.Utils.Constant;
-import com.auto.jarvis.libraryicognite.adapters.PagerFragmentAdapter;
 import com.auto.jarvis.libraryicognite.estimote.BeaconID;
-import com.auto.jarvis.libraryicognite.estimote.CheckOutProcess;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
@@ -39,7 +33,6 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
 
     android:background="#cece"
-    tools:context="com.auto.jarvis.libraryicognite.RecentBooksFragment">
+    tools:context="com.auto.jarvis.libraryicognite.fragments.RecentBooksFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvBookRecent"

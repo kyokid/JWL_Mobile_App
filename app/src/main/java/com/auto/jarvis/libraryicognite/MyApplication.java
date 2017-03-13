@@ -1,4 +1,4 @@
-package com.auto.jarvis.libraryicognite.activities;
+package com.auto.jarvis.libraryicognite;
 
 import android.app.Activity;
 import android.app.Application;
@@ -14,9 +14,9 @@ import com.estimote.sdk.EstimoteSDK;
  * Created by HaVH on 2/4/17.
  */
 
-public class GlobalVariable extends Application implements Application.ActivityLifecycleCallbacks {
+public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
-    private static GlobalVariable instance;
+    private static MyApplication instance;
 
     private boolean beaconNotificationsEnabled = false;
     public static String identifier = "";
@@ -56,7 +56,7 @@ public class GlobalVariable extends Application implements Application.ActivityL
 
 
 
-    public static synchronized GlobalVariable getInstance() {
+    public static synchronized MyApplication getInstance() {
         return instance;
     }
 

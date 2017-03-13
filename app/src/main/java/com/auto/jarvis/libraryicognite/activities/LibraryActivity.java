@@ -16,8 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.auto.jarvis.libraryicognite.BorrowCartActivity;
-import com.auto.jarvis.libraryicognite.LoginActivity;
+import com.auto.jarvis.libraryicognite.MyApplication;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.NetworkUtils;
@@ -28,7 +27,6 @@ import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
-import com.estimote.sdk.SystemRequirementsChecker;
 import com.estimote.sdk.connection.DeviceConnectionProvider;
 import com.estimote.sdk.connection.scanner.ConfigurableDevice;
 import com.estimote.sdk.connection.scanner.ConfigurableDevicesScanner;
@@ -211,7 +209,7 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
 //    private void startSearching() {
-//        GlobalVariable app = (GlobalVariable) getApplication();
+//        MyApplication app = (MyApplication) getApplication();
 //        if (!SystemRequirementsChecker.checkWithDefaultDialogs(LibraryActivity.this)) {
 //            Log.e(TAG, "Can't scan for beacons, some pre-conditions were not met");
 //            Log.e(TAG, "Read more about what's required at: http://estimote.github.io/Android-SDK/JavaDocs/com/estimote/sdk/SystemRequirementsChecker.html");
@@ -303,7 +301,7 @@ public class LibraryActivity extends AppCompatActivity {
                             borrowIntent.putExtra("RESULT", true);
                             borrowIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
 //                            borrowIntent.setFlags(1);
-                            if (!GlobalVariable.isBackgroundMode()) {
+                            if (!MyApplication.isBackgroundMode()) {
                                 startActivity(borrowIntent);
                             }
                         }
