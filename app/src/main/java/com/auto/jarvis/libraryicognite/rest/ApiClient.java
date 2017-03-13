@@ -10,18 +10,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    public static String URL = "jwl-api-v0.herokuapp.com";
-    public static final String BASE_URL = "http://" + URL + "/";
+//    public static String URL = "jwl-api-v0.herokuapp.com";
+    public static String BASE_URL = "http://jwl-api-v0.herokuapp.com/";
+
 
 
 //    public static final String BASE_URL = "http://10.5.50.25:8080/";
 //    public static final String BASE_URL = "http://192.168.43.207:8080/"; //thiendn ip wfchuane
 
-    private static Retrofit retrofit = null;
+    public static Retrofit retrofit = null;
+
 
     public static Retrofit getClient() {
         if (retrofit == null) {
-
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -34,7 +35,8 @@ public class ApiClient {
         return retrofit;
     }
 
-    public static void setURL(String URL) {
-        ApiClient.URL = URL;
+    public ApiClient() {
     }
+
+
 }

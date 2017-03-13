@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
             public void onClick(View view) {
                 String username = etUsername.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
+                Log.d("URL", ApiClient.BASE_URL);
                 User user = new User(username, password);
                 Call<RestService<User>> callLogin = apiService.login(user);
 
@@ -145,18 +147,19 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
                         String urlServer = "";
                         int selectedId = radioGroup.getCheckedRadioButtonId();
                         if (selectedId == heroku.getId()) {
-                            Toast.makeText(LoginActivity.this, "heroku", Toast.LENGTH_SHORT).show();
                             urlServer = "jwl-api-v0.herokuapp.com";
 
                         } else if (selectedId == local.getId()) {
                             urlServer = editText.getText().toString();
-                            Toast.makeText(LoginActivity.this, urlServer, Toast.LENGTH_SHORT).show();
                         }
-                        ApiClient.setURL(urlServer);
-                        Intent i = getBaseContext().getPackageManager()
-                                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
+                        ApiClient.retrofit = null;
+//                        ApiClient.changeApiBaseUrl(urlServer);
+                        ApiClient.BASE_URL = "http://" + urlServer + "/";
+                        apiService = ApiClient.getClient().create(ApiInterface.class);
+//                        Intent i = getBaseContext().getPackageManager()
+//                                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+//                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivity(i);
                     }
                 })
                 .negativeText("Cancel");

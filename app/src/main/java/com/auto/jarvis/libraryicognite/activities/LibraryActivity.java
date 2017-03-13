@@ -2,6 +2,7 @@ package com.auto.jarvis.libraryicognite.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -293,6 +294,12 @@ public class LibraryActivity extends AppCompatActivity {
                         } else {
                             Log.d("BEACON", "message = " + message);
                             NotificationUtils.showNotification(getApplicationContext(), message, recentList);
+
+                            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+                            PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "checkout");
+                            wl.acquire(5000);
+                            wl.release();
+
                             borrowIntent.putExtra("RESULT", true);
                             borrowIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
 //                            borrowIntent.setFlags(1);
