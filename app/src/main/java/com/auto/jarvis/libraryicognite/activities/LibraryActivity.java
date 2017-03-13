@@ -301,7 +301,7 @@ public class LibraryActivity extends AppCompatActivity {
                             borrowIntent.putExtra("RESULT", true);
                             borrowIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
 //                            borrowIntent.setFlags(1);
-                            if (!MyApplication.isBackgroundMode()) {
+                            if ((MyApplication.isScreenOn() && !MyApplication.isBackgroundMode()) || (!MyApplication.isScreenOn() && MyApplication.isBackgroundMode()) ) {
                                 startActivity(borrowIntent);
                             }
                         }

@@ -3,6 +3,7 @@ package com.auto.jarvis.libraryicognite;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
@@ -93,39 +94,41 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityStarted(Activity activity) {
-        Log.i("BACKGROUND", "started");
         ++start;
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Log.i("BACKGROUND", "resumed");
         ++resume;
         checkStatusActivity();
         Log.i("BACKGROUND", "BACKGROUND MODE IS " + backgroundMode);
+        checkMonitor();
+        Log.i("BACKGROUND", "monitor status " + screenOn);
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        Log.i("BACKGROUND", "pause");
         ++pause;
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        Log.i("BACKGROUND", "stopped");
         ++stop;
         checkStatusActivity();
         Log.i("BACKGROUND", "BACKGROUND MODE IS " + backgroundMode);
+        checkMonitor();
+        Log.i("BACKGROUND", "monitor status " + screenOn);
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-
+        Log.i("BACKGROUND", "saved");
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
+        Log.i("BACKGROUND", "destroyed");
+
     }
 
     private void checkStatusActivity() {
@@ -134,5 +137,19 @@ public class MyApplication extends Application implements Application.ActivityLi
         } else if (start > stop) {
             backgroundMode = false;
         }
+    }
+
+    private boolean checkMonitor() {
+        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
+            screenOn = pm.isInteractive();
+        }
+        return screenOn;
+
+    }
+    private static boolean screenOn;
+
+    public static boolean isScreenOn() {
+        return screenOn;
     }
 }
