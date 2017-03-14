@@ -22,6 +22,9 @@ public class InformationBookBorrowed implements Parcelable {
     private int rootId;
     private String bookCopyBookTitle;
     private String bookCopyBookPublisher;
+    private String bookCopyBookDescription;
+    private int bookCopyBookNumberOfPages;
+
 
     protected InformationBookBorrowed(Parcel in) {
         id = in.readInt();
@@ -38,6 +41,8 @@ public class InformationBookBorrowed implements Parcelable {
         rootId = in.readInt();
         bookCopyBookTitle = in.readString();
         bookCopyBookPublisher = in.readString();
+        bookCopyBookDescription = in.readString();
+        bookCopyBookNumberOfPages = in.readInt();
     }
 
     public static final Creator<InformationBookBorrowed> CREATOR = new Creator<InformationBookBorrowed>() {
@@ -51,6 +56,14 @@ public class InformationBookBorrowed implements Parcelable {
             return new InformationBookBorrowed[size];
         }
     };
+
+    public Integer getBookCopyBookNumberOfPages() {
+        return bookCopyBookNumberOfPages;
+    }
+
+    public String getBookCopyBookDescription() {
+        return bookCopyBookDescription;
+    }
 
     public String getBookCopyBookPublisher() {
         return bookCopyBookPublisher;
@@ -171,20 +184,22 @@ public class InformationBookBorrowed implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(bookCopyRfid);
-        parcel.writeString(accountUserId);
-        parcel.writeInt(borrowLimitDays);
-        parcel.writeInt(extendTimes);
-        parcel.writeInt(extendTimesLimit);
-        parcel.writeInt(daysPerExtend);
-        parcel.writeString(borrowedDate);
-        parcel.writeString(returnDate);
-        parcel.writeString(deadlineDate);
-        parcel.writeInt(extendNumber);
-        parcel.writeInt(rootId);
-        parcel.writeString(bookCopyBookTitle);
-        parcel.writeString(bookCopyBookPublisher);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(bookCopyRfid);
+        dest.writeString(accountUserId);
+        dest.writeInt(borrowLimitDays);
+        dest.writeInt(extendTimes);
+        dest.writeInt(extendTimesLimit);
+        dest.writeInt(daysPerExtend);
+        dest.writeString(borrowedDate);
+        dest.writeString(returnDate);
+        dest.writeString(deadlineDate);
+        dest.writeInt(extendNumber);
+        dest.writeInt(rootId);
+        dest.writeString(bookCopyBookTitle);
+        dest.writeString(bookCopyBookPublisher);
+        dest.writeString(bookCopyBookDescription);
+        dest.writeInt(bookCopyBookNumberOfPages);
     }
 }

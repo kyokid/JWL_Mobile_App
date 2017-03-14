@@ -1,17 +1,22 @@
 package com.auto.jarvis.libraryicognite.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 
 /**
  * Created by Havh on 1/16/2017.
  */
 
-public class Book {
+public class Book implements Parcelable{
     private String rfidBook;
     private String title;
     private String publisher;
     private String author;
     private String deadLine;
+    private String description;
+    private int numberOfPages;
     private int id;
 
     public Book() {
@@ -24,8 +29,39 @@ public class Book {
         this.id = id;
     }
 
+    protected Book(Parcel in) {
+        rfidBook = in.readString();
+        title = in.readString();
+        publisher = in.readString();
+        author = in.readString();
+        deadLine = in.readString();
+        description = in.readString();
+        numberOfPages = in.readInt();
+        id = in.readInt();
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
+
     public String getRfidBook() {
         return rfidBook;
+    }
+
+    public int getNumberOfPages() {
+        return numberOfPages;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getDeadLine() {
@@ -54,6 +90,25 @@ public class Book {
         book.publisher = bookBorrowed.getBookCopyBookPublisher();
         book.deadLine = bookBorrowed.getDeadlineDate();
         book.rfidBook = bookBorrowed.getBookCopyRfid();
+        book.numberOfPages = bookBorrowed.getBookCopyBookNumberOfPages();
+        book.description = bookBorrowed.getBookCopyBookDescription();
         return book;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(rfidBook);
+        dest.writeString(title);
+        dest.writeString(publisher);
+        dest.writeString(author);
+        dest.writeString(deadLine);
+        dest.writeString(description);
+        dest.writeInt(numberOfPages);
+        dest.writeInt(id);
     }
 }

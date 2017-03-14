@@ -11,7 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 //    public static String URL = "jwl-api-v0.herokuapp.com";
-    public static String BASE_URL = "http://jwl-api-v0.herokuapp.com/";
+//    public static String BASE_URL = "http://jwl-api-v0.herokuapp.com/";
+    public static String BASE_URL = "http://192.168.0.109:8080/";
 
 
 

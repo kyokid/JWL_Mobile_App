@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.auto.jarvis.libraryicognite.DetailBookActivity;
+import com.auto.jarvis.libraryicognite.activities.DetailBookActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
-import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.models.Book;
 
 import java.util.Date;
@@ -52,8 +50,10 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View v) {
                     mBooks.get(position);
-                    Log.d("CLICKED", " " + mBooks.get(position).getRfidBook());
+                    Log.d("CLICKED", " " + mBooks.get(position));
                     Intent detailIntent = new Intent(v.getContext(), DetailBookActivity.class);
+                    Book bookDetail = mBooks.get(position);
+                    detailIntent.putExtra("BOOK_DETAIL", bookDetail);
                     v.getContext().startActivity(detailIntent);
                 }
             });
