@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:text="You are at the entry"
             android:layout_centerInParent="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:textStyle="bold"
             />
 

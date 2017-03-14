@@ -57,15 +57,11 @@ public class LibraryActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private static final String TAG = "MainActivity";
-
     ConfigurableDevicesScanner deviceScanner;
     DeviceConnectionProvider connectionProvider;
-    ConfigurableDevice device;
-    private int status = Constant.CHECK_IN;
+    private int status;
 
     private String username;
-    private boolean inLibrary = false;
     Bundle intentFlag;
 
 
@@ -79,12 +75,16 @@ public class LibraryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         intentFlag = getIntent().getExtras();
         if (intentFlag != null) {
-            inLibrary = intentFlag.getBoolean("IN_LIBRARY");
+            status = intentFlag.getInt("IN_LIBRARY");
         }
 
         initView();
+        Log.d("STATUS_USER", "status user first = " + status);
 
-//        checkStatusBorrower(username);
+        checkStatusBorrower(username);
+
+        status = SaveSharedPreference.getStatusUser(getApplicationContext());
+        Log.d("STATUS_USER", "status user second = " + status);
 //        startSearching();
         if (NetworkUtils.checkBluetoothConnection(LibraryActivity.this)) {
             startScan();
@@ -98,19 +98,26 @@ public class LibraryActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RestService<Boolean>> call, Response<RestService<Boolean>> response) {
                 if (response.isSuccessful()) {
-                    inLibrary = response.body().getData();
+                    Boolean inLibrary = response.body().getData();
+                    if (!inLibrary) {
+                        tvLocation.setText(R.string.not_checkin);
+                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.LOGIN);
+                    } else {
+                        tvLocation.setText("You are at the entry");
+                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<RestService<Boolean>> call, Throwable t) {
-
+                Log.d("INLIBRARY", "FAIL " + t.getMessage());
             }
         });
     }
 
     private void startScan() {
-        if (status == Constant.CHECK_IN && inLibrary) {
+        if (status == Constant.CHECK_IN) {
             deviceScanner.setScanPeriodMillis(5000);
             deviceScanner.scanForDevices(new ConfigurableDevicesScanner.ScannerCallback() {
                 @Override
@@ -120,7 +127,7 @@ public class LibraryActivity extends AppCompatActivity {
 
                     for (ConfigurableDevicesScanner.ScanResultItem item : list) {
                         String macAddress = item.device.macAddress.toStandardString();
-                        if (status == Constant.CHECK_IN && inLibrary && macAddress.equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
+                        if (status == Constant.CHECK_IN && macAddress.equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
                             Log.d("BEACON", "init check out");
                             initCheckout(username);
 
@@ -295,7 +302,7 @@ public class LibraryActivity extends AppCompatActivity {
 
                             PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
                             PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.PARTIAL_WAKE_LOCK, "checkout");
-                            wl.acquire(5000);
+                            wl.acquire(3000);
                             wl.release();
 
                             borrowIntent.putExtra("RESULT", true);

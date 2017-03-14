@@ -13,7 +13,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_profile">Edit profile</string>
     <string name="no_internet">No Internet Connection</string>
-    
+    <string name="not_checkin">You are not check in, please go to check in or contact librarian.</string>
+
     <string-array name="url">
         <item></item>
     </string-array>

@@ -89,7 +89,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
-        Log.i("BACKGROUND", "create");
     }
 
     @Override
@@ -101,9 +100,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     public void onActivityResumed(Activity activity) {
         ++resume;
         checkStatusActivity();
-        Log.i("BACKGROUND", "BACKGROUND MODE IS " + backgroundMode);
         checkMonitor();
-        Log.i("BACKGROUND", "monitor status " + screenOn);
     }
 
     @Override
@@ -115,19 +112,15 @@ public class MyApplication extends Application implements Application.ActivityLi
     public void onActivityStopped(Activity activity) {
         ++stop;
         checkStatusActivity();
-        Log.i("BACKGROUND", "BACKGROUND MODE IS " + backgroundMode);
         checkMonitor();
-        Log.i("BACKGROUND", "monitor status " + screenOn);
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-        Log.i("BACKGROUND", "saved");
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        Log.i("BACKGROUND", "destroyed");
 
     }
 
