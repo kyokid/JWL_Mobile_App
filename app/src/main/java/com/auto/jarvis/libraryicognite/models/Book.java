@@ -7,6 +7,7 @@ import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
  */
 
 public class Book {
+    private String rfidBook;
     private String title;
     private String publisher;
     private String author;
@@ -21,6 +22,10 @@ public class Book {
         this.title = title;
         this.author = author;
         this.id = id;
+    }
+
+    public String getRfidBook() {
+        return rfidBook;
     }
 
     public String getDeadLine() {
@@ -48,6 +53,7 @@ public class Book {
         book.title = bookBorrowed.getBookCopyBookTitle();
         book.publisher = bookBorrowed.getBookCopyBookPublisher();
         book.deadLine = bookBorrowed.getDeadlineDate();
+        book.rfidBook = bookBorrowed.getBookCopyRfid();
         return book;
     }
 }

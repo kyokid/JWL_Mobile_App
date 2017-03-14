@@ -42,5 +42,8 @@ dependencies {
     compile 'com.google.zxing:core:3.2.1'
     compile 'com.google.firebase:firebase-messaging:9.2.0'
     compile 'com.afollestad.material-dialogs:core:0.9.4.1'
+
+    compile 'com.github.florent37:arclayout:1.0.2'
+    compile 'com.flaviofaria:kenburnsview:1.0.7'
 }
 apply plugin: 'com.google.gms.google-services'

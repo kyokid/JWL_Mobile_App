@@ -1,14 +1,19 @@
 package com.auto.jarvis.libraryicognite.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.auto.jarvis.libraryicognite.DetailBookActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
+import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.models.Book;
 
 import java.util.Date;
@@ -24,6 +29,8 @@ import butterknife.ButterKnife;
 public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Book> mBooks;
+    Context context;
+
 
     public BorrowListAdapter(List<Book> mBooks) {
         this.mBooks = mBooks;
@@ -37,10 +44,19 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (null != holder) {
             BookViewHolder viewHolder = (BookViewHolder) holder;
             viewHolder.bind(mBooks.get(position), position);
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBooks.get(position);
+                    Log.d("CLICKED", " " + mBooks.get(position).getRfidBook());
+                    Intent detailIntent = new Intent(v.getContext(), DetailBookActivity.class);
+                    v.getContext().startActivity(detailIntent);
+                }
+            });
         }
     }
 

@@ -3,6 +3,7 @@ package com.auto.jarvis.libraryicognite.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.adapters.BorrowByDayAdapter;
 import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.listeners.BorrowCartDetailListener;
 import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.BookByDay;
 import com.auto.jarvis.libraryicognite.models.input.User;
@@ -63,6 +65,21 @@ public class BorrowListFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//        rvBooks.addOnItemTouchListener(new BorrowCartDetailListener(getActivity(), rvBooks, new BorrowCartDetailListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Toast.makeText(getActivity().getApplicationContext(), "id = " + rvBooks.getAdapter().getItemId(position), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//
+//            }
+//        }));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
