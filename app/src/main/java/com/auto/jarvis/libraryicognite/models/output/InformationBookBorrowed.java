@@ -24,6 +24,7 @@ public class InformationBookBorrowed implements Parcelable {
     private String bookCopyBookPublisher;
     private String bookCopyBookDescription;
     private int bookCopyBookNumberOfPages;
+    private int bookCopyBookPublishYear;
 
 
     protected InformationBookBorrowed(Parcel in) {
@@ -43,6 +44,7 @@ public class InformationBookBorrowed implements Parcelable {
         bookCopyBookPublisher = in.readString();
         bookCopyBookDescription = in.readString();
         bookCopyBookNumberOfPages = in.readInt();
+        bookCopyBookPublishYear = in.readInt();
     }
 
     public static final Creator<InformationBookBorrowed> CREATOR = new Creator<InformationBookBorrowed>() {
@@ -56,6 +58,10 @@ public class InformationBookBorrowed implements Parcelable {
             return new InformationBookBorrowed[size];
         }
     };
+
+    public int getBookCopyBookPublishYear() {
+        return bookCopyBookPublishYear;
+    }
 
     public Integer getBookCopyBookNumberOfPages() {
         return bookCopyBookNumberOfPages;
@@ -201,5 +207,6 @@ public class InformationBookBorrowed implements Parcelable {
         dest.writeString(bookCopyBookPublisher);
         dest.writeString(bookCopyBookDescription);
         dest.writeInt(bookCopyBookNumberOfPages);
+        dest.writeInt(bookCopyBookPublishYear);
     }
 }

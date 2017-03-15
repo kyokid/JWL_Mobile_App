@@ -18,6 +18,7 @@ public class Book implements Parcelable{
     private String description;
     private int numberOfPages;
     private int id;
+    private int publishYear;
 
     public Book() {
 
@@ -51,6 +52,10 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
+    public int getPublishYear() {
+        return publishYear;
+    }
 
     public String getRfidBook() {
         return rfidBook;
@@ -92,6 +97,7 @@ public class Book implements Parcelable{
         book.rfidBook = bookBorrowed.getBookCopyRfid();
         book.numberOfPages = bookBorrowed.getBookCopyBookNumberOfPages();
         book.description = bookBorrowed.getBookCopyBookDescription();
+        book.publishYear = bookBorrowed.getBookCopyBookPublishYear();
         return book;
     }
 
