@@ -19,6 +19,8 @@ public class Book implements Parcelable{
     private int numberOfPages;
     private int id;
     private int publishYear;
+    private int price;
+    private String thumbnail;
 
     public Book() {
 
@@ -30,6 +32,7 @@ public class Book implements Parcelable{
         this.id = id;
     }
 
+
     protected Book(Parcel in) {
         rfidBook = in.readString();
         title = in.readString();
@@ -39,6 +42,9 @@ public class Book implements Parcelable{
         description = in.readString();
         numberOfPages = in.readInt();
         id = in.readInt();
+        publishYear = in.readInt();
+        price = in.readInt();
+        thumbnail = in.readString();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -52,6 +58,14 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
 
     public int getPublishYear() {
         return publishYear;
@@ -98,8 +112,11 @@ public class Book implements Parcelable{
         book.numberOfPages = bookBorrowed.getBookCopyBookNumberOfPages();
         book.description = bookBorrowed.getBookCopyBookDescription();
         book.publishYear = bookBorrowed.getBookCopyBookPublishYear();
+        book.thumbnail = bookBorrowed.getBookCopyBookThumbnail();
+        book.price = bookBorrowed.getBookCopyBookPrice();
         return book;
     }
+
 
     @Override
     public int describeContents() {
@@ -116,5 +133,8 @@ public class Book implements Parcelable{
         dest.writeString(description);
         dest.writeInt(numberOfPages);
         dest.writeInt(id);
+        dest.writeInt(publishYear);
+        dest.writeInt(price);
+        dest.writeString(thumbnail);
     }
 }

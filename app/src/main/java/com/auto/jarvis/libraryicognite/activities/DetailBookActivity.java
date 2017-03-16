@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.models.Book;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,8 +23,8 @@ public class DetailBookActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.imgThumbnail)
-    CardView imgThumbnail;
+    @BindView(R.id.cardThumbnail)
+    CardView cardThumbnail;
 
     @BindView(R.id.tvCategories)
     TextView tvCategories;
@@ -36,6 +37,12 @@ public class DetailBookActivity extends AppCompatActivity {
 
     @BindView(R.id.tvPublished)
     TextView tvPublished;
+
+    @BindView(R.id.tvPrice)
+    TextView tvPrice;
+
+    @BindView(R.id.imgThumbnail)
+    ImageView imgThumbnail;
 
 
 
@@ -51,10 +58,20 @@ public class DetailBookActivity extends AppCompatActivity {
 
         tvBookTitle.setText(bookDetail.getTitle());
         tvDescription.setText(bookDetail.getDescription());
-        tvNumberOfPages.setText(bookDetail.getNumberOfPages() + " Pages");
+        tvNumberOfPages.setText(String.format("%d Pages", bookDetail.getNumberOfPages()));
 
         String publishYear = String.valueOf(bookDetail.getPublishYear());
-        tvPublished.setText(publishYear);
+        tvPublished.setText("Published: " + publishYear);
+        String price = String.valueOf(bookDetail.getPrice());
+        String thumbnail = bookDetail.getThumbnail();
+        tvPrice.setText("Price: " + price);
+        if (thumbnail != null) {
+            Picasso.with(DetailBookActivity.this)
+                    .load(thumbnail)
+                    .fit()
+                    .into(imgThumbnail);
+        }
+
     }
 
     private void initView(Book book) {

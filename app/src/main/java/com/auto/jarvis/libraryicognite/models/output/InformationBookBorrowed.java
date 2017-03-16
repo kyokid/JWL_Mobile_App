@@ -25,6 +25,8 @@ public class InformationBookBorrowed implements Parcelable {
     private String bookCopyBookDescription;
     private int bookCopyBookNumberOfPages;
     private int bookCopyBookPublishYear;
+    private int bookCopyBookPrice;
+    private String bookCopyBookThumbnail;
 
 
     protected InformationBookBorrowed(Parcel in) {
@@ -45,6 +47,36 @@ public class InformationBookBorrowed implements Parcelable {
         bookCopyBookDescription = in.readString();
         bookCopyBookNumberOfPages = in.readInt();
         bookCopyBookPublishYear = in.readInt();
+        bookCopyBookPrice = in.readInt();
+        bookCopyBookThumbnail = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(bookCopyRfid);
+        dest.writeString(accountUserId);
+        dest.writeInt(borrowLimitDays);
+        dest.writeInt(extendTimes);
+        dest.writeInt(extendTimesLimit);
+        dest.writeInt(daysPerExtend);
+        dest.writeString(borrowedDate);
+        dest.writeString(returnDate);
+        dest.writeString(deadlineDate);
+        dest.writeInt(extendNumber);
+        dest.writeInt(rootId);
+        dest.writeString(bookCopyBookTitle);
+        dest.writeString(bookCopyBookPublisher);
+        dest.writeString(bookCopyBookDescription);
+        dest.writeInt(bookCopyBookNumberOfPages);
+        dest.writeInt(bookCopyBookPublishYear);
+        dest.writeInt(bookCopyBookPrice);
+        dest.writeString(bookCopyBookThumbnail);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<InformationBookBorrowed> CREATOR = new Creator<InformationBookBorrowed>() {
@@ -58,6 +90,14 @@ public class InformationBookBorrowed implements Parcelable {
             return new InformationBookBorrowed[size];
         }
     };
+
+    public int getBookCopyBookPrice() {
+        return bookCopyBookPrice;
+    }
+
+    public String getBookCopyBookThumbnail() {
+        return bookCopyBookThumbnail;
+    }
 
     public int getBookCopyBookPublishYear() {
         return bookCopyBookPublishYear;
@@ -184,29 +224,5 @@ public class InformationBookBorrowed implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(bookCopyRfid);
-        dest.writeString(accountUserId);
-        dest.writeInt(borrowLimitDays);
-        dest.writeInt(extendTimes);
-        dest.writeInt(extendTimesLimit);
-        dest.writeInt(daysPerExtend);
-        dest.writeString(borrowedDate);
-        dest.writeString(returnDate);
-        dest.writeString(deadlineDate);
-        dest.writeInt(extendNumber);
-        dest.writeInt(rootId);
-        dest.writeString(bookCopyBookTitle);
-        dest.writeString(bookCopyBookPublisher);
-        dest.writeString(bookCopyBookDescription);
-        dest.writeInt(bookCopyBookNumberOfPages);
-        dest.writeInt(bookCopyBookPublishYear);
-    }
 }
