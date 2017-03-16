@@ -55,7 +55,6 @@ public class DetailBookActivity extends AppCompatActivity {
 
         String publishYear = String.valueOf(bookDetail.getPublishYear());
         tvPublished.setText(publishYear);
-
     }
 
     private void initView(Book book) {
