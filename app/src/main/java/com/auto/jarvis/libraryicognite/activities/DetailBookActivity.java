@@ -5,11 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -44,6 +49,11 @@ public class DetailBookActivity extends AppCompatActivity {
     @BindView(R.id.imgThumbnail)
     ImageView imgThumbnail;
 
+    @BindView(R.id.btnRenew)
+    Button btnRenew;
+
+    ApiInterface apiService;
+
 
 
     @Override
@@ -52,7 +62,7 @@ public class DetailBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_book);
         ButterKnife.bind(this);
 
-        Book bookDetail = getIntent().getParcelableExtra("BOOK_DETAIL");
+        final Book bookDetail = getIntent().getParcelableExtra("BOOK_DETAIL");
         initView(bookDetail);
 
 
@@ -65,6 +75,14 @@ public class DetailBookActivity extends AppCompatActivity {
         String price = String.valueOf(bookDetail.getPrice());
         String thumbnail = bookDetail.getThumbnail();
         tvPrice.setText("Price: " + price);
+
+        btnRenew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DetailBookActivity.this, "renew book: " + bookDetail.getRfidBook(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (thumbnail != null) {
             Picasso.with(DetailBookActivity.this)
                     .load(thumbnail)
@@ -80,6 +98,8 @@ public class DetailBookActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(book.getTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        apiService = ApiClient.getClient().create(ApiInterface.class);
 
     }
 

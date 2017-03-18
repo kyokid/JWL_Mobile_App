@@ -1,6 +1,10 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
@@ -16,6 +20,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.MyApplication;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
@@ -67,6 +73,8 @@ public class LibraryActivity extends AppCompatActivity {
 
     ApiInterface apiService;
 
+    private BroadcastReceiver bluetoothReceiver;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +94,35 @@ public class LibraryActivity extends AppCompatActivity {
         status = SaveSharedPreference.getStatusUser(getApplicationContext());
         Log.d("STATUS_USER", "status user second = " + status);
 //        startSearching();
-        if (NetworkUtils.checkBluetoothConnection(LibraryActivity.this)) {
+        boolean onBluetooth = !NetworkUtils.checkBluetoothConnection(LibraryActivity.this);
+        if (onBluetooth) {
             startScan();
+        } else {
+            tvLocation.setText("Please turn on bluetooth to use this service");
         }
+
+        bluetoothReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String action = intent.getAction();
+                if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                    final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                    switch (state) {
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            tvLocation.setText("Please turn on bluetooth to use this service");
+                            break;
+
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            tvLocation.setText("Turn on bluetooth already");
+                            break;
+                    }
+
+                }
+            }
+        };
+
+        IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(bluetoothReceiver, filter1);
     }
 
     private void checkStatusBorrower(String username) {
@@ -231,6 +265,7 @@ public class LibraryActivity extends AppCompatActivity {
     protected void onDestroy() {
         connectionProvider.destroy();
         deviceScanner.stopScanning();
+        unregisterReceiver(bluetoothReceiver);
         super.onDestroy();
     }
 
@@ -245,9 +280,6 @@ public class LibraryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
-
-
-
 
 
     private void initCheckout(String username) {
@@ -308,7 +340,7 @@ public class LibraryActivity extends AppCompatActivity {
                             borrowIntent.putExtra("RESULT", true);
                             borrowIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
 //                            borrowIntent.setFlags(1);
-                            if ((MyApplication.isScreenOn() && !MyApplication.isBackgroundMode()) || (!MyApplication.isScreenOn() && MyApplication.isBackgroundMode()) ) {
+                            if ((MyApplication.isScreenOn() && !MyApplication.isBackgroundMode()) || (!MyApplication.isScreenOn() && MyApplication.isBackgroundMode())) {
                                 startActivity(borrowIntent);
                             }
                         }

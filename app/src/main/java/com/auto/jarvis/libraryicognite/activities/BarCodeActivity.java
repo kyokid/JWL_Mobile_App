@@ -1,5 +1,6 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +63,7 @@ import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
 
 public class BarCodeActivity extends AppCompatActivity {
 
-//    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
+    //    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
 //    public static final String DEFAULT_IDENTIFIER = "rid";
 //    private static final Region ALL_ESTIMOTE_BEACON_REGION  = new Region(DEFAULT_IDENTIFIER,
 //            UUID.fromString(DEFAULT_UUID), null, null);
@@ -70,7 +73,10 @@ public class BarCodeActivity extends AppCompatActivity {
     RelativeLayout pbLoadingQRCode;
     @BindView(R.id.ivQrCode)
     ImageView ivQrCode;
-//    @BindView(R.id.viewPager)
+
+    @BindView(R.id.pgLoading)
+    ProgressBar pgLoading;
+    //    @BindView(R.id.viewPager)
 //    ViewPager viewPager;
 //    @BindView(R.id.tablayout)
 //    TabLayout tabLayout;
@@ -80,12 +86,14 @@ public class BarCodeActivity extends AppCompatActivity {
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
-//    private String userId;
+    //    private String userId;
     ApiInterface apiService;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-//    private BeaconManager beaconManager;
+    //    private BeaconManager beaconManager;
     private List<Beacon> beacons = new ArrayList<>();
+
+    private String userId;
 //    private CheckOutProcess checkout;
 
     @Override
@@ -93,59 +101,46 @@ public class BarCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
-        String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
-//            Toast.makeText(getBaseContext(), getResources().getString(R.string.google_api_key), Toast.LENGTH_SHORT).show();
-            Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
-            NotificationUtils.sendNewIdToServer(FirebaseInstanceId.getInstance().getToken());
+        Log.d("Quan", "A");
+        new AsynCaller().execute();
+    }
+
+    private void helloWorld(final String userId) {
+        Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
+        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
 //            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
 //            this.startService(service);
-            mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    // checking for type intent filter
-                    if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
-                        Log.d("Registration token:" , intent.getStringExtra("token"));
-                        NotificationUtils.sendNewIdToServer(intent.getStringExtra("token"));
-                    } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
-                        String message = intent.getStringExtra("message");
-                        Log.d("Push notification:", message);
-                        Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
-                        intentLibrary.putExtra("IN_LIBRARY", true);
-                        startActivity(intentLibrary);
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+                    Log.d("Registration token:" , intent.getStringExtra("token"));
+                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
+                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+                    String message = intent.getStringExtra("message");
+                    Log.d("Push notification:", message);
+                    Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
+                    intentLibrary.putExtra("IN_LIBRARY", true);
+                    startActivity(intentLibrary);
 
-                    }
                 }
-            };
-            IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
-            registerReceiver(mRegistrationBroadcastReceiver, filter);
-            initView(userId);
-
-        }
-
+            }
+        };
+        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
+        registerReceiver(mRegistrationBroadcastReceiver, filter);
+        initView(userId);
+    }
 
     private void initView(String userId) {
-
         tabTitle = getResources().getStringArray(R.array.tab_title);
-        // Toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-//        viewPager.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager(), userId));
-//        tabLayout.setupWithViewPager(viewPager);
-//        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-////            tabLayout.getTabAt(i).setIcon(icons[i]);
-//            tabLayout.getTabAt(i).setText(tabTitle[i].toString());
-//
-//        }
-
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
-
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
         tvUsername.setText(userId);
-
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -153,10 +148,6 @@ public class BarCodeActivity extends AppCompatActivity {
                 return true;
             }
         });
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
         qrCodeProcess(userId);
     }
 
@@ -165,21 +156,10 @@ public class BarCodeActivity extends AppCompatActivity {
         Date now = new Date(Calendar.getInstance().getTimeInMillis());
         Bitmap bmp = null;
         String privateKey = "";
-        if (lastrequest.equals(now.toString())){
-            privateKey = SaveSharedPreference.getPrivateKey(this);
-            try {
-                JSONObject qrContent = new JSONObject();
-                qrContent.put("userId", userId);
-                qrContent.put("key", privateKey);
-                bmp = fromStringToBitmap(qrContent.toString());
-                ivQrCode.setImageBitmap(bmp);
-                pbLoadingQRCode.setVisibility(View.GONE);
-            } catch (WriterException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }else{
+        if (lastrequest.equals(now.toString())) {
+            new AsyncQrCode().execute();
+            pgLoading.setVisibility(View.GONE);
+        } else {
             apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<RestService<String>> result = apiService.requestPrivateKey(userId);
             result.enqueue(new Callback<RestService<String>>() {
@@ -203,6 +183,7 @@ public class BarCodeActivity extends AppCompatActivity {
                             SaveSharedPreference.setPrivateKey(BarCodeActivity.this, privateKey);
                             ivQrCode.setImageBitmap(bmp);
                             pbLoadingQRCode.setVisibility(View.GONE);
+                            pgLoading.setVisibility(View.GONE);
                         } catch (WriterException e) {
                             e.printStackTrace();
                         } catch (JSONException e) {
@@ -210,10 +191,12 @@ public class BarCodeActivity extends AppCompatActivity {
                         }
                     }
                 }
+
                 @Override
                 public void onFailure(Call<RestService<String>> call, Throwable t) {
                     Toast.makeText(getBaseContext(), "Fail to call requestPrivateKey", Toast.LENGTH_LONG).show();
                     Log.d("BarCodeActivity", t.getMessage());
+                    pgLoading.setVisibility(View.GONE);
                 }
             });
         }
@@ -258,11 +241,14 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
 
     private void selectDrawerItem(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.barCodePage:
                 startActivity(BarCodeActivity.getIntentNewTask(this));
                 break;
@@ -299,13 +285,20 @@ public class BarCodeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (beaconManager == null) {
-//            beaconManager.disconnect();
-//        }
-//    }
+    private Bitmap qrCodeGene() {
+        String privateKey = SaveSharedPreference.getPrivateKey(this);
+        try {
+            JSONObject qrContent = new JSONObject();
+            qrContent.put("userId", userId);
+            qrContent.put("key", privateKey);
+            return fromStringToBitmap(qrContent.toString());
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     protected void onResume() {
@@ -318,27 +311,6 @@ public class BarCodeActivity extends AppCompatActivity {
 //            startScanning();
 //        }
     }
-//
-//    private void startScanning() {
-//        if ( beaconManager != null) {
-//            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-//                @Override
-//                public void onServiceReady() {
-//                    beaconManager.startRanging(ALL_ESTIMOTE_BEACON_REGION);
-//                }
-//            });
-//        }
-//    }
-
-//    QRCodeWriter writer = new QRCodeWriter();
-//    JSONObject jsonObject = new JSONObject();
-//        try {
-//        //TODO add userId string here
-//        jsonObject.put("userId", userId);
-//        jsonObject.put("createDate", new Date(Calendar.getInstance().getTimeInMillis()));
-//    } catch (JSONException e) {
-//        e.printStackTrace();
-//    }
 
 
     @Override
@@ -348,5 +320,48 @@ public class BarCodeActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
+    }
+
+
+    private class AsynCaller extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return SaveSharedPreference.getUsername(BarCodeActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pgLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String userId) {
+            super.onPostExecute(userId);
+            pgLoading.setVisibility(View.GONE);
+            helloWorld(userId);
+        }
+    }
+
+    private class AsyncQrCode extends AsyncTask<Void, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            return qrCodeGene();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pgLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            ivQrCode.setImageBitmap(bitmap);
+            pgLoading.setVisibility(View.GONE);
+        }
     }
 }

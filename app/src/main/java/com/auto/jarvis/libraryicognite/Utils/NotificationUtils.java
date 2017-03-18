@@ -31,10 +31,9 @@ public class NotificationUtils {
 
 
 
-    public static void sendNewIdToServer(String googleToken){
+    public static void sendNewIdToServer(String userId, String googleToken){
         ApiInterface apiService;
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        String userId = SaveSharedPreference.getUsername(getApplicationContext());
         Call<RestService<String>> updateGoogleToken = apiService.updateGoogleToken(userId, googleToken);
         updateGoogleToken.enqueue(new Callback<RestService<String>>() {
             @Override

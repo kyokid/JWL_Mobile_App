@@ -35,13 +35,13 @@
             android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
             android:name=".activities.BarCodeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.BorrowCartActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
             android:name=".activities.InsideLibraryActivity"
             android:theme="@style/AppTheme.NoActionBar" />

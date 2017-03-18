@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="128dp"
+    android:layout_height="160dp"
     android:background="@drawable/drawer_header">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -10,12 +10,14 @@
         android:layout_height="58dp"
         android:layout_margin="16dp"
         android:src="@drawable/avatar_holder"
+        android:layout_above="@+id/tvUsername"
         android:scaleType="centerCrop" />
 
     <TextView
+        android:layout_alignParentBottom="true"
         android:id="@+id/tvUsername"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_below="@+id/civAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"

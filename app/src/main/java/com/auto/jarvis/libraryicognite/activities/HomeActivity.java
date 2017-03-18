@@ -26,7 +26,7 @@ public class HomeActivity extends AppCompatActivity {
         String userId = SaveSharedPreference.getUsername(this);
         if (userId.length() == 0 || userId.isEmpty()) {
             Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
                         inLibrary = response.body().getData();
                         if (inLibrary) {
                             Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
+                            intentLibrary.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             intentLibrary.putExtra("IN_LIBRARY", true);
                             startActivity(intentLibrary);
                         }
@@ -53,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("LIBRARY", " " + inLibrary);
             if (!inLibrary) {
                 Intent barCodeIntent = new Intent(this, BarCodeActivity.class);
-                barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(barCodeIntent);
             }
 

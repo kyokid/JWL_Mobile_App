@@ -48,4 +48,7 @@ public interface ApiInterface {
 
     @GET("/users/{id}/requestKey")
     Call<RestService<String>> requestPrivateKey(@Path("id") String userId);
+
+    @GET("/renew/{rfid}")
+    Call<RestService<Boolean>> renewBorrowedBook(@Path("rfid") String rfid);
 }
