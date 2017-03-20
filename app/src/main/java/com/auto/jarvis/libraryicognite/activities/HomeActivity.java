@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         String userId = SaveSharedPreference.getUsername(this);
-        if (userId.length() == 0 || userId.isEmpty()) {
+        if (userId.length() == 0 || userId.isEmpty() || userId.equals("")) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -41,6 +41,10 @@ public class HomeActivity extends AppCompatActivity {
                             intentLibrary.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             intentLibrary.putExtra("IN_LIBRARY", true);
                             startActivity(intentLibrary);
+                        }else if (!inLibrary) {
+                            Intent barCodeIntent = new Intent(HomeActivity.this, BarCodeActivity.class);
+                            barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(barCodeIntent);
                         }
                     }
                 }
@@ -48,16 +52,17 @@ public class HomeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<RestService<Boolean>> call, Throwable t) {
-
+                    Intent barCodeIntent = new Intent(HomeActivity.this, BarCodeActivity.class);
+                    barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(barCodeIntent);
                 }
             });
             Log.d("LIBRARY", " " + inLibrary);
-            if (!inLibrary) {
-                Intent barCodeIntent = new Intent(this, BarCodeActivity.class);
-                barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(barCodeIntent);
-            }
-
+//            if (!inLibrary) {
+//                Intent barCodeIntent = new Intent(this, BarCodeActivity.class);
+//                barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(barCodeIntent);
+//            }
         }
     }
 }

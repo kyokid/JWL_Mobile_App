@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -34,7 +35,9 @@ import android.widget.Toast;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
+import com.auto.jarvis.libraryicognite.fragments.QRCodePagerFragment;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
@@ -65,13 +68,13 @@ public class BarCodeActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.pbLoadingQRCode)
-    RelativeLayout pbLoadingQRCode;
-    @BindView(R.id.ivQrCode)
-    ImageView ivQrCode;
+//    @BindView(R.id.pbLoadingQRCode)
+//    RelativeLayout pbLoadingQRCode;
+//    @BindView(R.id.ivQrCode)
+//    ImageView ivQrCode;
 
-    @BindView(R.id.pgLoading)
-    ProgressBar pgLoading;
+//    @BindView(R.id.pgLoading)
+//    ProgressBar pgLoading;
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
     @BindView(R.id.nvView)
@@ -88,37 +91,42 @@ public class BarCodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        QRCodePagerFragment fragment = QRCodePagerFragment.newInstance("", "");
+        fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
         ButterKnife.bind(this);
+        initView(SaveSharedPreference.getUsername(getBaseContext()));
         Log.d("Quan", "A");
-        new AsynCaller().execute();
+//        new AsynCaller().execute();
     }
 
-    private void helloWorld(final String userId) {
-        Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
-        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
-//            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
-//            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
-//            this.startService(service);
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                // checking for type intent filter
-                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
-                    Log.d("Registration token:" , intent.getStringExtra("token"));
-                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
-                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
-                    String message = intent.getStringExtra("message");
-                    Log.d("Push notification:", message);
-                    Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
-                    intentLibrary.putExtra("IN_LIBRARY", true);
-                    startActivity(intentLibrary);
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
-        registerReceiver(mRegistrationBroadcastReceiver, filter);
-        initView(userId);
-    }
+//    private void helloWorld(final String userId) {
+//        Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
+//        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
+////            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
+////            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
+////            this.startService(service);
+//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                // checking for type intent filter
+//                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+//                    Log.d("Registration token:" , intent.getStringExtra("token"));
+//                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
+//                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+//                    String message = intent.getStringExtra("message");
+//                    Log.d("Push notification:", message);
+//                    Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
+//                    intentLibrary.putExtra("IN_LIBRARY", true);
+//                    startActivity(intentLibrary);
+//                }
+//            }
+//        };
+//        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
+//        registerReceiver(mRegistrationBroadcastReceiver, filter);
+//        initView(userId);
+//    }
 
     private void initView(String userId) {
         tabTitle = getResources().getStringArray(R.array.tab_title);
@@ -135,69 +143,69 @@ public class BarCodeActivity extends AppCompatActivity {
                 return true;
             }
         });
-        qrCodeProcess(userId);
+//        qrCodeProcess(userId);
     }
 
-    private void qrCodeProcess(final String userId) {
-        String lastrequest = SaveSharedPreference.getLastRequestDate(this);
-        Date now = new Date(Calendar.getInstance().getTimeInMillis());
-        Bitmap bmp = null;
-        String privateKey = "";
-        if (lastrequest.equals(now.toString())) {
-            new AsyncQrCode().execute();
-            pgLoading.setVisibility(View.GONE);
-        } else {
-            apiService = ApiClient.getClient().create(ApiInterface.class);
-            Call<RestService<String>> result = apiService.requestPrivateKey(userId);
-            result.enqueue(new Callback<RestService<String>>() {
-                @Override
-                public void onResponse(Call<RestService<String>> call, Response<RestService<String>> response) {
-                    if (response.isSuccessful()) {
-                        String result = response.body().getData();
-                        String privateKey = "";
-                        JSONObject resultJson;
-                        String date = "";
-                        Bitmap bmp;
-                        try {
-                            resultJson = new JSONObject(result);
-                            privateKey = resultJson.getString("key");
-                            date = resultJson.getString("date");
-                            JSONObject qrContent = new JSONObject();
-                            qrContent.put("userId", userId);
-                            qrContent.put("key", privateKey);
-                            bmp = fromStringToBitmap(qrContent.toString());
-                            SaveSharedPreference.setLastRequestDate(BarCodeActivity.this, date);
-                            SaveSharedPreference.setPrivateKey(BarCodeActivity.this, privateKey);
-                            ivQrCode.setImageBitmap(bmp);
-                            pbLoadingQRCode.setVisibility(View.GONE);
-                            pgLoading.setVisibility(View.GONE);
-                        } catch (WriterException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<RestService<String>> call, Throwable t) {
-                    Toast.makeText(getBaseContext(), "Fail to call requestPrivateKey", Toast.LENGTH_LONG).show();
-                    Log.d("BarCodeActivity", t.getMessage());
-                    pgLoading.setVisibility(View.GONE);
-                }
-            });
-        }
-
-//        pbLoadingQRCode.setVisibility(View.GONE);
-        ivQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(BarCodeActivity.this, LibraryActivity.class);
-                intent.putExtra("IN_LIBRARY", Constant.CHECK_IN);
-                startActivity(intent);
-            }
-        });
-    }
+//    private void qrCodeProcess(final String userId) {
+//        String lastrequest = SaveSharedPreference.getLastRequestDate(this);
+//        Date now = new Date(Calendar.getInstance().getTimeInMillis());
+//        Bitmap bmp = null;
+//        String privateKey = "";
+//        if (lastrequest.equals(now.toString())) {
+//            new AsyncQrCode().execute();
+//            pgLoading.setVisibility(View.GONE);
+//        } else {
+//            apiService = ApiClient.getClient().create(ApiInterface.class);
+//            Call<RestService<String>> result = apiService.requestPrivateKey(userId);
+//            result.enqueue(new Callback<RestService<String>>() {
+//                @Override
+//                public void onResponse(Call<RestService<String>> call, Response<RestService<String>> response) {
+//                    if (response.isSuccessful()) {
+//                        String result = response.body().getData();
+//                        String privateKey = "";
+//                        JSONObject resultJson;
+//                        String date = "";
+//                        Bitmap bmp;
+//                        try {
+//                            resultJson = new JSONObject(result);
+//                            privateKey = resultJson.getString("key");
+//                            date = resultJson.getString("date");
+//                            JSONObject qrContent = new JSONObject();
+//                            qrContent.put("userId", userId);
+//                            qrContent.put("key", privateKey);
+//                            bmp = fromStringToBitmap(qrContent.toString());
+//                            SaveSharedPreference.setLastRequestDate(BarCodeActivity.this, date);
+//                            SaveSharedPreference.setPrivateKey(BarCodeActivity.this, privateKey);
+//                            ivQrCode.setImageBitmap(bmp);
+//                            pbLoadingQRCode.setVisibility(View.GONE);
+//                            pgLoading.setVisibility(View.GONE);
+//                        } catch (WriterException e) {
+//                            e.printStackTrace();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<RestService<String>> call, Throwable t) {
+//                    Toast.makeText(getBaseContext(), "Fail to call requestPrivateKey", Toast.LENGTH_LONG).show();
+//                    Log.d("BarCodeActivity", t.getMessage());
+//                    pgLoading.setVisibility(View.GONE);
+//                }
+//            });
+//        }
+//
+////        pbLoadingQRCode.setVisibility(View.GONE);
+//        ivQrCode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(BarCodeActivity.this, LibraryActivity.class);
+//                intent.putExtra("IN_LIBRARY", Constant.CHECK_IN);
+//                startActivity(intent);
+//            }
+//        });
+//    }
 
     private Bitmap fromStringToBitmap(String content) throws WriterException {
         QRCodeWriter writer = new QRCodeWriter();
@@ -222,7 +230,7 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mRegistrationBroadcastReceiver);
+//        unregisterReceiver(mRegistrationBroadcastReceiver); chuyen sang unregister tu fragment
     }
 
     @Override
@@ -279,9 +287,7 @@ public class BarCodeActivity extends AppCompatActivity {
             qrContent.put("userId", userId);
             qrContent.put("key", privateKey);
             return fromStringToBitmap(qrContent.toString());
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (WriterException | JSONException e) {
             e.printStackTrace();
         }
         return null;
@@ -307,45 +313,45 @@ public class BarCodeActivity extends AppCompatActivity {
     }
 
 
-    private class AsynCaller extends AsyncTask<Void, Void, String> {
+//    private class AsynCaller extends AsyncTask<Void, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(Void... params) {
+//            return SaveSharedPreference.getUsername(BarCodeActivity.this);
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            pgLoading.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String userId) {
+//            super.onPostExecute(userId);
+//            pgLoading.setVisibility(View.GONE);
+//            helloWorld(userId);
+//        }
+//    }
 
-        @Override
-        protected String doInBackground(Void... params) {
-            return SaveSharedPreference.getUsername(BarCodeActivity.this);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pgLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String userId) {
-            super.onPostExecute(userId);
-            pgLoading.setVisibility(View.GONE);
-            helloWorld(userId);
-        }
-    }
-
-    private class AsyncQrCode extends AsyncTask<Void, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            return qrCodeGene();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pgLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            ivQrCode.setImageBitmap(bitmap);
-            pgLoading.setVisibility(View.GONE);
-        }
-    }
+//    private class AsyncQrCode extends AsyncTask<Void, Void, Bitmap> {
+//
+//        @Override
+//        protected Bitmap doInBackground(Void... params) {
+//            return qrCodeGene();
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            pgLoading.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            super.onPostExecute(bitmap);
+//            ivQrCode.setImageBitmap(bitmap);
+//            pgLoading.setVisibility(View.GONE);
+//        }
+//    }
 }

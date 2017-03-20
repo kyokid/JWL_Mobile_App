@@ -57,10 +57,10 @@ public class BeaconNotificationManager {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
                 Log.d(TAG, "onEnterRegion: " + region.getIdentifier());
-                MyApplication.identifier = "" + region.getIdentifier();
-                MyApplication.major = "" + region.getMajor();
-                MyApplication.minor = "" + region.getMinor();
-                MyApplication.proximity = "" + region.getProximityUUID();
+//                MyApplication.identifier = "" + region.getIdentifier();
+//                MyApplication.major = "" + region.getMajor();
+//                MyApplication.minor = "" + region.getMinor();
+//                MyApplication.proximity = "" + region.getProximityUUID();
                 String message = enterMessages.get(region.getIdentifier());
                 if (message != null) {
                     if (!isInit) {
