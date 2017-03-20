@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Havh on 1/16/2017.
@@ -11,13 +12,13 @@ import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 
 public class Book implements Parcelable{
     private String rfidBook;
-    private String title;
-    private String publisher;
+    @SerializedName("title") private String title;
+    @SerializedName("publisher") private String publisher;
     private String author;
     private String deadLine;
     private String description;
     private int numberOfPages;
-    private int id;
+    @SerializedName("id") private int id;
     private int publishYear;
     private int price;
     private String thumbnail;

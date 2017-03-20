@@ -23,7 +23,7 @@ public class PagerFragmentAdapter extends FragmentPagerAdapter {
         if(position == 0){
             return NFCPagerFragment.newInstance();
         }
-        return QRCodePagerFragment.newInstance(String.valueOf(position), userId);
+        return QRCodePagerFragment.newInstance();
     }
 
     @Override

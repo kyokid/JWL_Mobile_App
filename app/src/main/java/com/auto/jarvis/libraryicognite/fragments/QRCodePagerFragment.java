@@ -65,10 +65,8 @@ public class QRCodePagerFragment extends Fragment {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     ApiInterface apiService;
 
-    public static QRCodePagerFragment newInstance(String title, String userId) {
+    public static QRCodePagerFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString("title", title);
-        args.putString("userId", userId);
         QRCodePagerFragment fragment = new QRCodePagerFragment();
         fragment.setArguments(args);
         return fragment;

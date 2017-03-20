@@ -1,5 +1,6 @@
 package com.auto.jarvis.libraryicognite.interfaces;
 
+import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.input.InitBorrow;
 import com.auto.jarvis.libraryicognite.models.output.Data;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
@@ -51,4 +52,7 @@ public interface ApiInterface {
 
     @GET("/renew/{rfid}")
     Call<RestService<Boolean>> renewBorrowedBook(@Path("rfid") String rfid);
+
+    @GET("/books/search")
+    Call<RestService<List<Book>>> search(@Query("search_term") String searchKey);
 }

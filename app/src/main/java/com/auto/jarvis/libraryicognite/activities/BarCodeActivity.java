@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +37,7 @@ import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.fragments.QRCodePagerFragment;
+import com.auto.jarvis.libraryicognite.fragments.SearchFragment;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
@@ -83,8 +85,8 @@ public class BarCodeActivity extends AppCompatActivity {
     String[] tabTitle;
     ApiInterface apiService;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-
-
+    private final String BARCODE_FRAGMENT_TAG = "barcode_fragment";
+    private final String SEARCH_FRAGMENT_TAG = "search_fragment";
     private String userId;
 
     @Override
@@ -93,7 +95,7 @@ public class BarCodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bar_code);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        QRCodePagerFragment fragment = QRCodePagerFragment.newInstance("", "");
+        QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
         fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
         ButterKnife.bind(this);
         initView(SaveSharedPreference.getUsername(getBaseContext()));
@@ -309,6 +311,38 @@ public class BarCodeActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment f = fragmentManager.findFragmentByTag(SEARCH_FRAGMENT_TAG);
+                if (f instanceof SearchFragment){
+                    ((SearchFragment) f).search(query);
+                }else {
+                    SearchFragment fragment = SearchFragment.newInstance(query);
+                    fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment, SEARCH_FRAGMENT_TAG).commit();
+                    fragment.search(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                Fragment f = getSupportFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_TAG);
+                if (f instanceof SearchFragment){
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
+                    fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
+                }
+                return false;
+            }
+        });
         return true;
     }
 
