@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
@@ -32,6 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 import static com.auto.jarvis.libraryicognite.R.id.ivQrCode;
 
 /**
@@ -42,6 +44,8 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.rvBooks)
     RecyclerView rvBooks;
+    @BindView(R.id.tvNoMatchingBook)
+    TextView tvNoMatchingBook;
     public static final String SEARCH = "search";
     private String searchKey;
     private ApiInterface apiService;
@@ -71,12 +75,17 @@ public class SearchFragment extends Fragment {
         result.enqueue(new Callback<RestService<List<Book>>>() {
             @Override
             public void onResponse(Call<RestService<List<Book>>> call, Response<RestService<List<Book>>> response) {
-                mBooks = response.body().getData();
-                mAdapter = new SearchBookListAdapter(getContext(), mBooks);
-                rvBooks.setAdapter(mAdapter);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                        LinearLayoutManager.VERTICAL, false);
-                rvBooks.setLayoutManager(layoutManager);
+                if (response.body().getData().size()>0){
+                    tvNoMatchingBook.setVisibility(View.GONE);
+                    mBooks = response.body().getData();
+                    mAdapter = new SearchBookListAdapter(getContext(), mBooks);
+                    rvBooks.setAdapter(mAdapter);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
+                            LinearLayoutManager.VERTICAL, false);
+                    rvBooks.setLayoutManager(layoutManager);
+                } else{
+                    tvNoMatchingBook.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
