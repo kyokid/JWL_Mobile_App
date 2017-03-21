@@ -104,7 +104,7 @@ public class QRCodePagerFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getContext().unregisterReceiver(mRegistrationBroadcastReceiver);
+//        getContext().unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
     private class AsynCaller extends AsyncTask<Void, Void, String> {
@@ -150,29 +150,29 @@ public class QRCodePagerFragment extends Fragment {
     }
 
     private void helloWorld(final String userId) {
-        Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
-        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
-//            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
-//            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
-//            this.startService(service);
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                // checking for type intent filter
-                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
-                    Log.d("Registration token:" , intent.getStringExtra("token"));
-                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
-                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
-                    String message = intent.getStringExtra("message");
-                    Log.d("Push notification:", message);
-                    Intent intentLibrary = new Intent(getContext(), LibraryActivity.class);
-                    intentLibrary.putExtra("IN_LIBRARY", true);
-                    startActivity(intentLibrary);
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
-        getContext().registerReceiver(mRegistrationBroadcastReceiver, filter);
+//        Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
+//        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
+////            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
+////            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
+////            this.startService(service);
+//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                // checking for type intent filter
+//                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+//                    Log.d("Registration token:" , intent.getStringExtra("token"));
+//                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
+//                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+//                    String message = intent.getStringExtra("message");
+//                    Log.d("Push notification:", message);
+//                    Intent intentLibrary = new Intent(getContext(), LibraryActivity.class);
+//                    intentLibrary.putExtra("IN_LIBRARY", true);
+//                    startActivity(intentLibrary);
+//                }
+//            }
+//        };
+//        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
+//        getContext().registerReceiver(mRegistrationBroadcastReceiver, filter);
         initView(userId);
     }
 

@@ -64,7 +64,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.R.attr.fragment;
 import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
+import static java.security.AccessController.getContext;
 
 public class BarCodeActivity extends AppCompatActivity {
 
@@ -94,12 +96,36 @@ public class BarCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
 
+        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
+//            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
+//            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
+//            this.startService(service);
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+                    Log.d("Registration token:" , intent.getStringExtra("token"));
+                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
+                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+                    String message = intent.getStringExtra("message");
+                    Log.d("Push notification:", message);
+                    Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
+                    intentLibrary.putExtra("IN_LIBRARY", true);
+                    startActivity(intentLibrary);
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
+        registerReceiver(mRegistrationBroadcastReceiver, filter);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
         fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
         ButterKnife.bind(this);
         initView(SaveSharedPreference.getUsername(getBaseContext()));
         Log.d("Quan", "A");
+
 //        new AsynCaller().execute();
     }
 
@@ -232,7 +258,7 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        unregisterReceiver(mRegistrationBroadcastReceiver); chuyen sang unregister tu fragment
+        unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
     @Override
