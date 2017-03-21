@@ -63,10 +63,6 @@ import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
 
 public class BarCodeActivity extends AppCompatActivity {
 
-    //    public static final String DEFAULT_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FEED";
-//    public static final String DEFAULT_IDENTIFIER = "rid";
-//    private static final Region ALL_ESTIMOTE_BEACON_REGION  = new Region(DEFAULT_IDENTIFIER,
-//            UUID.fromString(DEFAULT_UUID), null, null);
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.pbLoadingQRCode)
@@ -76,25 +72,17 @@ public class BarCodeActivity extends AppCompatActivity {
 
     @BindView(R.id.pgLoading)
     ProgressBar pgLoading;
-    //    @BindView(R.id.viewPager)
-//    ViewPager viewPager;
-//    @BindView(R.id.tablayout)
-//    TabLayout tabLayout;
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
     @BindView(R.id.nvView)
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
-    //    private String userId;
     ApiInterface apiService;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-    //    private BeaconManager beaconManager;
-    private List<Beacon> beacons = new ArrayList<>();
 
     private String userId;
-//    private CheckOutProcess checkout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +112,6 @@ public class BarCodeActivity extends AppCompatActivity {
                     Intent intentLibrary = new Intent(BarCodeActivity.this, LibraryActivity.class);
                     intentLibrary.putExtra("IN_LIBRARY", true);
                     startActivity(intentLibrary);
-
                 }
             }
         };
@@ -307,9 +294,6 @@ public class BarCodeActivity extends AppCompatActivity {
                 new IntentFilter(Constant.PUSH_NOTIFICATION));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constant.REGISTRATION_COMPLETE));
-//        if (SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
-//            startScanning();
-//        }
     }
 
 

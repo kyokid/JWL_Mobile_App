@@ -19,11 +19,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     private static MyApplication instance;
 
-    private boolean beaconNotificationsEnabled = false;
-    public static String identifier = "";
-    public static String major = "";
-    public static String minor = "";
-    public static String proximity = "";
     private String username;
 
     private int resume;
@@ -61,21 +56,21 @@ public class MyApplication extends Application implements Application.ActivityLi
         return instance;
     }
 
-    public void enableBeaconNotifications() {
-        if (beaconNotificationsEnabled) {
-            return;
-        }
+//    public void enableBeaconNotifications() {
+//        if (beaconNotificationsEnabled) {
+//            return;
+//        }
+//
+//        BeaconNotificationManager beaconNotificationsManager = new BeaconNotificationManager(this);
+//
+//        beaconNotificationsManager.addNotification(new BeaconID("B9407F30-F5F8-466E-AFF9-25556B57FEED", 1, 1), "Init Checkout", "Success, Thank you");
+//        beaconNotificationsManager.startMonitoring();
+//        beaconNotificationsEnabled = true;
+//    }
 
-        BeaconNotificationManager beaconNotificationsManager = new BeaconNotificationManager(this);
-
-        beaconNotificationsManager.addNotification(new BeaconID("B9407F30-F5F8-466E-AFF9-25556B57FEED", 1, 1), "Init Checkout", "Success, Thank you");
-        beaconNotificationsManager.startMonitoring();
-        beaconNotificationsEnabled = true;
-    }
-
-    public boolean isBeaconNotificationsEnabled() {
-        return beaconNotificationsEnabled;
-    }
+//    public boolean isBeaconNotificationsEnabled() {
+//        return beaconNotificationsEnabled;
+//    }
 
     public void setConnectivityListener(InternetConnectionReceiver.ConnectivityReceiverListener listener) {
         InternetConnectionReceiver.connectivityReceiverListener = listener;
