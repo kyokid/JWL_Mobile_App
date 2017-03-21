@@ -86,6 +86,8 @@ public class BarCodeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     String[] tabTitle;
     ApiInterface apiService;
+
+
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private final String BARCODE_FRAGMENT_TAG = "barcode_fragment";
     private final String SEARCH_FRAGMENT_TAG = "search_fragment";
@@ -95,7 +97,8 @@ public class BarCodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
-
+        ButterKnife.bind(this);
+        userId = SaveSharedPreference.getUsername(getBaseContext());
         NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
 //            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
@@ -123,9 +126,8 @@ public class BarCodeActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
         fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
-        ButterKnife.bind(this);
+
         initView(SaveSharedPreference.getUsername(getBaseContext()));
-        Log.d("Quan", "A");
 
 //        new AsynCaller().execute();
     }

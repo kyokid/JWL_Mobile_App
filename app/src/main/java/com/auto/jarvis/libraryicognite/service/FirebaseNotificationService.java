@@ -29,12 +29,14 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         //Toast.makeText(getApplicationContext(), "Receive message: " + remoteMessage.getFrom(), Toast.LENGTH_SHORT).show();
         Log.d("FirebaseNoti: ", remoteMessage.getNotification().getBody());
         String title = remoteMessage.getNotification().getTitle();
-        if (title != null && title.equals("Remaining day")) {
-            sendNotification(remoteMessage);
-        } else {
+            if (title != null && title.equals("Remaining day")) {
+                sendNotification(remoteMessage);
+            } else {
             Intent pushNotification = new Intent(Constant.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", remoteMessage.getNotification().getBody());
+            pushNotification.putExtra("mess" +
+                    "age", remoteMessage.getNotification().getBody());
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+
         }
     }
 

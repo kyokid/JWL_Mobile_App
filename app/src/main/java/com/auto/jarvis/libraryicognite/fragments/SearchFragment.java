@@ -52,7 +52,7 @@ public class SearchFragment extends Fragment {
     private List<Book> mBooks;
     private SearchBookListAdapter mAdapter;
 
-    public static SearchFragment newInstance(String searchKey){
+    public static SearchFragment newInstance(String searchKey) {
         SearchFragment searchFragment = new SearchFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SEARCH, searchKey);
@@ -69,13 +69,13 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    public void search(String searchKey){
+    public void search(String searchKey) {
         apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<RestService<List<Book>>> result = apiService.search(searchKey);
         result.enqueue(new Callback<RestService<List<Book>>>() {
             @Override
             public void onResponse(Call<RestService<List<Book>>> call, Response<RestService<List<Book>>> response) {
-                if (response.body().getData().size()>0){
+                if (response.body().getData() != null && response.body().getData().size() > 0) {
                     tvNoMatchingBook.setVisibility(View.GONE);
                     mBooks = response.body().getData();
                     mAdapter = new SearchBookListAdapter(getContext(), mBooks);
@@ -83,14 +83,14 @@ public class SearchFragment extends Fragment {
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                             LinearLayoutManager.VERTICAL, false);
                     rvBooks.setLayoutManager(layoutManager);
-                } else{
+                } else {
                     tvNoMatchingBook.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(Call<RestService<List<Book>>> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail to call search API", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Fail to call search API", Toast.LENGTH_SHORT).show();
             }
         });
     }
