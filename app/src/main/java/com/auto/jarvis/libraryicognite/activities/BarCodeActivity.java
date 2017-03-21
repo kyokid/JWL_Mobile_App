@@ -116,6 +116,7 @@ public class BarCodeActivity extends AppCompatActivity {
                 }
             }
         };
+
         IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
         registerReceiver(mRegistrationBroadcastReceiver, filter);
 
