@@ -3,8 +3,13 @@ package com.auto.jarvis.libraryicognite.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.auto.jarvis.libraryicognite.models.output.BookAuthorDto;
+import com.auto.jarvis.libraryicognite.models.output.BookCategoryDto;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Havh on 1/16/2017.
@@ -14,7 +19,6 @@ public class Book implements Parcelable{
     private String rfidBook;
     @SerializedName("title") private String title;
     @SerializedName("publisher") private String publisher;
-    private String author;
     private String deadLine;
     private String description;
     private int numberOfPages;
@@ -22,14 +26,17 @@ public class Book implements Parcelable{
     private int publishYear;
     private int price;
     private String thumbnail;
+    private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
+    private ArrayList<BookCategoryDto> bookCopyBookBookCategories;
+    private String borrowedDate;
+    private String deadlineDate;
 
     public Book() {
 
     }
 
-    public Book(String title, String author, int id) {
+    public Book(String title, int id) {
         this.title = title;
-        this.author = author;
         this.id = id;
     }
 
@@ -38,7 +45,6 @@ public class Book implements Parcelable{
         rfidBook = in.readString();
         title = in.readString();
         publisher = in.readString();
-        author = in.readString();
         deadLine = in.readString();
         description = in.readString();
         numberOfPages = in.readInt();
@@ -46,6 +52,33 @@ public class Book implements Parcelable{
         publishYear = in.readInt();
         price = in.readInt();
         thumbnail = in.readString();
+        bookCopyBookBookAuthors = in.createTypedArrayList(BookAuthorDto.CREATOR);
+        bookCopyBookBookCategories = in.createTypedArrayList(BookCategoryDto.CREATOR);
+        borrowedDate = in.readString();
+        deadlineDate = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(rfidBook);
+        dest.writeString(title);
+        dest.writeString(publisher);
+        dest.writeString(deadLine);
+        dest.writeString(description);
+        dest.writeInt(numberOfPages);
+        dest.writeInt(id);
+        dest.writeInt(publishYear);
+        dest.writeInt(price);
+        dest.writeString(thumbnail);
+        dest.writeTypedList(bookCopyBookBookAuthors);
+        dest.writeTypedList(bookCopyBookBookCategories);
+        dest.writeString(borrowedDate);
+        dest.writeString(deadlineDate);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -59,6 +92,22 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
+    public String getBorrowedDate() {
+        return borrowedDate;
+    }
+
+    public String getDeadlineDate() {
+        return deadlineDate;
+    }
+
+    public ArrayList<BookCategoryDto> getBookCopyBookBookCategories() {
+        return bookCopyBookBookCategories;
+    }
+
+    public ArrayList<BookAuthorDto> getBookCopyBookBookAuthors() {
+        return bookCopyBookBookAuthors;
+    }
 
     public int getPrice() {
         return price;
@@ -96,9 +145,6 @@ public class Book implements Parcelable{
         return title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
 
     public int getId() {
         return id;
@@ -115,27 +161,12 @@ public class Book implements Parcelable{
         book.publishYear = bookBorrowed.getBookCopyBookPublishYear();
         book.thumbnail = bookBorrowed.getBookCopyBookThumbnail();
         book.price = bookBorrowed.getBookCopyBookPrice();
+        book.bookCopyBookBookAuthors = bookBorrowed.getBookCopyBookBookAuthors();
+        book.bookCopyBookBookCategories = bookBorrowed.getBookCopyBookBookCategories();
+        book.borrowedDate = bookBorrowed.getBorrowedDate();
         return book;
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(rfidBook);
-        dest.writeString(title);
-        dest.writeString(publisher);
-        dest.writeString(author);
-        dest.writeString(deadLine);
-        dest.writeString(description);
-        dest.writeInt(numberOfPages);
-        dest.writeInt(id);
-        dest.writeInt(publishYear);
-        dest.writeInt(price);
-        dest.writeString(thumbnail);
-    }
 }

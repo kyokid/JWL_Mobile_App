@@ -55,4 +55,7 @@ public interface ApiInterface {
 
     @GET("/books/search")
     Call<RestService<List<Book>>> search(@Query("search_term") String searchKey);
+
+    @GET("/books/{id}")
+    Call<RestService<List<Book>>> getBookDetail(@Path("id") String id);
 }

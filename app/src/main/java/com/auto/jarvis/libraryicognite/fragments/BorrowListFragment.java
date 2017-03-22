@@ -66,20 +66,6 @@ public class BorrowListFragment extends Fragment {
     }
 
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        rvBooks.addOnItemTouchListener(new BorrowCartDetailListener(getActivity(), rvBooks, new BorrowCartDetailListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Toast.makeText(getActivity().getApplicationContext(), "id = " + rvBooks.getAdapter().getItemId(position), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onItemLongClick(View view, int position) {
-//
-//            }
-//        }));
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

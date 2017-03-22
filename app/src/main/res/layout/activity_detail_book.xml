@@ -13,7 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBar"
@@ -34,22 +35,21 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="310dp"
+            android:layout_height="348dp"
             android:background="@color/colorDetailBook"
 
-            >
+            android:layout_weight="1.08">
 
             <TextView
                 android:id="@+id/tvTitleBook"
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
-                android:layout_alignTop="@+id/cardThumbnail"
-                android:layout_marginStart="35dp"
-                android:layout_marginTop="14dp"
-                android:layout_toEndOf="@+id/cardThumbnail"
+                android:layout_marginStart="15dp"
                 android:text="Clean Architecture"
                 android:textColor="#FFF"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:layout_alignTop="@+id/cardThumbnail"
+                android:layout_toEndOf="@+id/tvDuration" />
 
             <TextView
                 android:id="@+id/tvCategories"
@@ -87,45 +87,80 @@
                 android:id="@+id/tvPublished"
                 android:layout_width="126dp"
                 android:layout_height="16dp"
-                android:layout_alignStart="@+id/tvCategories"
-                android:layout_below="@+id/tvCategories"
-                android:layout_marginTop="15dp"
-
-                android:text="Published: 30/02/2016"
+                android:text="Publisher"
                 android:textColor="#FFF"
-                android:textSize="12sp" />
+                android:textSize="14sp"
+                android:layout_below="@+id/tvCategories"
+                android:layout_alignStart="@+id/tvAuthor"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/tvCategories"
+                android:layout_below="@+id/tvPublished"
+                android:layout_marginTop="15dp"
+                android:maxLines="2"
+                android:lines="2"
+                android:text="Conan Doyle"
+                android:textColor="#FFF"
+                android:textSize="14sp"
+                android:layout_alignEnd="@+id/tvCategories" />
+
+            <TextView
+                android:id="@+id/tvPublishedYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015"
+                android:textColor="#FFF"
+                android:layout_above="@+id/tvNumberOfPages"
+                android:layout_alignStart="@+id/tvPublished"
+                android:textSize="14sp"
+                android:layout_marginBottom="12dp" />
+
 
             <TextView
                 android:id="@+id/tvNumberOfPages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/tvPublished"
-
-                android:layout_below="@+id/tvPublished"
-                android:layout_marginTop="18dp"
                 android:text="300 pages"
-                android:textColor="#FFF" />
+                android:textColor="#FFF"
+                android:layout_above="@+id/tvPrice"
+                android:textSize="12sp"
+                android:layout_alignStart="@+id/tvPublished"
+                android:layout_marginBottom="12dp" />
 
 
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/tvPublished"
-
-                android:layout_below="@+id/tvNumberOfPages"
-                android:layout_marginTop="18dp"
+                android:textSize="12sp"
                 android:text="$90"
-                android:textColor="#FFF" />
+                android:textColor="#FFF"
+                android:layout_alignBottom="@+id/cardThumbnail"
+                android:layout_alignStart="@+id/tvNumberOfPages" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20/2/2017 - 20/5/2017"
+                android:textColor="#FFF"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/cardThumbnail"
+                android:layout_marginBottom="26dp" />
 
             <Button
                 android:text="Renew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:id="@+id/btnRenew"
                 android:layout_below="@+id/tvPrice"
-                android:layout_alignEnd="@+id/tvCategories"
-                android:layout_marginTop="23dp"
-                android:id="@+id/btnRenew" />
+                android:visibility="gone"
+                android:layout_alignEnd="@+id/tvCategories" />
 
 
         </RelativeLayout>

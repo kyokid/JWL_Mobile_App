@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.auto.jarvis.libraryicognite.activities.DetailBookActivity;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
+import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,7 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private List<Book> mBooks;
     Context context;
+    ApiInterface apiClient;
 
 
     public BorrowListAdapter(List<Book> mBooks) {
@@ -107,5 +110,9 @@ public class BorrowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void addAll(List<Book> books) {
         mBooks.addAll(books);
         notifyDataSetChanged();
+    }
+
+    private void getDetailBookCopy(String bookId) {
+        apiClient = ApiClient.getClient().create(ApiInterface.class);
     }
 }
