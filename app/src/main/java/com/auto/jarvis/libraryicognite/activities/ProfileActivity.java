@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
@@ -73,23 +74,27 @@ public class ProfileActivity extends AppCompatActivity {
         getProfile.enqueue(new Callback<RestService<Data>>() {
             @Override
             public void onResponse(Call<RestService<Data>> call, Response<RestService<Data>> response) {
-                Profile profile = response.body().getData().getProfile();
-                fullName = profile.getFullname();
-                email = profile.getEmail();
-                address = profile.getAddress();
-                placeOfWork = profile.getPlaceOfWork();
-                birthday = profile.getDateOfBirth();
-                phoneNo = profile.getPhoneNo();
+                if (response.body().getData().getProfile() != null){
+                    Profile profile = response.body().getData().getProfile();
+                    fullName = profile.getFullname();
+                    email = profile.getEmail();
+                    address = profile.getAddress();
+                    placeOfWork = profile.getPlaceOfWork();
+                    birthday = profile.getDateOfBirth();
+                    phoneNo = profile.getPhoneNo();
 
-                if (!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) &&
-                        !TextUtils.isEmpty(address) && !TextUtils.isEmpty(placeOfWork) &&
-                        !TextUtils.isEmpty(birthday) && !TextUtils.isEmpty(phoneNo)) {
-                    tvFullName.setText(fullName);
-                    tvEmail.setText(email);
-                    tvAddress.setText(address);
+                    if (!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) &&
+                            !TextUtils.isEmpty(address) && !TextUtils.isEmpty(placeOfWork) &&
+                            !TextUtils.isEmpty(birthday) && !TextUtils.isEmpty(phoneNo)) {
+                        tvFullName.setText(fullName);
+                        tvEmail.setText(email);
+                        tvAddress.setText(address);
 //                    tvPlaceOfWork.setText(placeOfWork);
 //                    tvBirthday.setText(birthday);
-                    tvPhoneNo.setText(phoneNo);
+                        tvPhoneNo.setText(phoneNo);
+                    }
+                }else {
+                    Toast.makeText(getBaseContext(), "Vui lòng thêm profile vào DB", Toast.LENGTH_SHORT).show();
                 }
 
 

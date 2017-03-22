@@ -39,6 +39,7 @@
                     android:textStyle="italic"/>
             </RelativeLayout>
             <TextView
+                android:id="@+id/tvAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Edogawa conan"/>

@@ -3,13 +3,15 @@ package com.auto.jarvis.libraryicognite.models.output;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by HaVH on 3/21/17.
  */
 
 public class BookAuthorDto implements Parcelable{
-    private Integer id;
-    private String authorName;
+    @SerializedName("id") private Integer id;
+    @SerializedName("authorName") private String authorName;
 
     public BookAuthorDto() {
 

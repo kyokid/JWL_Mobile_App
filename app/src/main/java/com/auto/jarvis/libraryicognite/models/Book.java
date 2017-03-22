@@ -25,12 +25,12 @@ public class Book implements Parcelable{
     private int publishYear;
     private int price;
     private String thumbnail;
-    private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
+    @SerializedName("bookAuthors") private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
     private ArrayList<BookCategoryDto> bookCopyBookBookCategories;
     private String borrowedDate;
     private String deadlineDate;
-    @SerializedName("isAvailable") private boolean isAvailable;
-
+    @SerializedName("available") private boolean isAvailable;
+    @SerializedName("follow") private boolean isFollow;
     public Book() {
 
     }
@@ -39,7 +39,6 @@ public class Book implements Parcelable{
         this.title = title;
         this.id = id;
     }
-
 
     protected Book(Parcel in) {
         rfidBook = in.readString();
@@ -57,6 +56,7 @@ public class Book implements Parcelable{
         borrowedDate = in.readString();
         deadlineDate = in.readString();
         isAvailable = in.readByte() != 0;
+        isFollow = in.readByte() != 0;
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -70,6 +70,10 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
 
     public String getBorrowedDate() {
         return borrowedDate;
@@ -145,6 +149,10 @@ public class Book implements Parcelable{
         return book;
     }
 
+    public boolean isFollow() {
+        return isFollow;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -167,5 +175,6 @@ public class Book implements Parcelable{
         dest.writeString(borrowedDate);
         dest.writeString(deadlineDate);
         dest.writeByte((byte) (isAvailable ? 1 : 0));
+        dest.writeByte((byte) (isFollow ? 1 : 0));
     }
 }
