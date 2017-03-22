@@ -3,6 +3,9 @@ package com.auto.jarvis.libraryicognite.models.output;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by HaVH on 2/9/17.
  */
@@ -27,6 +30,8 @@ public class InformationBookBorrowed implements Parcelable {
     private int bookCopyBookPublishYear;
     private int bookCopyBookPrice;
     private String bookCopyBookThumbnail;
+    private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
+    private ArrayList<BookCategoryDto> bookCopyBookBookCategories;
 
 
     protected InformationBookBorrowed(Parcel in) {
@@ -49,6 +54,8 @@ public class InformationBookBorrowed implements Parcelable {
         bookCopyBookPublishYear = in.readInt();
         bookCopyBookPrice = in.readInt();
         bookCopyBookThumbnail = in.readString();
+        bookCopyBookBookAuthors = in.createTypedArrayList(BookAuthorDto.CREATOR);
+        bookCopyBookBookCategories = in.createTypedArrayList(BookCategoryDto.CREATOR);
     }
 
     @Override
@@ -72,6 +79,8 @@ public class InformationBookBorrowed implements Parcelable {
         dest.writeInt(bookCopyBookPublishYear);
         dest.writeInt(bookCopyBookPrice);
         dest.writeString(bookCopyBookThumbnail);
+        dest.writeTypedList(bookCopyBookBookAuthors);
+        dest.writeTypedList(bookCopyBookBookCategories);
     }
 
     @Override
@@ -90,6 +99,14 @@ public class InformationBookBorrowed implements Parcelable {
             return new InformationBookBorrowed[size];
         }
     };
+
+    public ArrayList<BookAuthorDto> getBookCopyBookBookAuthors() {
+        return bookCopyBookBookAuthors;
+    }
+
+    public ArrayList<BookCategoryDto> getBookCopyBookBookCategories() {
+        return bookCopyBookBookCategories;
+    }
 
     public int getBookCopyBookPrice() {
         return bookCopyBookPrice;
