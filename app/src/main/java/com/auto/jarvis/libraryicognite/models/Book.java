@@ -30,6 +30,7 @@ public class Book implements Parcelable{
     private ArrayList<BookCategoryDto> bookCopyBookBookCategories;
     private String borrowedDate;
     private String deadlineDate;
+    @SerializedName("isAvailable") private boolean isAvailable;
 
     public Book() {
 
@@ -56,29 +57,7 @@ public class Book implements Parcelable{
         bookCopyBookBookCategories = in.createTypedArrayList(BookCategoryDto.CREATOR);
         borrowedDate = in.readString();
         deadlineDate = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(rfidBook);
-        dest.writeString(title);
-        dest.writeString(publisher);
-        dest.writeString(deadLine);
-        dest.writeString(description);
-        dest.writeInt(numberOfPages);
-        dest.writeInt(id);
-        dest.writeInt(publishYear);
-        dest.writeInt(price);
-        dest.writeString(thumbnail);
-        dest.writeTypedList(bookCopyBookBookAuthors);
-        dest.writeTypedList(bookCopyBookBookCategories);
-        dest.writeString(borrowedDate);
-        dest.writeString(deadlineDate);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        isAvailable = in.readByte() != 0;
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -167,6 +146,27 @@ public class Book implements Parcelable{
         return book;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(rfidBook);
+        dest.writeString(title);
+        dest.writeString(publisher);
+        dest.writeString(deadLine);
+        dest.writeString(description);
+        dest.writeInt(numberOfPages);
+        dest.writeInt(id);
+        dest.writeInt(publishYear);
+        dest.writeInt(price);
+        dest.writeString(thumbnail);
+        dest.writeTypedList(bookCopyBookBookAuthors);
+        dest.writeTypedList(bookCopyBookBookCategories);
+        dest.writeString(borrowedDate);
+        dest.writeString(deadlineDate);
+        dest.writeByte((byte) (isAvailable ? 1 : 0));
+    }
 }
