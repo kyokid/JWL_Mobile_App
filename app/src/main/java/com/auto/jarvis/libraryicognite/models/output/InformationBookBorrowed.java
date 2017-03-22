@@ -3,8 +3,9 @@ package com.auto.jarvis.libraryicognite.models.output;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by HaVH on 2/9/17.
@@ -19,19 +20,38 @@ public class InformationBookBorrowed implements Parcelable {
     private int extendTimesLimit;
     private int daysPerExtend;
     private String borrowedDate;
+
     private String returnDate;
+
     private String deadlineDate;
     private int extendNumber;
     private int rootId;
-    private String bookCopyBookTitle;
-    private String bookCopyBookPublisher;
-    private String bookCopyBookDescription;
-    private int bookCopyBookNumberOfPages;
-    private int bookCopyBookPublishYear;
-    private int bookCopyBookPrice;
-    private String bookCopyBookThumbnail;
-    private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
-    private ArrayList<BookCategoryDto> bookCopyBookBookCategories;
+    @SerializedName("bookCopyBookTitle")
+    private String bookTitle;
+
+    @SerializedName("bookCopyBookPublisher")
+    private String publisher;
+
+    @SerializedName("bookCopyBookDescription")
+    private String Description;
+
+    @SerializedName("bookCopyBookNumberOfPages")
+    private int numberOfPages;
+
+    @SerializedName("bookCopyBookPublishYear")
+    private int publishYear;
+
+    @SerializedName("bookCopyBookPrice")
+    private int price;
+
+    @SerializedName("bookCopyBookThumbnail")
+    private String thumbnail;
+
+    @SerializedName("bookCopyBookBookAuthors")
+    private ArrayList<BookAuthorDto> authors;
+
+    @SerializedName("bookCopyBookBookCategories")
+    private ArrayList<BookCategoryDto> categories;
 
 
     protected InformationBookBorrowed(Parcel in) {
@@ -47,15 +67,15 @@ public class InformationBookBorrowed implements Parcelable {
         deadlineDate = in.readString();
         extendNumber = in.readInt();
         rootId = in.readInt();
-        bookCopyBookTitle = in.readString();
-        bookCopyBookPublisher = in.readString();
-        bookCopyBookDescription = in.readString();
-        bookCopyBookNumberOfPages = in.readInt();
-        bookCopyBookPublishYear = in.readInt();
-        bookCopyBookPrice = in.readInt();
-        bookCopyBookThumbnail = in.readString();
-        bookCopyBookBookAuthors = in.createTypedArrayList(BookAuthorDto.CREATOR);
-        bookCopyBookBookCategories = in.createTypedArrayList(BookCategoryDto.CREATOR);
+        bookTitle = in.readString();
+        publisher = in.readString();
+        Description = in.readString();
+        numberOfPages = in.readInt();
+        publishYear = in.readInt();
+        price = in.readInt();
+        thumbnail = in.readString();
+        authors = in.createTypedArrayList(BookAuthorDto.CREATOR);
+        categories = in.createTypedArrayList(BookCategoryDto.CREATOR);
     }
 
     @Override
@@ -72,15 +92,15 @@ public class InformationBookBorrowed implements Parcelable {
         dest.writeString(deadlineDate);
         dest.writeInt(extendNumber);
         dest.writeInt(rootId);
-        dest.writeString(bookCopyBookTitle);
-        dest.writeString(bookCopyBookPublisher);
-        dest.writeString(bookCopyBookDescription);
-        dest.writeInt(bookCopyBookNumberOfPages);
-        dest.writeInt(bookCopyBookPublishYear);
-        dest.writeInt(bookCopyBookPrice);
-        dest.writeString(bookCopyBookThumbnail);
-        dest.writeTypedList(bookCopyBookBookAuthors);
-        dest.writeTypedList(bookCopyBookBookCategories);
+        dest.writeString(bookTitle);
+        dest.writeString(publisher);
+        dest.writeString(Description);
+        dest.writeInt(numberOfPages);
+        dest.writeInt(publishYear);
+        dest.writeInt(price);
+        dest.writeString(thumbnail);
+        dest.writeTypedList(authors);
+        dest.writeTypedList(categories);
     }
 
     @Override
@@ -100,48 +120,48 @@ public class InformationBookBorrowed implements Parcelable {
         }
     };
 
-    public ArrayList<BookAuthorDto> getBookCopyBookBookAuthors() {
-        return bookCopyBookBookAuthors;
+    public ArrayList<BookAuthorDto> getAuthors() {
+        return authors;
     }
 
-    public ArrayList<BookCategoryDto> getBookCopyBookBookCategories() {
-        return bookCopyBookBookCategories;
+    public ArrayList<BookCategoryDto> getCategories() {
+        return categories;
     }
 
-    public int getBookCopyBookPrice() {
-        return bookCopyBookPrice;
+    public int getPrice() {
+        return price;
     }
 
-    public String getBookCopyBookThumbnail() {
-        return bookCopyBookThumbnail;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
-    public int getBookCopyBookPublishYear() {
-        return bookCopyBookPublishYear;
+    public int getPublishYear() {
+        return publishYear;
     }
 
-    public Integer getBookCopyBookNumberOfPages() {
-        return bookCopyBookNumberOfPages;
+    public Integer getNumberOfPages() {
+        return numberOfPages;
     }
 
-    public String getBookCopyBookDescription() {
-        return bookCopyBookDescription;
+    public String getDescription() {
+        return Description;
     }
 
-    public String getBookCopyBookPublisher() {
-        return bookCopyBookPublisher;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public String getBookCopyBookTitle() {
-        return bookCopyBookTitle;
+    public String getBookTitle() {
+        return bookTitle;
     }
 
-    public void setBookCopyBookTitle(String bookCopyBookTitle) {
-        this.bookCopyBookTitle = bookCopyBookTitle;
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
     }
 
-    public void setBookCopyBookPublisher(String bookCopyBookPublisher) {
-        this.bookCopyBookPublisher = bookCopyBookPublisher;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
     public int getId() {

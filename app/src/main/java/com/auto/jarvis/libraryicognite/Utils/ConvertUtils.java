@@ -26,4 +26,20 @@ public class ConvertUtils {
         Date date = new Date();
         return date;
     }
+
+    public static String formateDate(String strSource) {
+        String strDestination = "";
+        try {
+            SimpleDateFormat formatSource = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date date = formatSource.parse(strSource);
+            SimpleDateFormat formatDestination = new SimpleDateFormat("dd/MM/yyyy");
+
+            return strDestination = formatDestination.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return strDestination;
+    }
 }

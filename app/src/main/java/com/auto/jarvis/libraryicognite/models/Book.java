@@ -9,7 +9,6 @@ import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Havh on 1/16/2017.
@@ -131,17 +130,17 @@ public class Book implements Parcelable{
 
     public static Book fromBorrowedList(InformationBookBorrowed bookBorrowed) {
         Book book = new Book();
-        book.title = bookBorrowed.getBookCopyBookTitle();
-        book.publisher = bookBorrowed.getBookCopyBookPublisher();
+        book.title = bookBorrowed.getBookTitle();
+        book.publisher = bookBorrowed.getPublisher();
         book.deadLine = bookBorrowed.getDeadlineDate();
         book.rfidBook = bookBorrowed.getBookCopyRfid();
-        book.numberOfPages = bookBorrowed.getBookCopyBookNumberOfPages();
-        book.description = bookBorrowed.getBookCopyBookDescription();
-        book.publishYear = bookBorrowed.getBookCopyBookPublishYear();
-        book.thumbnail = bookBorrowed.getBookCopyBookThumbnail();
-        book.price = bookBorrowed.getBookCopyBookPrice();
-        book.bookCopyBookBookAuthors = bookBorrowed.getBookCopyBookBookAuthors();
-        book.bookCopyBookBookCategories = bookBorrowed.getBookCopyBookBookCategories();
+        book.numberOfPages = bookBorrowed.getNumberOfPages();
+        book.description = bookBorrowed.getDescription();
+        book.publishYear = bookBorrowed.getPublishYear();
+        book.thumbnail = bookBorrowed.getThumbnail();
+        book.price = bookBorrowed.getPrice();
+        book.bookCopyBookBookAuthors = bookBorrowed.getAuthors();
+        book.bookCopyBookBookCategories = bookBorrowed.getCategories();
         book.borrowedDate = bookBorrowed.getBorrowedDate();
         return book;
     }

@@ -96,22 +96,23 @@ public class DetailBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_book);
         ButterKnife.bind(this);
 
-        final Book bookDetail = getIntent().getExtras().getParcelable("BOOK_DETAIL");
-        rfid = bookDetail.getRfidBook();
+        final InformationBookBorrowed bookDetail = getIntent().getExtras().getParcelable("BOOK_DETAIL");
+        rfid = bookDetail.getBookCopyRfid();
         initView(bookDetail);
 
         StringBuilder categories = new StringBuilder();
         StringBuilder author = new StringBuilder();
-        tvBookTitle.setText(bookDetail.getTitle());
+        tvBookTitle.setText(bookDetail.getBookTitle());
         tvDescription.setText(bookDetail.getDescription());
         tvNumberOfPages.setText(String.format("Số trang: %d", bookDetail.getNumberOfPages()));
 
-        tvPublished.setText("Nhà xuất bản: " + bookDetail.getPublisher());
+//        tvPublished.setText("Nhà xuất bản: " + bookDetail.getPublisher());
+        tvPublished.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
         String price = String.valueOf(bookDetail.getPrice());
         String thumbnail = bookDetail.getThumbnail();
         tvPrice.setText("Giá 1 quyển: " + price + "$");
-        if (bookDetail.getBookCopyBookBookAuthors() != null) {
-            authorDtos = bookDetail.getBookCopyBookBookAuthors();
+        if (bookDetail.getAuthors() != null) {
+            authorDtos = bookDetail.getAuthors();
             for (int i = 1; i <= authorDtos.size(); i++) {
                 if (i != authorDtos.size()) {
                     author.append(authorDtos.get(i - 1).getAuthorName()).append(", ");
@@ -121,8 +122,8 @@ public class DetailBookActivity extends AppCompatActivity {
             }
         }
 
-        if (bookDetail.getBookCopyBookBookCategories() != null && bookDetail.getBookCopyBookBookCategories().size() > 0) {
-            bookCategoryDtos = bookDetail.getBookCopyBookBookCategories();
+        if (bookDetail.getCategories() != null && bookDetail.getCategories().size() > 0) {
+            bookCategoryDtos = bookDetail.getCategories();
             for (int i = 1; i <= bookCategoryDtos.size(); i++) {
                 if (i != bookCategoryDtos.size()) {
                     categories.append(bookCategoryDtos.get(i - 1).getCategoryName()).append("/");
@@ -133,7 +134,7 @@ public class DetailBookActivity extends AppCompatActivity {
         }
 
         String strBorrowedDate = formateDate(bookDetail.getBorrowedDate());
-        String strDeadlineDate = formateDate(bookDetail.getDeadLine());
+        String strDeadlineDate = formateDate(bookDetail.getDeadlineDate());
 //        try {
 //            SimpleDateFormat formatSource = new SimpleDateFormat("yyyy-MM-dd");
 //
@@ -164,10 +165,10 @@ public class DetailBookActivity extends AppCompatActivity {
 
     }
 
-    private void initView(Book book) {
+    private void initView(InformationBookBorrowed book) {
         //toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(book.getTitle());
+        getSupportActionBar().setTitle(book.getBookTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 

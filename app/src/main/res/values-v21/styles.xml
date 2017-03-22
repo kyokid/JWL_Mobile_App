@@ -2,5 +2,8 @@
 <resources>
     <style name="AppTheme.TransparentStatusBar" parent="AppTheme.NoActionBar">
         <item name="android:statusBarColor">#25000000</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 </resources>

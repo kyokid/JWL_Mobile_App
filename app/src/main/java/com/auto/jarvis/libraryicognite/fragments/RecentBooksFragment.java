@@ -45,6 +45,7 @@ public class RecentBooksFragment extends Fragment {
     public Unbinder unbinder;
 
     List<InformationBookBorrowed> listRecent;
+    List<InformationBookBorrowed> multiSelectedBook = new ArrayList<>();
 
 
     public RecentBooksFragment() {
@@ -75,7 +76,7 @@ public class RecentBooksFragment extends Fragment {
                 book1.add(Book.fromBorrowedList(bookBorrowed));
             }
         }
-        BorrowListAdapter adapter = new BorrowListAdapter(book1);
+        BorrowListAdapter adapter = new BorrowListAdapter(listRecent, getActivity(), multiSelectedBook);
 
         rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rvBooks.setAdapter(adapter);

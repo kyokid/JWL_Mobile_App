@@ -1,64 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/list_item_normal_state"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:weightSum="1">
 
-        >
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_weight="0.25"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.75"
+            android:textSize="16sp" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:weightSum="1">
+    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:fontFamily="sans-serif-thin"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:text="Con Ca vang" />
+    <TextView
+        android:id="@+id/tvOverdue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="OverDue: 3 days"
+        android:textColor="@color/colorLateDeadline"
+        android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/tvDeadline"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="0.75"
-                    android:textSize="16sp"
-                    tools:text="Heiminger" />
-
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvOverdue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="OverDue: 3 days"
-                android:textColor="@color/colorLateDeadline"
-                android:visibility="gone"
-                />
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
 
     <View
         android:id="@+id/viewSeparate"
