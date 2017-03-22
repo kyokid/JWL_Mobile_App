@@ -8,5 +8,6 @@
     <color name="tabSelectedColor">#dcef0f</color>
     <color name="colorLateDeadline">#ef0b17</color>
     <color name="colorDetailBook">#8DC3E0</color>
-
+    <color name="avalable">#64dd17</color>
+    <color name="not_available"> #f44336</color>
 </resources>
