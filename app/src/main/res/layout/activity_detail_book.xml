@@ -159,8 +159,15 @@
                 android:layout_marginTop="12dp"
                 android:id="@+id/btnRenew"
                 android:layout_below="@+id/tvPrice"
-                android:visibility="gone"
                 android:layout_alignEnd="@+id/tvCategories" />
+
+            <ProgressBar
+                android:id="@+id/pgLoadingRenew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                />
 
 
         </RelativeLayout>

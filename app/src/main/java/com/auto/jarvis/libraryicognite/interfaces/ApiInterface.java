@@ -51,7 +51,7 @@ public interface ApiInterface {
     Call<RestService<String>> requestPrivateKey(@Path("id") String userId);
 
     @GET("/renew/{rfid}")
-    Call<RestService<Boolean>> renewBorrowedBook(@Path("rfid") String rfid);
+    Call<RestService<InformationBookBorrowed>> renewBorrowedBook(@Path("rfid") String rfid);
 
     @GET("/books/search")
     Call<RestService<List<Book>>> search(@Query("search_term") String searchKey);
