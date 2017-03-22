@@ -94,4 +94,9 @@ public class SearchFragment extends Fragment {
             }
         });
     }
+
+    public void resetView(){
+        mBooks.clear();
+        mAdapter.notifyDataSetChanged();
+    }
 }

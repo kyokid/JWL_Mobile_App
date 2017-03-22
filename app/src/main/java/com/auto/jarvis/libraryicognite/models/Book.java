@@ -26,11 +26,11 @@ public class Book implements Parcelable{
     private int publishYear;
     private int price;
     private String thumbnail;
-    private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
+    @SerializedName("bookAuthors") private ArrayList<BookAuthorDto> bookCopyBookBookAuthors;
     private ArrayList<BookCategoryDto> bookCopyBookBookCategories;
     private String borrowedDate;
     private String deadlineDate;
-    @SerializedName("isAvailable") private boolean isAvailable;
+    @SerializedName("available") private boolean isAvailable;
 
     public Book() {
 
@@ -71,6 +71,10 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
 
     public String getBorrowedDate() {
         return borrowedDate;
