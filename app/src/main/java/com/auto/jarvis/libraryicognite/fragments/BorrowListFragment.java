@@ -73,6 +73,10 @@ public class BorrowListFragment extends Fragment {
     MaterialDialog dialog;
     String rfid, messageRenew;
 
+    boolean isLast = false;
+    int size = 0;
+    int count = 0;
+
     public BorrowListFragment() {
         // Required empty public constructor
     }
@@ -157,6 +161,7 @@ public class BorrowListFragment extends Fragment {
                                     Intent detailIntent = new Intent(getContext(), DetailBookActivity.class);
                                     InformationBookBorrowed bookDetail = listBorrowed.get(position);
                                     detailIntent.putExtra("BOOK_DETAIL", bookDetail);
+                                    detailIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     getContext().startActivity(detailIntent);
                                 }
                             }
@@ -241,7 +246,12 @@ public class BorrowListFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_renew:
-                    showDialogRenew();
+                    if (multiSelectedBook.size() != 1) {
+                        messageRenew = " những";
+                    } else {
+                        messageRenew = "";
+                    }
+                    showDialogRenew(messageRenew);
                     return true;
                 default:
                     return false;
@@ -257,16 +267,15 @@ public class BorrowListFragment extends Fragment {
         }
     };
 
-    private void showDialogRenew() {
+    private void showDialogRenew(String message) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                 .title("Gia hạn sách")
-                .content("Bạn muốn gia hạn những sách này?")
+                .content("Bạn muốn gia hạn" + message + " cuốn sách này?")
                 .positiveText("OK")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        renewBook();
-
+                        renewManyBooks();
                     }
                 })
                 .negativeText("Cancel");
@@ -275,36 +284,39 @@ public class BorrowListFragment extends Fragment {
         dialog.show();
     }
 
-    private void renewBook() {
-        for (InformationBookBorrowed book :
-                multiSelectedBook) {
-            rfid = book.getBookCopyRfid();
-
-            Call<RestService<InformationBookBorrowed>> renew = apiService.renewBorrowedBook(rfid);
-            renew.enqueue(new Callback<RestService<InformationBookBorrowed>>() {
-                @Override
-                public void onResponse(Call<RestService<InformationBookBorrowed>> call, Response<RestService<InformationBookBorrowed>> response) {
-                    messageRenew = response.body().getTextMessage();
+    private void renewBook(String rfid, final boolean last) {
+        Call<RestService<InformationBookBorrowed>> renew = apiService.renewBorrowedBook(rfid);
+        renew.enqueue(new Callback<RestService<InformationBookBorrowed>>() {
+            @Override
+            public void onResponse(Call<RestService<InformationBookBorrowed>> call, Response<RestService<InformationBookBorrowed>> response) {
+                if (!last) {
+                    messageRenew = response.body().getTextMessage() + "Bạn có muốn gia hạn cuốn sách tiếp theo?";
+                    showDialogContinue(messageRenew);
+                } else {
                     showDialogFinish(messageRenew);
-                    if (!response.body().getCode().equals("400")) {
-                        InformationBookBorrowed newBook = response.body().getData();
-                        String strDeadlineDate = formateDate(newBook.getDeadlineDate());
-
-                    }
                 }
+            }
 
-                @Override
-                public void onFailure(Call<RestService<InformationBookBorrowed>> call, Throwable t) {
+            @Override
+            public void onFailure(Call<RestService<InformationBookBorrowed>> call, Throwable t) {
 
-                }
-            });
-        }
+            }
+        });
     }
+
+
 
     private void showDialogFinish(String message) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                 .title("Gia hạn sách")
                 .content(message)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        actionMode.finish();
+                        adapter.notifyDataSetChanged();
+                    }
+                })
                 .positiveText("OK");
         dialog = builder.build();
         dialog.show();
@@ -318,14 +330,31 @@ public class BorrowListFragment extends Fragment {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        renewBook();
-
+                        renewManyBooks();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        actionMode.finish();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .negativeText("Cancel");
 
         dialog = builder.build();
         dialog.show();
+    }
+
+    private void renewManyBooks() {
+        size = multiSelectedBook.size();
+        rfid = multiSelectedBook.get(count).getBookCopyRfid();
+        if (count == size - 1) {
+            isLast = true;
+            messageRenew = "Bạn đã gia hạn thành công những cuốn sách vừa chọn.";
+        }
+        count++;
+        renewBook(rfid, isLast);
     }
 
 

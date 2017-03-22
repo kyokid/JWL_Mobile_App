@@ -135,19 +135,6 @@ public class DetailBookActivity extends AppCompatActivity {
 
         String strBorrowedDate = formateDate(bookDetail.getBorrowedDate());
         String strDeadlineDate = formateDate(bookDetail.getDeadlineDate());
-//        try {
-//            SimpleDateFormat formatSource = new SimpleDateFormat("yyyy-MM-dd");
-//
-//            Date dateDL = formatSource.parse(strDeadlineDate);
-//            Date dateBR = formatSource.parse(strBorrowedDate);
-//            SimpleDateFormat formatDestination = new SimpleDateFormat("dd/MM/yyyy");
-//
-//            strBorrowedDate = formatDestination.format(dateBR);
-//            strDeadlineDate = formatDestination.format(dateDL);
-//
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
 
 
         tvCategories.setText(categories);
@@ -188,7 +175,7 @@ public class DetailBookActivity extends AppCompatActivity {
     private void showDialogReNew() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title("Gia hạn sách")
-                .content("Bạn muốn gia hạn sách này?")
+                .content("Bạn muốn gia hạn cuốn sách này?")
                 .positiveText("OK")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
