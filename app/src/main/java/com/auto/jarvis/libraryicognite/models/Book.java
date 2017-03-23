@@ -30,6 +30,11 @@ public class Book implements Parcelable{
     private String borrowedDate;
     private String deadlineDate;
     @SerializedName("available") private boolean isAvailable;
+
+    public void setFollow(boolean follow) {
+        isFollow = follow;
+    }
+
     @SerializedName("follow") private boolean isFollow;
     public Book() {
 

@@ -51,7 +51,7 @@ public class SearchFragment extends Fragment {
     private ApiInterface apiService;
     private List<Book> mBooks;
     private SearchBookListAdapter mAdapter;
-
+    private String mUserId;
     public static SearchFragment newInstance(String searchKey) {
         SearchFragment searchFragment = new SearchFragment();
         Bundle bundle = new Bundle();
@@ -66,19 +66,20 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         String searchKey = getArguments().getString(SEARCH);
+        mUserId = SaveSharedPreference.getUsername(getContext());
         return view;
     }
 
-    public void search(String searchKey) {
+    public void search(String searchKey, String userId) {
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<RestService<List<Book>>> result = apiService.search(searchKey);
+        Call<RestService<List<Book>>> result = apiService.search(searchKey, userId);
         result.enqueue(new Callback<RestService<List<Book>>>() {
             @Override
             public void onResponse(Call<RestService<List<Book>>> call, Response<RestService<List<Book>>> response) {
                 if (response.body().getData() != null && response.body().getData().size() > 0) {
                     tvNoMatchingBook.setVisibility(View.GONE);
                     mBooks = response.body().getData();
-                    mAdapter = new SearchBookListAdapter(getContext(), mBooks);
+                    mAdapter = new SearchBookListAdapter(getContext(), mBooks, mUserId);
                     rvBooks.setAdapter(mAdapter);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                             LinearLayoutManager.VERTICAL, false);

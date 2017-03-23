@@ -236,11 +236,11 @@ public class BarCodeActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment f = fragmentManager.findFragmentByTag(SEARCH_FRAGMENT_TAG);
                 if (f instanceof SearchFragment){
-                    ((SearchFragment) f).search(query);
+                    ((SearchFragment) f).search(query, userId);
                 }else {
                     SearchFragment fragment = SearchFragment.newInstance(query);
                     fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment, SEARCH_FRAGMENT_TAG).commit();
-                    fragment.search(query);
+                    fragment.search(query, userId);
                 }
                 searchView.clearFocus();
                 return true;

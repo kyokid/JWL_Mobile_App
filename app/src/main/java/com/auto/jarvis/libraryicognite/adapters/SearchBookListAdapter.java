@@ -13,10 +13,17 @@ import android.widget.TextView;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.activities.DetailBookActivity;
+import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.output.BookAuthorDto;
+import com.auto.jarvis.libraryicognite.models.output.RestService;
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.R.attr.author;
 
@@ -27,10 +34,12 @@ import static android.R.attr.author;
 public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAdapter.ViewHolder> {
     List<Book> mBooks;
     Context mContext;
+    String mUserId;
 
-    public SearchBookListAdapter(Context context, List<Book> mBooks) {
+    public SearchBookListAdapter(Context context, List<Book> mBooks, String userId) {
         this.mBooks = mBooks;
         this.mContext = context;
+        this.mUserId = userId;
     }
 
     @Override
@@ -41,7 +50,7 @@ public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         if (holder != null) {
             final ViewHolder viewHolder = holder;
             viewHolder.tvTitle.setText(mBooks.get(position).getTitle());
@@ -59,19 +68,60 @@ public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAd
             if (!mBooks.get(position).isAvailable()){
                 viewHolder.tvAvailable.setText("Unavailable");
                 viewHolder.tvAvailable.setTextColor(ContextCompat.getColor(mContext, R.color.not_available));
-                viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_not_favorite);
-                viewHolder.ivIsFavorite.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_favorite);
-                    }
-                });
-
+                if (mBooks.get(position).isFollow()){
+                    viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_favorite);
+                }else{
+                    viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_not_favorite);
+                }
             }else {
                 viewHolder.ivIsFavorite.setVisibility(View.GONE);
                 viewHolder.tvAvailable.setText("Available");
                 viewHolder.tvAvailable.setTextColor(ContextCompat.getColor(mContext, R.color.avalable));
             }
+            viewHolder.ivIsFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mBooks.get(position).isFollow()){
+                        ApiInterface apiService;
+                        apiService = ApiClient.getClient().create(ApiInterface.class);
+                        Call<RestService<Book>> removeFromWishList = apiService.removeFromWishList(mUserId, mBooks.get(position).getId());
+                        removeFromWishList.enqueue(new Callback<RestService<Book>>() {
+                            @Override
+                            public void onResponse(Call<RestService<Book>> call, Response<RestService<Book>> response) {
+                                Book book = response.body().getData();
+                                book.setFollow(false);//
+                                mBooks.set(position, book);
+                                notifyItemChanged(position);
+                            }
+                            @Override
+                            public void onFailure(Call<RestService<Book>> call, Throwable t) {
+                                viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_not_favorite);
+                                mBooks.get(position).setFollow(true);
+                            }
+                        });
+
+                    }else {
+                        ApiInterface apiService;
+                        apiService = ApiClient.getClient().create(ApiInterface.class);
+                        Call<RestService<Book>> addToWishList = apiService.addToWishList(mUserId, mBooks.get(position).getId());
+                        addToWishList.enqueue(new Callback<RestService<Book>>() {
+                            @Override
+                            public void onResponse(Call<RestService<Book>> call, Response<RestService<Book>> response) {
+                                Book book = response.body().getData();
+                                book.setFollow(true);//
+                                mBooks.set(position, book);
+                                notifyItemChanged(position);
+//                                viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_favorite);
+                            }
+                            @Override
+                            public void onFailure(Call<RestService<Book>> call, Throwable t) {
+
+                            }
+                        });
+
+                    }
+                }
+            });
         }
     }
 

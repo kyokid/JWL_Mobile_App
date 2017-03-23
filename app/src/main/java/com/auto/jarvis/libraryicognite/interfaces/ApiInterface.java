@@ -54,8 +54,16 @@ public interface ApiInterface {
     Call<RestService<InformationBookBorrowed>> renewBorrowedBook(@Path("rfid") String rfid);
 
     @GET("/books/search")
-    Call<RestService<List<Book>>> search(@Query("search_term") String searchKey);
+    Call<RestService<List<Book>>> search(@Query("search_term") String searchKey,
+                                         @Query("user_id") String userId);
 
     @GET("/books/{id}")
     Call<RestService<List<Book>>> getBookDetail(@Path("id") String id);
+
+    @GET("/wishlist/add")
+    Call<RestService<Book>> addToWishList(@Query("user_id") String userId,
+                                          @Query("book_id") int bookId);
+    @GET("/wishlist/remove")
+    Call<RestService<Book>> removeFromWishList(@Query("user_id") String userId,
+                                          @Query("book_id") int bookId);
 }
