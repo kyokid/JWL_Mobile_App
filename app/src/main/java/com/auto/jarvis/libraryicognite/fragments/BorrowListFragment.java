@@ -161,7 +161,7 @@ public class BorrowListFragment extends Fragment {
                                     Intent detailIntent = new Intent(getContext(), DetailBookActivity.class);
                                     InformationBookBorrowed bookDetail = listBorrowed.get(position);
                                     detailIntent.putExtra("BOOK_DETAIL", bookDetail);
-                                    detailIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     getContext().startActivity(detailIntent);
                                 }
                             }

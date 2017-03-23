@@ -64,7 +64,9 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
         Date deadLine = ConvertUtils.convertStringtoDate(book.getDeadlineDate());
         boolean result = deadLine.after(currentDate);
 
-        holder.tvDeadLine.setText(book.getDeadlineDate());
+        String deadline = ConvertUtils.formateDate(book.getDeadlineDate());
+
+        holder.tvDeadLine.setText(deadline);
         if (!result) {
             holder.tvDeadLine.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
             holder.overdue.setVisibility(View.VISIBLE);
