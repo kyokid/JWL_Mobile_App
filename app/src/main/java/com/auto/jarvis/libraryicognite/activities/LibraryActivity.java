@@ -89,7 +89,7 @@ public class LibraryActivity extends AppCompatActivity {
         initView();
         Log.d("STATUS_USER", "status user first = " + status);
 
-        checkStatusBorrower(username);
+//        checkStatusBorrower(username);
 
         status = SaveSharedPreference.getStatusUser(getApplicationContext());
         Log.d("STATUS_USER", "status user second = " + status);
@@ -110,10 +110,12 @@ public class LibraryActivity extends AppCompatActivity {
                     switch (state) {
                         case BluetoothAdapter.STATE_TURNING_OFF:
                             tvLocation.setText("Please turn on bluetooth to use this service");
+                            deviceScanner.stopScanning();
                             break;
 
                         case BluetoothAdapter.STATE_TURNING_ON:
                             tvLocation.setText("Turn on bluetooth already");
+                            startScan();
                             break;
                     }
 
@@ -249,18 +251,6 @@ public class LibraryActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
     }
 
-//    private void startSearching() {
-//        MyApplication app = (MyApplication) getApplication();
-//        if (!SystemRequirementsChecker.checkWithDefaultDialogs(LibraryActivity.this)) {
-//            Log.e(TAG, "Can't scan for beacons, some pre-conditions were not met");
-//            Log.e(TAG, "Read more about what's required at: http://estimote.github.io/Android-SDK/JavaDocs/com/estimote/sdk/SystemRequirementsChecker.html");
-//            Log.e(TAG, "If this is fixable, you should see a popup on the app's screen right now, asking to enable what's necessary");
-//        } else if (!app.isBeaconNotificationsEnabled()) {
-//            Log.d(TAG, "Enabling beacon notifications");
-//            app.enableBeaconNotifications();
-//        }
-//    }
-
     @Override
     protected void onDestroy() {
         connectionProvider.destroy();
@@ -357,6 +347,8 @@ public class LibraryActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 }

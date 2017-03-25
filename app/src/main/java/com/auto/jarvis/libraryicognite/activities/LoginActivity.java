@@ -78,40 +78,37 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
     private void initView() {
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = etUsername.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
-                Log.d("URL", ApiClient.BASE_URL);
-                User user = new User(username, password);
-                Call<RestService<User>> callLogin = apiService.login(user);
+        btnLogin.setOnClickListener(view -> {
+            String username = etUsername.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+            Log.d("URL", ApiClient.BASE_URL);
+            User user = new User(username, password);
+            Call<RestService<User>> callLogin = apiService.login(user);
 
-                callLogin.enqueue(new Callback<RestService<User>>() {
-                    @Override
-                    public void onResponse(Call<RestService<User>> call, Response<RestService<User>> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body().isSucceed()) {
-                                User user = response.body().getData();
-                                SaveSharedPreference.setUsername(getApplicationContext(), user.getUsername());
-                                SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.LOGIN);
-                                Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
-                                intent.putExtra(USER_TAG, user);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(LoginActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
-                            }
+            callLogin.enqueue(new Callback<RestService<User>>() {
+                @Override
+                public void onResponse(Call<RestService<User>> call, Response<RestService<User>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().isSucceed()) {
+                            User user = response.body().getData();
+                            SaveSharedPreference.setUsername(getApplicationContext(), user.getUsername());
+                            SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.LOGIN);
+                            Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
+                            intent.putExtra(USER_TAG, user);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LoginActivity.this, response.body().getTextMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<RestService<User>> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                @Override
+                public void onFailure(Call<RestService<User>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
 
 
-            }
         });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {

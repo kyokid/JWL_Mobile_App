@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
@@ -40,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
                             Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
                             intentLibrary.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             intentLibrary.putExtra("IN_LIBRARY", true);
+                            SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
                             startActivity(intentLibrary);
                         }else if (!inLibrary) {
                             Intent barCodeIntent = new Intent(HomeActivity.this, BarCodeActivity.class);

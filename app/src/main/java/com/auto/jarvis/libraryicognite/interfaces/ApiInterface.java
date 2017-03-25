@@ -25,7 +25,7 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
 
-    @POST("users/login/")
+    @POST("user/login/")
     Call<RestService<User>> login(@Body User user);
 
     @POST("init/borrow")
