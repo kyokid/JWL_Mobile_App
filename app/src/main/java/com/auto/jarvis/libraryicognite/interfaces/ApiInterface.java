@@ -29,6 +29,9 @@ public interface ApiInterface {
     @POST("user/login/")
     Call<RestService<User>> login(@Body User user);
 
+    @POST("user/login")
+    Observable<RestService<User>> loginUser(@Body User user);
+
     @POST("init/borrow")
     Call<RestService<InitBorrow>> initBorrow(@Body InitBorrow initBorrow);
 

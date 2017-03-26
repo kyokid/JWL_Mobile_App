@@ -37,48 +37,6 @@ public class HomeActivity extends AppCompatActivity {
         controllerActivities();
 
 
-//        String userId = SaveSharedPreference.getUsername(this);
-//        if (userId.length() == 0 || userId.isEmpty() || userId.equals("")) {
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        } else {
-//            apiService = ApiClient.getClient().create(ApiInterface.class);
-//            Call<RestService<Boolean>> result = apiService.inLibrary(userId);
-//            result.enqueue(new Callback<RestService<Boolean>>() {
-//                @Override
-//                public void onResponse(Call<RestService<Boolean>> call, Response<RestService<Boolean>> response) {
-//                    if (response.isSuccessful()) {
-//                        inLibrary = response.body().getData();
-//                        if (inLibrary) {
-//                            Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
-//                            intentLibrary.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            intentLibrary.putExtra("IN_LIBRARY", true);
-//                            SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-//                            startActivity(intentLibrary);
-//                        } else if (!inLibrary) {
-//                            Intent barCodeIntent = new Intent(HomeActivity.this, BarCodeActivity.class);
-//                            barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            startActivity(barCodeIntent);
-//                        }
-//                    }
-//                }
-//
-//
-//                @Override
-//                public void onFailure(Call<RestService<Boolean>> call, Throwable t) {
-//                    Intent barCodeIntent = new Intent(HomeActivity.this, BarCodeActivity.class);
-//                    barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(barCodeIntent);
-//                }
-//            });
-//            Log.d("LIBRARY", " " + inLibrary);
-////            if (!inLibrary) {
-////                Intent barCodeIntent = new Intent(this, BarCodeActivity.class);
-////                barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-////                startActivity(barCodeIntent);
-////            }
-//        }
     }
 
     private void controllerActivities() {
@@ -139,44 +97,4 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
     }
-
-//        if (userId.length() == 0 || userId.isEmpty() || userId.equals("")) {
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        } else {
-//            Observable<RestService<Boolean>> statusUser = apiService.userStatus(userId);
-//            statusUser.subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Subscriber<RestService<Boolean>>() {
-//                        @Override
-//                        public void onCompleted() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onNext(RestService<Boolean> booleanRestService) {
-//                            inLibrary = booleanRestService.getData();
-//                            if (inLibrary) {
-//                                Intent intentLibrary = new Intent(HomeActivity.this, LibraryActivity.class);
-//                                intentLibrary.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                intentLibrary.putExtra("IN_LIBRARY", true);
-//                                SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-//                                startActivity(intentLibrary);
-//                                unsubscribe();
-//                            } else {
-//                                Intent barCodeIntent = new Intent(HomeActivity.this, BarCodeActivity.class);
-//                                barCodeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(barCodeIntent);
-//                            }
-//                        }
-//                    });
-//
-//        }
-//    }
 }
