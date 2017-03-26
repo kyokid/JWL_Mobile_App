@@ -11,6 +11,10 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -82,6 +86,14 @@
             </intent-filter>
         </service>
         <!-- ./Firebase Notifications -->
+
+        <service android:name=".service.BackGroundService"
+            android:exported="false"
+            />
+
+        <service
+            android:name="com.estimote.sdk.service.BeaconService"
+            android:exported="false" />
         <activity android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

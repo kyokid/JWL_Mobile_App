@@ -256,13 +256,13 @@ public class QRCodePagerFragment extends Fragment {
         }
 
 //        pbLoadingQRCode.setVisibility(View.GONE);
-        ivQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), LibraryActivity.class);
-                intent.putExtra("IN_LIBRARY", Constant.CHECK_IN);
-                startActivity(intent);
-            }
-        });
+//        ivQrCode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getContext(), LibraryActivity.class);
+//                intent.putExtra("IN_LIBRARY", Constant.CHECK_IN);
+//                startActivity(intent);
+//            }
+//        });
     }
 }

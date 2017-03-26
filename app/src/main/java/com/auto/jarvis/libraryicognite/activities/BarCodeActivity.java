@@ -107,7 +107,6 @@ public class BarCodeActivity extends AppCompatActivity {
                     String message = intent.getStringExtra("message");
                     Log.d("Push notification:", message);
                     Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
-                    intentLibrary.putExtra("IN_LIBRARY", true);
                     SaveSharedPreference.setStatusUser(context, Constant.CHECK_IN);
                     startActivity(intentLibrary);
                 }
@@ -133,12 +132,9 @@ public class BarCodeActivity extends AppCompatActivity {
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
         tvUsername.setText(userId);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectDrawerItem(item);
-                return true;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            selectDrawerItem(item);
+            return true;
         });
     }
 
@@ -257,17 +253,14 @@ public class BarCodeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                Fragment f = getSupportFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_TAG);
-                if (f instanceof SearchFragment){
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
-                    fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
-                }
-                return false;
+        searchView.setOnCloseListener(() -> {
+            Fragment f = getSupportFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_TAG);
+            if (f instanceof SearchFragment){
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                QRCodePagerFragment fragment1 = QRCodePagerFragment.newInstance();
+                fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment1).commit();
             }
+            return false;
         });
         return true;
     }

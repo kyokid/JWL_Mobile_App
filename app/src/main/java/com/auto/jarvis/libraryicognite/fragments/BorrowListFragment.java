@@ -95,12 +95,7 @@ public class BorrowListFragment extends Fragment {
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
         //pull to refresh
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getBorrowedBook(true);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> getBorrowedBook(true));
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -135,12 +130,6 @@ public class BorrowListFragment extends Fragment {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         listBorrowed = response.body().getData();
-//                        List<InformationBookBorrowed> book1 = new ArrayList<>();
-//                        for (int i = 0; i < listBorrowed.size(); i++) {
-//                            if (TextUtils.isEmpty(listBorrowed.get(i).getReturnDate())) {
-//                                book1.add(Book.fromBorrowedList(listBorrowed.get(i)));
-//                            }
-//                        }
                         if (!isRefreshing) {
                             adapter = new BorrowListAdapter(listBorrowed, getActivity(), multiSelectedBook);
                         } else {
@@ -177,9 +166,7 @@ public class BorrowListFragment extends Fragment {
                                         actionMode = getActivity().startActionMode(mActionModeCallback);
                                     }
                                 }
-
                                 multiSelect(position);
-
                             }
                         }));
 

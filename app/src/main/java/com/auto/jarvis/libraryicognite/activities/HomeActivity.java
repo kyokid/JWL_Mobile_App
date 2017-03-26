@@ -83,7 +83,6 @@ public class HomeActivity extends AppCompatActivity {
                                             Intent intentControl = null;
                                             if (inLibrary) {
                                                 intentControl = new Intent(HomeActivity.this, LibraryActivity.class);
-                                                intentControl.putExtra("IN_LIBRARY", true);
                                                 SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
                                             } else {
                                                 intentControl = new Intent(HomeActivity.this, BarCodeActivity.class);
