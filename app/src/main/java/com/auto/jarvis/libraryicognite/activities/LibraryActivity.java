@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -20,8 +19,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.MyApplication;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
@@ -34,7 +31,6 @@ import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.estimote.sdk.connection.DeviceConnectionProvider;
-import com.estimote.sdk.connection.scanner.ConfigurableDevice;
 import com.estimote.sdk.connection.scanner.ConfigurableDevicesScanner;
 import com.estimote.sdk.connection.scanner.DeviceType;
 
@@ -155,23 +151,20 @@ public class LibraryActivity extends AppCompatActivity {
     private void startScan() {
         if (status == Constant.CHECK_IN) {
             deviceScanner.setScanPeriodMillis(5000);
-            deviceScanner.scanForDevices(new ConfigurableDevicesScanner.ScannerCallback() {
-                @Override
-                public void onDevicesFound(List<ConfigurableDevicesScanner.ScanResultItem> list) {
-                    Log.d("BEACON", "Number of beacon: " + list.size());
-                    Log.d("BEACON", "status: " + status);
+            deviceScanner.scanForDevices(list -> {
+                Log.d("BEACON", "Number of beacon: " + list.size());
+                Log.d("BEACON", "status: " + status);
 
-                    for (ConfigurableDevicesScanner.ScanResultItem item : list) {
-                        String macAddress = item.device.macAddress.toStandardString();
-                        if (status == Constant.CHECK_IN && macAddress.equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
-                            Log.d("BEACON", "init check out");
-                            initCheckout(username);
+                for (ConfigurableDevicesScanner.ScanResultItem item : list) {
+                    String macAddress = item.device.macAddress.toStandardString();
+                    if (status == Constant.CHECK_IN && macAddress.equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
+                        Log.d("BEACON", "init check out");
+                        initCheckout(username);
 
-                        } else if (status == Constant.INIT_CHECKOUT && macAddress.equals(Constant.IBEACON_CHECKOUT_COMPLETE_ADDRESS)) {
-                            Log.d("BEACON", "Finish");
-                            finishCheckout(username);
+                    } else if (status == Constant.INIT_CHECKOUT && macAddress.equals(Constant.IBEACON_CHECKOUT_COMPLETE_ADDRESS)) {
+                        Log.d("BEACON", "Finish");
+                        finishCheckout(username);
 
-                        }
                     }
                 }
             });
@@ -219,12 +212,9 @@ public class LibraryActivity extends AppCompatActivity {
 //        tvUsername.setText(username);
 
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectDrawerItem(item);
-                return true;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            selectDrawerItem(item);
+            return true;
         });
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);

@@ -17,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by HaVH on 1/13/17.
@@ -66,4 +67,8 @@ public interface ApiInterface {
     @GET("/wishlist/remove")
     Call<RestService<Book>> removeFromWishList(@Query("user_id") String userId,
                                           @Query("book_id") int bookId);
+
+    @GET("users/{id}/status")
+    Observable<RestService<Boolean>> userStatus(@Path("id") String userId);
+
 }
