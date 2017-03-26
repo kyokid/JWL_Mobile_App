@@ -35,8 +35,14 @@ public interface ApiInterface {
     @POST("init/borrow")
     Call<RestService<InitBorrow>> initBorrow(@Body InitBorrow initBorrow);
 
+    @POST("init/borrow")
+    Observable<RestService<InitBorrow>> initCheckout(@Body InitBorrow initBorrow);
+
     @POST("checkout/")
     Call<RestService<List<InformationBookBorrowed>>> checkout(@Body InitBorrow checkout);
+
+    @POST("checkout")
+    Observable<RestService<List<InformationBookBorrowed>>> checkoutFinish(@Body InitBorrow checkout);
 
     @POST("getBorrowedBooks/")
     Call<RestService<List<InformationBookBorrowed>>> getBorrowedBook(@Body User userId);
