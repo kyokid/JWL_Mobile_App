@@ -58,7 +58,7 @@ public class QRCodePagerFragment extends Fragment {
     ImageView ivQrCode;
 //    @BindView(pbLoadingQRCode)
 //    ProgressBar pgLoading;
-    @BindView(pbLoadingQRCode)
+    @BindView(R.id.pbLoadingQRCode)
     ProgressBar pgLoading;
     private Unbinder unbinder;
     private String userId;
@@ -122,8 +122,8 @@ public class QRCodePagerFragment extends Fragment {
         @Override
         protected void onPostExecute(String userId) {
             super.onPostExecute(userId);
-            pgLoading.setVisibility(View.GONE);
-            helloWorld(userId);
+            initView(userId);
+//            pgLoading.setVisibility(View.GONE);
         }
     }
 
@@ -137,7 +137,6 @@ public class QRCodePagerFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pgLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -148,32 +147,6 @@ public class QRCodePagerFragment extends Fragment {
         }
     }
 
-    private void helloWorld(final String userId) {
-//        Log.d("API key = ", FirebaseInstanceId.getInstance().getToken());
-//        NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
-////            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
-////            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
-////            this.startService(service);
-//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                // checking for type intent filter
-//                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
-//                    Log.d("Registration token:" , intent.getStringExtra("token"));
-//                    NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
-//                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
-//                    String message = intent.getStringExtra("message");
-//                    Log.d("Push notification:", message);
-//                    Intent intentLibrary = new Intent(getContext(), LibraryActivity.class);
-//                    intentLibrary.putExtra("IN_LIBRARY", true);
-//                    startActivity(intentLibrary);
-//                }
-//            }
-//        };
-//        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
-//        getContext().registerReceiver(mRegistrationBroadcastReceiver, filter);
-        initView(userId);
-    }
 
     private Bitmap qrCodeGene() {
         String privateKey = SaveSharedPreference.getPrivateKey(getContext());
@@ -208,11 +181,8 @@ public class QRCodePagerFragment extends Fragment {
     private void qrCodeProcess(final String userId) {
         String lastrequest = SaveSharedPreference.getLastRequestDate(getContext());
         Date now = new Date(Calendar.getInstance().getTimeInMillis());
-        Bitmap bmp = null;
-        String privateKey = "";
         if (lastrequest.equals(now.toString())) {
             new AsyncQrCode().execute();
-            pgLoading.setVisibility(View.GONE);
         } else {
             apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<RestService<String>> result = apiService.requestPrivateKey(userId);

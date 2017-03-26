@@ -60,6 +60,9 @@ public interface ApiInterface {
     @GET("/users/{id}/requestKey")
     Call<RestService<String>> requestPrivateKey(@Path("id") String userId);
 
+    @GET("/users/{id}/requestKey")
+    Observable<RestService<String>> requestNewKey(@Path("id") String userId);
+
     @GET("/renew/{rfid}")
     Call<RestService<InformationBookBorrowed>> renewBorrowedBook(@Path("rfid") String rfid);
 

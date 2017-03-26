@@ -31,12 +31,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
-
         apiService = ApiClient.getClient().create(ApiInterface.class);
-
         controllerActivities();
-
-
     }
 
     private void controllerActivities() {
