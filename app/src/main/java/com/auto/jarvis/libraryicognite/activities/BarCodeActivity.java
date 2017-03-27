@@ -107,7 +107,9 @@ public class BarCodeActivity extends AppCompatActivity {
                     String message = intent.getStringExtra("message");
                     Log.d("Push notification:", message);
                     Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
-                    SaveSharedPreference.setStatusUser(context, Constant.CHECK_IN);
+                    SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+                    int status = SaveSharedPreference.getStatusUser(getApplicationContext());
+                    Log.d("BEACON", "STATUS AFTER SET: " + status);
                     startActivity(intentLibrary);
                 }
             }

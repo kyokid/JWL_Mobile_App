@@ -41,7 +41,6 @@ public class LoginNFCService extends HostApduService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println("da toi day");
             byte[] accountBytes = qrContent.toString().getBytes();
             Log.i(TAG, "Sending account number: " + qrContent.toString());
             System.out.println("Sending account number: " + qrContent.toString());

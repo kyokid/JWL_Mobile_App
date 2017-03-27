@@ -25,6 +25,7 @@ import com.estimote.sdk.Region;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -61,6 +62,7 @@ public class BackGroundService extends Service {
 
     @Override
     public void onRebind(Intent intent) {
+        Log.d("BEACON", "REBIND");
         super.onRebind(intent);
     }
 
@@ -76,19 +78,20 @@ public class BackGroundService extends Service {
         userId = SaveSharedPreference.getUsername(getBaseContext());
         initBorrow = new InitBorrow(userId, "1");
         beaconManager = new BeaconManager(this);
-
-        status = SaveSharedPreference.getStatusUser(getApplicationContext());
-
-        beaconManager.setBackgroundScanPeriod(1000, 1000);
+        beaconManager.setBackgroundScanPeriod(5000, 5000);
         beaconManager.setRangingListener((region, list) -> {
             Log.d("BEACON", "Found beacons: " + list.size());
+            status = SaveSharedPreference.getStatusUser(getApplicationContext());
+            Log.d("BEACON", "status of user: " + status);
             for (Beacon beacon : list) {
                 if (status == Constant.CHECK_IN && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
                     status = Constant.INIT_CHECKOUT;
+                    SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.INIT_CHECKOUT);
                     initCheckout();
                 }
                 if (status == Constant.INIT_CHECKOUT && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_CHECKOUT_COMPLETE_ADDRESS)) {
                     status = Constant.LOGIN;
+                    SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.LOGIN);
                     checkOut();
                     if (beaconManager != null) {
                         beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS_REGION);
@@ -122,6 +125,7 @@ public class BackGroundService extends Service {
         Observable<RestService<InitBorrow>> init = apiInterface.initCheckout(initBorrow);
         init.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .timeout(30, TimeUnit.SECONDS)
                 .subscribe(new Subscriber<RestService<InitBorrow>>() {
                     @Override
                     public void onCompleted() {
@@ -151,15 +155,18 @@ public class BackGroundService extends Service {
                 .subscribe(new Subscriber<RestService<List<InformationBookBorrowed>>>() {
                     @Override
                     public void onCompleted() {
-                        if ((MyApplication.isScreenOn() && !MyApplication.isBackgroundMode())
-                                || (!MyApplication.isScreenOn() && MyApplication.isBackgroundMode())) {
-                            startActivity(borrowIntent);
+                        if (borrowIntent != null) {
+                            if ((MyApplication.isScreenOn() && !MyApplication.isBackgroundMode())
+                                    || (!MyApplication.isScreenOn() && MyApplication.isBackgroundMode())) {
+                                startActivity(borrowIntent);
+                            }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         message = e.getMessage();
+                        if (message != null)
                         LibraryActivity.getInstance().updateTextView(message);
                     }
 
@@ -182,7 +189,6 @@ public class BackGroundService extends Service {
                             borrowIntent.putExtra("RESULT", true);
                             borrowIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             borrowIntent.putParcelableArrayListExtra("RECENT_LIST", recentList);
-
 
                         }
                     }

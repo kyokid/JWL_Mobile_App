@@ -193,6 +193,7 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
     private void loginProcess() {
         String userId = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
+        progressDialog.setCanceledOnTouchOutside(false);
         User user = new User(userId, password);
         Observable<RestService<User>> loginProcess = apiService.loginUser(user);
         loginProcess.subscribeOn(Schedulers.newThread())
