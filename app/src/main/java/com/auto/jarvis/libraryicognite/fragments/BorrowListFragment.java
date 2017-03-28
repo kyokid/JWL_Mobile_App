@@ -139,6 +139,7 @@ public class BorrowListFragment extends Fragment {
                         rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         rvBooks.setItemAnimator(new DefaultItemAnimator());
                         rvBooks.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
 
                         rvBooks.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), rvBooks, new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
@@ -159,7 +160,7 @@ public class BorrowListFragment extends Fragment {
                             public void onItemLongClick(View view, int position) {
                                 Log.d("new_adapter", "long click");
                                 if (!isMultiSelect) {
-                                    multiSelectedBook = new ArrayList<InformationBookBorrowed>();
+                                    multiSelectedBook = new ArrayList<>();
                                     isMultiSelect = true;
 
                                     if (actionMode == null) {
@@ -186,6 +187,9 @@ public class BorrowListFragment extends Fragment {
     private void onLoadItemsComplete(List<InformationBookBorrowed> books) {
         adapter.clear();
         adapter.addAll(books);
+        multiSelectedBook.clear();
+        listBorrowed.clear();
+        adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -314,18 +318,10 @@ public class BorrowListFragment extends Fragment {
                 .title("Gia hạn sách")
                 .content(message)
                 .positiveText("OK")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        renewManyBooks();
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        actionMode.finish();
-                        adapter.notifyDataSetChanged();
-                    }
+                .onPositive((dialog1, which) -> renewManyBooks())
+                .onNegative((dialog12, which) -> {
+                    actionMode.finish();
+                    adapter.notifyDataSetChanged();
                 })
                 .negativeText("Cancel");
 

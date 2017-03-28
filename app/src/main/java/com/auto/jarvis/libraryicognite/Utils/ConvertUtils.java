@@ -1,9 +1,20 @@
 package com.auto.jarvis.libraryicognite.Utils;
 
+import android.util.Log;
+
+import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.output.RestService;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by HaVH on 2/24/17.
@@ -42,4 +53,5 @@ public class ConvertUtils {
         }
         return strDestination;
     }
+
 }

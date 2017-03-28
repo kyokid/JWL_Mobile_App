@@ -83,4 +83,7 @@ public interface ApiInterface {
     @GET("users/{id}/status")
     Observable<RestService<Boolean>> userStatus(@Path("id") String userId);
 
+    @GET("getSystemDate")
+    Observable<RestService<String>> getCurrentDate();
+
 }
