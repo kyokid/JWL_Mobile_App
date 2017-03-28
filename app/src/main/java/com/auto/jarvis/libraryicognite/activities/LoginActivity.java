@@ -1,6 +1,7 @@
 package com.auto.jarvis.libraryicognite.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity implements InternetConnectionReceiver.ConnectivityReceiverListener {
@@ -74,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
     Handler handler;
 
     ProgressDialog progressDialog;
+    String message = "";
 
 
     public static final String USER_TAG = "USER_TAG";
@@ -88,7 +91,6 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
         handler = new Handler();
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Login");
-        progressDialog.setMessage("Please wait...");
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         initView();
@@ -129,19 +131,16 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
         editText = (EditText) dialog.findViewById(R.id.etCustomUrl);
         heroku = (RadioButton) dialog.findViewById(R.id.rdHeroku);
         local = (RadioButton) dialog.findViewById(R.id.rdCustomUrl);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (i == R.id.rdHeroku) {
-                    editText.setVisibility(View.GONE);
-                    editText.setEnabled(false);
-                } else if (i == R.id.rdCustomUrl) {
-                    editText.setVisibility(View.VISIBLE);
-                    editText.setEnabled(true);
-                    editText.requestFocus();
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-                }
+        radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+            if (i == R.id.rdHeroku) {
+                editText.setVisibility(View.GONE);
+                editText.setEnabled(false);
+            } else if (i == R.id.rdCustomUrl) {
+                editText.setVisibility(View.VISIBLE);
+                editText.setEnabled(true);
+                editText.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
@@ -149,7 +148,6 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
         dialog.show();
 
     }
-
 
 
     @Override
@@ -194,33 +192,40 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
         String userId = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Please wait...");
         User user = new User(userId, password);
-        Observable<RestService<User>> loginProcess = apiService.loginUser(user);
-        loginProcess.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        doLogin(user)
                 .doOnSubscribe(() -> handler.post(() -> progressDialog.show()))
-                .doOnTerminate(() -> handler.post(() -> progressDialog.dismiss()))
-                .subscribe(new Subscriber<RestService<User>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(RestService<User> userRestService) {
-                        User user = userRestService.getData();
-                        SaveSharedPreference.setUsername(getApplicationContext(), user.getUsername());
+                .subscribe(userRestService -> {
+                    if (userRestService.getCode().equals("200")) {
+                        User userResult = userRestService.getData();
+                        SaveSharedPreference.setUsername(getApplicationContext(), userResult.getUsername());
                         SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.LOGIN);
                         Intent intent = new Intent(LoginActivity.this, BarCodeActivity.class);
-                        intent.putExtra(USER_TAG, user);
+                        handler.post(() -> progressDialog.dismiss());
                         startActivity(intent);
+                    } else {
+                        progressDialog.dismiss();
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        message = userRestService.getTextMessage();
+                        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                                .title("Login")
+                                .content(message)
+                                .positiveText("OK");
+                        MaterialDialog dialog = builder.build();
+                        dialog.show();
                     }
                 });
+    }
+
+    private Observable<RestService<User>> doLogin(User user) {
+        return apiService.loginUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
