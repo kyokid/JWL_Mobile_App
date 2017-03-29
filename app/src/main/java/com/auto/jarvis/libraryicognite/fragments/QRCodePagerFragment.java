@@ -123,9 +123,17 @@ public class QRCodePagerFragment extends Fragment {
         @Override
         protected Bitmap doInBackground(Void... params) {
             Bitmap bitmap = null;
+            JSONObject qrContent = new JSONObject();
             String key = SaveSharedPreference.getPrivateKey(getContext());
             try {
-                bitmap = fromStringToBitmap(key);
+                qrContent.put("userId", userId);
+                qrContent.put("key", key);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                bitmap = fromStringToBitmap(qrContent.toString());
             } catch (WriterException e) {
                 e.printStackTrace();
             }
