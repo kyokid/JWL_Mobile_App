@@ -4,6 +4,7 @@ package com.auto.jarvis.libraryicognite.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -91,15 +92,61 @@ public class BorrowListFragment extends Fragment {
         return rootView;
     }
 
-    private void initView() {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void initView() {
+        listBorrowed = new ArrayList<>();
         apiService = ApiClient.getClient().create(ApiInterface.class);
         //pull to refresh
-        swipeRefreshLayout.setOnRefreshListener(() -> getBorrowedBook(true));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            getBorrowedBook(true);
+        });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        adapter = new BorrowListAdapter(listBorrowed, getActivity(), multiSelectedBook);
+
+        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rvBooks.setItemAnimator(new DefaultItemAnimator());
+        rvBooks.setAdapter(adapter);
+        rvBooks.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), rvBooks, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.d("new_adapter", "one click");
+                if (isMultiSelect) {
+                    multiSelect(position);
+                } else {
+                    Intent detailIntent = new Intent(getContext(), DetailBookActivity.class);
+                    InformationBookBorrowed bookDetail = listBorrowed.get(position);
+                    detailIntent.putExtra("BOOK_DETAIL", bookDetail);
+                    detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(detailIntent);
+                }
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                Log.d("new_adapter", "long click");
+                if (!isMultiSelect) {
+                    multiSelectedBook = new ArrayList<>();
+                    isMultiSelect = true;
+
+                    if (actionMode == null) {
+                        actionMode = getActivity().startActionMode(mActionModeCallback);
+                    }
+                }
+                multiSelect(position);
+            }
+        }));
+
+
+
 
         getBorrowedBook(false);
 
@@ -109,6 +156,7 @@ public class BorrowListFragment extends Fragment {
         }
 
     }
+
 
     @Override
     public void onDestroyView() {
@@ -127,48 +175,13 @@ public class BorrowListFragment extends Fragment {
             public void onResponse(Call<RestService<List<InformationBookBorrowed>>> call, Response<RestService<List<InformationBookBorrowed>>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
-                        listBorrowed = response.body().getData();
-                        if (!isRefreshing) {
-                            adapter = new BorrowListAdapter(listBorrowed, getActivity(), multiSelectedBook);
-                        } else {
-                            onLoadItemsComplete(listBorrowed);
+                        swipeRefreshLayout.setRefreshing(false);
+                       if (isRefreshing){
+                            multiSelectedBook.clear();
+                            adapter.clear();
                         }
-
-                        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                        rvBooks.setItemAnimator(new DefaultItemAnimator());
-                        rvBooks.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-
-                        rvBooks.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), rvBooks, new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Log.d("new_adapter", "one click");
-                                if (isMultiSelect) {
-                                    multiSelect(position);
-                                } else {
-                                    Intent detailIntent = new Intent(getContext(), DetailBookActivity.class);
-                                    InformationBookBorrowed bookDetail = listBorrowed.get(position);
-                                    detailIntent.putExtra("BOOK_DETAIL", bookDetail);
-                                    detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    getContext().startActivity(detailIntent);
-                                }
-                            }
-
-                            @Override
-                            public void onItemLongClick(View view, int position) {
-                                Log.d("new_adapter", "long click");
-                                if (!isMultiSelect) {
-                                    multiSelectedBook = new ArrayList<>();
-                                    isMultiSelect = true;
-
-                                    if (actionMode == null) {
-                                        actionMode = getActivity().startActionMode(mActionModeCallback);
-                                    }
-                                }
-                                multiSelect(position);
-                            }
-                        }));
-
+                        List<InformationBookBorrowed> listBorrowed = response.body().getData();
+                        adapter.addAll(listBorrowed);
                     }
                 }
             }
@@ -182,10 +195,13 @@ public class BorrowListFragment extends Fragment {
 
     }
 
+
     private void onLoadItemsComplete(List<InformationBookBorrowed> books) {
-        adapter.clear();
-        adapter.addAll(books);
-        multiSelectedBook.clear();
+//        multiSelectedBook.clear();
+//        adapter.mBooks.clear();
+//        adapter.mBooks = new ArrayList<>();
+//        adapter.notifyDataSetChanged();
+//        adapter.addAll(books);
         swipeRefreshLayout.setRefreshing(false);
         adapter.notifyDataSetChanged();
 
@@ -292,7 +308,6 @@ public class BorrowListFragment extends Fragment {
             }
         });
     }
-
 
 
     private void showDialogFinish(String message) {

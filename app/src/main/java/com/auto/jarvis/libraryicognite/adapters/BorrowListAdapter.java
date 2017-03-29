@@ -154,12 +154,12 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
 
     public void clear() {
         mBooks.clear();
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     public void addAll(List<InformationBookBorrowed> books) {
         mBooks.addAll(books);
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
 }
