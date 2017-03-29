@@ -161,12 +161,9 @@ public class DetailBookActivity extends AppCompatActivity {
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        btnRenew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //show dialog
-                showDialogReNew();
-            }
+        btnRenew.setOnClickListener(v -> {
+            //show dialog
+            showDialogReNew();
         });
 
 

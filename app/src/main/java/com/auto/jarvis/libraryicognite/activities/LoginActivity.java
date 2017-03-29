@@ -196,6 +196,12 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
         User user = new User(userId, password);
         doLogin(user)
                 .doOnSubscribe(() -> handler.post(() -> progressDialog.show()))
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(LoginActivity.this, "Something error", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .subscribe(userRestService -> {
                     if (userRestService.getCode().equals("200")) {
                         User userResult = userRestService.getData();
