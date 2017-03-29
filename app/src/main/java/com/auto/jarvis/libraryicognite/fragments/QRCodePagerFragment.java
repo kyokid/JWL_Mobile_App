@@ -56,7 +56,7 @@ public class QRCodePagerFragment extends Fragment {
 
     @BindView(R.id.ivQrCode)
     ImageView ivQrCode;
-//    @BindView(pbLoadingQRCode)
+    //    @BindView(pbLoadingQRCode)
 //    ProgressBar pgLoading;
     @BindView(R.id.pbLoadingQRCode)
     ProgressBar pgLoading;
@@ -73,14 +73,8 @@ public class QRCodePagerFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         userId = SaveSharedPreference.getUsername(getContext());
@@ -90,12 +84,7 @@ public class QRCodePagerFragment extends Fragment {
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override public void onDestroyView() {
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }

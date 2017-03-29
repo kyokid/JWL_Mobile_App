@@ -9,12 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +61,7 @@ public class BorrowCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrow_cart);
         ButterKnife.bind(this);
+        Log.d("LIFE", "CART create");
 
         initView();
         initFooter();
@@ -82,34 +85,25 @@ public class BorrowCartActivity extends AppCompatActivity {
             tvNewBooks.setVisibility(View.VISIBLE);
         }
 
-        ivBorrowedList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showFragment(borrowListFragment);
-                hideFragment(recentListFragment);
-            }
+        ivBorrowedList.setOnClickListener(view -> {
+            showFragment(borrowListFragment);
+            hideFragment(recentListFragment);
         });
 
-        ivRecentBooks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showFragment(recentListFragment);
-                hideFragment(borrowListFragment);
-                tvNewBooks.setVisibility(View.INVISIBLE);
-            }
+        ivRecentBooks.setOnClickListener(view -> {
+            showFragment(recentListFragment);
+            hideFragment(borrowListFragment);
+            tvNewBooks.setVisibility(View.INVISIBLE);
         });
-        tvNewBooks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showFragment(recentListFragment);
-                hideFragment(borrowListFragment);
-            }
+        tvNewBooks.setOnClickListener(view -> {
+            showFragment(recentListFragment);
+            hideFragment(borrowListFragment);
         });
     }
 
     public static Intent getIntentNewTask(Context context) {
         Intent intent = new Intent(context, BorrowCartActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
 
@@ -122,16 +116,14 @@ public class BorrowCartActivity extends AppCompatActivity {
 
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
 
+        String userId = SaveSharedPreference.getUsername(getBaseContext());
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-//        tvUsername.setText(user.getUsername());
+        tvUsername.setText(userId);
 
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectDrawerItem(item);
-                return true;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            selectDrawerItem(item);
+            return true;
         });
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
@@ -149,15 +141,20 @@ public class BorrowCartActivity extends AppCompatActivity {
     }
 
     private void selectDrawerItem(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.barCodePage:
-                startActivity(BarCodeActivity.getIntentNewTask(this));
+                intent = new Intent(this, BarCodeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
             case R.id.your_profile:
-                startActivity(ProfileActivity.getIntentNewTask(this));
+                intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
                 break;
             case R.id.borrow_list:
-                startActivity(BorrowCartActivity.getIntentNewTask(this));
+                intent = new Intent(this, BorrowCartActivity.class);
+                startActivity(intent);
                 break;
             case R.id.sign_out:
                 SaveSharedPreference.clearAll(this);
@@ -191,16 +188,13 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    private Fragment findPreviousFragment(String tag) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-//        if (fragment != null) {
-//            return fragment;
-//        }
-        return fragment;
-    }
 
     private void showFragment(Fragment fragment) {
         if (fragment instanceof BorrowListFragment) {
