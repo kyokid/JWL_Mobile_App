@@ -111,7 +111,6 @@ public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAd
                                 book.setFollow(true);//
                                 mBooks.set(position, book);
                                 notifyItemChanged(position);
-//                                viewHolder.ivIsFavorite.setImageResource(R.drawable.ic_favorite);
                             }
                             @Override
                             public void onFailure(Call<RestService<Book>> call, Throwable t) {

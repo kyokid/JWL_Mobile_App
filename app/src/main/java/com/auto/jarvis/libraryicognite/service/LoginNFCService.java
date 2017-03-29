@@ -31,7 +31,6 @@ public class LoginNFCService extends HostApduService {
     @Override
     public byte[] processCommandApdu(byte[] commandApdu, Bundle extras) {
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
-            //String account = "SE61476";
             String account = SaveSharedPreference.getUsername(getApplicationContext());
             String privateKey = SaveSharedPreference.getPrivateKey(getApplicationContext());
             JSONObject qrContent = new JSONObject();
