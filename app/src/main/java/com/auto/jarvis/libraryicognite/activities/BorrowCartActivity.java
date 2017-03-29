@@ -103,7 +103,7 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     public static Intent getIntentNewTask(Context context) {
         Intent intent = new Intent(context, BorrowCartActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
 

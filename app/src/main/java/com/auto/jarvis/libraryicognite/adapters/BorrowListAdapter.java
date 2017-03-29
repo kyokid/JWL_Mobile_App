@@ -55,8 +55,6 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
     @Override
     public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_item, parent, false);
-
-
         return new BookViewHolder(rootView);
     }
 
@@ -71,12 +69,23 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
                 .subscribe(new Subscriber<RestService<String>>() {
                     @Override
                     public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(RestService<String> stringRestService) {
+                        Log.d("LIFE", "NEXT");
+                        strCurrentDate = stringRestService.getData();
                         if (strCurrentDate != null) {
                             currentDate = ConvertUtils.convertStringtoDate(strCurrentDate);
                             Log.d("DATE-CONVERT", currentDate.toString());
                             Date deadLine = ConvertUtils.convertStringtoDate(book.getDeadlineDate());
                             boolean isAfter = deadLine.after(currentDate);
-                            boolean is3Days = deadLine.before(currentDate);
                             if (!isAfter) {
                                 distanceDate = (currentDate.getTime() - deadLine.getTime()) / 86400000;
                                 holder.tvDeadLine.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
@@ -102,16 +111,6 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
                         if (position == mBooks.size() - 1) {
                             holder.view.setVisibility(View.GONE);
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(RestService<String> stringRestService) {
-                        strCurrentDate = stringRestService.getData();
                     }
                 });
 

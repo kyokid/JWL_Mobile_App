@@ -39,8 +39,9 @@
         android:id="@+id/tvOverdue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="end"
         android:text="OverDue: 3 days"
+        android:layout_marginEnd="10dp"
         android:textColor="@color/colorLateDeadline"
         android:visibility="gone" />
 

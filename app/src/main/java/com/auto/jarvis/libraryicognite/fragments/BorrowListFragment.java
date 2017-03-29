@@ -120,9 +120,7 @@ public class BorrowListFragment extends Fragment {
 
         String username = SaveSharedPreference.getUsername(getActivity());
         User user = new User(username);
-//        user.setUsername(username);
         Call<RestService<List<InformationBookBorrowed>>> getBorrowedBook = apiService.getBorrowedBook(user);
-//        Log.d("borrow", getBorrowedBook.toString());
 
         getBorrowedBook.enqueue(new Callback<RestService<List<InformationBookBorrowed>>>() {
             @Override
@@ -188,9 +186,9 @@ public class BorrowListFragment extends Fragment {
         adapter.clear();
         adapter.addAll(books);
         multiSelectedBook.clear();
-        listBorrowed.clear();
-        adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+        adapter.notifyDataSetChanged();
+
     }
 
     private void multiSelect(int position) {
