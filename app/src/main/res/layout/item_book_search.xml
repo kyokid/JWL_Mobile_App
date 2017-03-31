@@ -27,7 +27,8 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    tools:text="Con Ca vang" />
+                    tools:text="Con Ca vangCon Ca vangCon ádfsdfsafC"
+                    android:maxLength="27"/>
                 <TextView
                     android:textColor="@color/not_available"
                     android:id="@+id/tvAvalable"
