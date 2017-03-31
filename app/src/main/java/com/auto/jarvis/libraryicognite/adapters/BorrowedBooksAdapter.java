@@ -44,7 +44,7 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
         holder.tvTitle.setText(String.valueOf(position + 1) + ". " + book.getBookTitle());
         String returnDate = ConvertUtils.formateDate(book.getReturnDate());
         holder.tvReturnDate.setText(returnDate);
-        int bookStatus = book.getBookStatus();
+        int bookStatus = Math.abs(book.getBookStatus());
         if (bookStatus == 0) {
             holder.tvStatus.setText("Trạng thái: Tốt");
             holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(R.color.colorPrimary));

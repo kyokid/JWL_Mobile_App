@@ -5,7 +5,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.estimote.sdk.SystemRequirementsChecker;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 import static android.net.ConnectivityManager.TYPE_MOBILE;
 import static android.net.ConnectivityManager.TYPE_WIFI;
@@ -24,6 +30,20 @@ public class NetworkUtils {
         NetworkInfo nw = cm.getActiveNetworkInfo();
         return (nw!= null && nw.isConnectedOrConnecting());
 
+    }
+
+
+    public static boolean isOnline() {
+        try {
+            int timeoutMs = 1500;
+            Socket sock = new Socket();
+            SocketAddress sockaddr = new InetSocketAddress(ApiClient.URL_CONNECTION, 8080);
+
+            sock.connect(sockaddr, timeoutMs);
+            sock.close();
+
+            return true;
+        } catch (IOException e) { return false; }
     }
 
     public static boolean checkBluetoothConnection(Activity activity) {

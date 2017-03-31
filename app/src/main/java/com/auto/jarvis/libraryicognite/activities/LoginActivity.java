@@ -48,7 +48,8 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class LoginActivity extends AppCompatActivity implements InternetConnectionReceiver.ConnectivityReceiverListener {
+public class LoginActivity extends AppCompatActivity
+        implements InternetConnectionReceiver.ConnectivityReceiverListener {
 
 
     @BindView(R.id.btnLogin)
@@ -101,7 +102,19 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
     private void initView() {
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        btnLogin.setOnClickListener(v -> loginProcess());
+        btnLogin.setOnClickListener(v -> {
+            checkConnectToServer()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(isOnline -> {
+                        if (!isOnline) {
+                            Intent intent = new Intent(LoginActivity.this, NoInternetActivity.class);
+                            startActivity(intent);
+                        } else {
+                            loginProcess();
+                        }
+                    });
+        });
 
         btnRegister.setOnClickListener(view -> showDialogMaterial());
     }
@@ -232,6 +245,14 @@ public class LoginActivity extends AppCompatActivity implements InternetConnecti
         return apiService.loginUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<Boolean> checkConnectToServer() {
+        return Observable.create(subscriber -> {
+            Boolean isOnline = NetworkUtils.isOnline();
+            subscriber.onNext(isOnline);
+            subscriber.onCompleted();
+        });
     }
 
 

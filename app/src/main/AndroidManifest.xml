@@ -36,7 +36,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar.Translusent"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activities.BarCodeActivity"
             android:theme="@style/AppTheme.TransparentStatusBar" />
@@ -107,7 +107,8 @@
             android:name=".activities.DetailBookActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.HistoryActivity"></activity>
+        <activity android:name=".activities.HistoryActivity" />
+        <activity android:name=".activities.NoInternetActivity"></activity>
     </application>
 
 </manifest>
