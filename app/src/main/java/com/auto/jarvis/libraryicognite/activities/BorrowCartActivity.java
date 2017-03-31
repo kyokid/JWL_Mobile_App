@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.fragments.BorrowListFragment;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.fragments.RecentBooksFragment;
@@ -25,6 +26,8 @@ import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class BorrowCartActivity extends AppCompatActivity {
 
@@ -57,11 +60,19 @@ public class BorrowCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_borrow_cart);
         ButterKnife.bind(this);
         Log.d("LIFE", "CART create");
-
-        initView();
-        initFooter();
-
-
+        RxUltils.checkConnectToServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isOnline -> {
+                    if (!isOnline) {
+                        Intent intent = new Intent(BorrowCartActivity.this, NoInternetActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        initView();
+                        initFooter();
+                    }
+                });
     }
 
     @Override

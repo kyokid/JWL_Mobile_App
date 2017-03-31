@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
+import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
@@ -18,6 +19,7 @@ import butterknife.BindView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity {
@@ -32,7 +34,20 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        controllerActivities();
+
+        RxUltils.checkConnectToServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isOnline -> {
+                    if (!isOnline) {
+                        Intent intent = new Intent(HomeActivity.this, NoInternetActivity.class);
+                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        controllerActivities();
+                    }
+                });
     }
 
     private void controllerActivities() {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.Data;
 import com.auto.jarvis.libraryicognite.models.output.Profile;
@@ -25,6 +26,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
 
@@ -63,10 +66,21 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         String userId = SaveSharedPreference.getUsername(ProfileActivity.this);
-        initView(userId);
-
-        getDataUser(userId);
-
+        RxUltils.checkConnectToServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isOnline -> {
+                    if (!isOnline) {
+                        Intent intent = new Intent(ProfileActivity.this, NoInternetActivity.class);
+                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        initView(userId);
+                        getDataUser(userId);
+                    }
+                });
     }
 
     private void getDataUser(String userId) {

@@ -1,5 +1,6 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
 import com.auto.jarvis.libraryicognite.adapters.BorrowedBooksAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
@@ -44,8 +46,19 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         ButterKnife.bind(this);
 
-        initView();
-
+        RxUltils.checkConnectToServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isOnline -> {
+                    if (!isOnline) {
+                        Intent intent = new Intent(HistoryActivity.this, NoInternetActivity.class);
+                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        initView();
+                    }
+                });
     }
 
     private void initView() {

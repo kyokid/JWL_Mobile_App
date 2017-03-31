@@ -109,6 +109,8 @@ public class LoginActivity extends AppCompatActivity
                     .subscribe(isOnline -> {
                         if (!isOnline) {
                             Intent intent = new Intent(LoginActivity.this, NoInternetActivity.class);
+                            intent.putExtra("FROM", this.getClass().getCanonicalName());
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         } else {
                             loginProcess();

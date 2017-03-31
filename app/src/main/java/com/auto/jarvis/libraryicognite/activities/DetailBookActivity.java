@@ -1,5 +1,6 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
+import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.BookAuthorDto;
 import com.auto.jarvis.libraryicognite.models.output.BookCategoryDto;
@@ -31,6 +33,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class DetailBookActivity extends AppCompatActivity {
 
@@ -90,17 +94,36 @@ public class DetailBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_book);
         ButterKnife.bind(this);
 
+        RxUltils.checkConnectToServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isOnline -> {
+                    if (!isOnline) {
+                        Intent intent = new Intent(DetailBookActivity.this, NoInternetActivity.class);
+                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        final InformationBookBorrowed bookDetail = getIntent().getExtras().getParcelable("BOOK_DETAIL");
+                        initView(bookDetail);
+                    }
+                });
+
         final InformationBookBorrowed bookDetail = getIntent().getExtras().getParcelable("BOOK_DETAIL");
         rfid = bookDetail.getBookCopyRfid();
         initView(bookDetail);
 
+
+    }
+
+    private void initView(InformationBookBorrowed bookDetail) {
+        rfid = bookDetail.getBookCopyRfid();
         StringBuilder categories = new StringBuilder();
         StringBuilder author = new StringBuilder();
         tvBookTitle.setText(bookDetail.getBookTitle());
         tvDescription.setText(bookDetail.getDescription());
         tvNumberOfPages.setText(String.format("Số trang: %d", bookDetail.getNumberOfPages()));
 
-//        tvPublished.setText("Nhà xuất bản: " + bookDetail.getPublisher());
         tvPublished.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
         String price = String.valueOf(bookDetail.getPrice());
         String thumbnail = bookDetail.getThumbnail();
@@ -144,32 +167,31 @@ public class DetailBookActivity extends AppCompatActivity {
                     .into(imgThumbnail);
         }
 
-    }
 
-    private void initView(InformationBookBorrowed book) {
+
         //toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(book.getBookTitle());
+        getSupportActionBar().setTitle(bookDetail.getBookTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        String strDeadlineDate = formateDate(book.getDeadlineDate());
-        Date deadline = ConvertUtils.convertStringtoDate(book.getDeadlineDate());
-        Long a = deadline.getTime() + (book.getDaysPerExtend() * 86400000);
+        String dl = formateDate(bookDetail.getDeadlineDate());
+        Date deadline = ConvertUtils.convertStringtoDate(bookDetail.getDeadlineDate());
+        Long a = deadline.getTime() + (bookDetail.getDaysPerExtend() * 86400000);
         Date b = new Date(a);
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String c = df.format(b);
         Log.d("aaa", "ngay gia han : " + c);
 
 
-        if (!book.isDeadline()) {
+        if (!bookDetail.isDeadline()) {
             btnRenew.setEnabled(false);
         }
 
         btnRenew.setOnClickListener(v -> {
             //show dialog
-            showDialogReNew(strDeadlineDate, c);
+            showDialogReNew(dl, c);
         });
 
 
