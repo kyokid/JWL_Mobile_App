@@ -31,6 +31,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -117,25 +118,27 @@ public class QRCodePagerFragment extends Fragment {
 //        }
 //    }
 
-//    private class AsyncQrCode extends AsyncTask<Void, Void, Bitmap> {
-//
-//        @Override
-//        protected Bitmap doInBackground(Void... params) {
-//            return qrCodeGene();
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            super.onPostExecute(bitmap);
-//            ivQrCode.setImageBitmap(bitmap);
-//            pgLoading.setVisibility(View.GONE);
-//        }
-//    }
+    private class AsyncQrCode extends AsyncTask<Void, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            Bitmap bitmap = null;
+            String key = SaveSharedPreference.getPrivateKey(getContext());
+            try {
+                bitmap = fromStringToBitmap(key);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            ivQrCode.setImageBitmap(bitmap);
+            pgLoading.setVisibility(View.GONE);
+        }
+    }
 
 
 //    private Bitmap qrCodeGene() {
@@ -184,13 +187,12 @@ public class QRCodePagerFragment extends Fragment {
                         JSONObject qrContent = new JSONObject();
                         qrContent.put("userId", userId);
                         qrContent.put("key", privateKey);
-                        bmp = fromStringToBitmap(qrContent.toString());
                         SaveSharedPreference.setLastRequestDate(getContext(), date);
                         SaveSharedPreference.setPrivateKey(getContext(), privateKey);
-                        ivQrCode.setImageBitmap(bmp);
-                        pgLoading.setVisibility(View.GONE);
-                    } catch (WriterException e) {
-                        e.printStackTrace();
+                        new AsyncQrCode().execute();
+//                        bmp = fromStringToBitmap(qrContent.toString());
+//                        ivQrCode.setImageBitmap(bmp);
+//                        pgLoading.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
