@@ -36,12 +36,10 @@
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar.Translusent"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
             android:name=".activities.BarCodeActivity"
-            android:theme="@style/AppTheme.TransparentStatusBar"
-            />
+            android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -89,14 +87,15 @@
         </service>
         <!-- ./Firebase Notifications -->
 
-        <service android:name=".service.BackGroundService"
-            android:exported="false"
-            />
-
+        <service
+            android:name=".service.BackGroundService"
+            android:exported="false" />
         <service
             android:name="com.estimote.sdk.service.BeaconService"
             android:exported="false" />
-        <activity android:name=".activities.HomeActivity"
+
+        <activity
+            android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -104,10 +103,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DetailBookActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+        <activity
+            android:name=".activities.DetailBookActivity"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.HistoryActivity"></activity>
     </application>
 
 </manifest>

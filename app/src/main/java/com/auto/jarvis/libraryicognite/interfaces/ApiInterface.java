@@ -86,4 +86,7 @@ public interface ApiInterface {
     @GET("getSystemDate")
     Observable<RestService<String>> getCurrentDate();
 
+    @GET("history/borrowed_books/{userId}")
+    Observable<RestService<List<InformationBookBorrowed>>> getBorrowedBooksHistory(@Path("userId") String userId);
+
 }

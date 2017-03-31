@@ -85,9 +85,14 @@ public class BackGroundService extends Service {
             Log.d("BEACON", "status of user: " + status);
             for (Beacon beacon : list) {
                 if (status == Constant.CHECK_IN && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
-                    status = Constant.INIT_CHECKOUT;
-                    SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.INIT_CHECKOUT);
+
                     initCheckout();
+
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (status == Constant.INIT_CHECKOUT && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_CHECKOUT_COMPLETE_ADDRESS)) {
                     status = Constant.LOGIN;
@@ -144,6 +149,10 @@ public class BackGroundService extends Service {
                         Log.d("BEACON", "INIT");
                         message = initBorrowRestService.getTextMessage();
                         LibraryActivity.getInstance().updateTextView(message);
+                        if (initBorrowRestService.getCode().equals("200")) {
+                            status = Constant.INIT_CHECKOUT;
+                            SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.INIT_CHECKOUT);
+                        }
                     }
                 });
     }

@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -162,6 +161,10 @@ public class LibraryActivity extends AppCompatActivity {
                 break;
             case R.id.borrow_list:
                 startActivity(BorrowCartActivity.getIntentNewTask(this));
+                break;
+            case R.id.borrowed_list:
+                Intent intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
                 break;
             case R.id.sign_out:
                 SaveSharedPreference.clearAll(this);

@@ -1,17 +1,11 @@
 package com.auto.jarvis.libraryicognite.activities;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -30,11 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
@@ -42,35 +32,13 @@ import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.fragments.QRCodePagerFragment;
 import com.auto.jarvis.libraryicognite.fragments.SearchFragment;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
-import com.auto.jarvis.libraryicognite.models.Book;
-import com.auto.jarvis.libraryicognite.models.output.RestService;
-import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
-import com.estimote.sdk.Beacon;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static android.R.attr.fragment;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
-import static java.security.AccessController.getContext;
 
 public class BarCodeActivity extends AppCompatActivity {
 
@@ -194,6 +162,10 @@ public class BarCodeActivity extends AppCompatActivity {
                 break;
             case R.id.borrow_list:
                 intent = new Intent(this, BorrowCartActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.borrowed_list:
+                intent = new Intent(this, HistoryActivity.class);
                 startActivity(intent);
                 break;
             case R.id.sign_out:

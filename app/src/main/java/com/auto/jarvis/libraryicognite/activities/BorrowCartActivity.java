@@ -1,23 +1,18 @@
 package com.auto.jarvis.libraryicognite.activities;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -154,6 +149,10 @@ public class BorrowCartActivity extends AppCompatActivity {
                 break;
             case R.id.borrow_list:
                 intent = new Intent(this, BorrowCartActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.borrowed_list:
+                intent = new Intent(this, HistoryActivity.class);
                 startActivity(intent);
                 break;
             case R.id.sign_out:

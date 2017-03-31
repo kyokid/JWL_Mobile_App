@@ -1,10 +1,8 @@
 package com.auto.jarvis.libraryicognite.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.auto.jarvis.libraryicognite.R;
-import com.auto.jarvis.libraryicognite.activities.DetailBookActivity;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.output.BookAuthorDto;
@@ -24,8 +21,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.author;
 
 /**
  * Created by thiendn on 21/03/2017.
@@ -76,7 +71,7 @@ public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAd
             }else {
                 viewHolder.ivIsFavorite.setVisibility(View.GONE);
                 viewHolder.tvAvailable.setText("Available");
-                viewHolder.tvAvailable.setTextColor(ContextCompat.getColor(mContext, R.color.avalable));
+                viewHolder.tvAvailable.setTextColor(ContextCompat.getColor(mContext, R.color.available));
             }
             viewHolder.ivIsFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override

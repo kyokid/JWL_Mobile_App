@@ -310,6 +310,7 @@ public class BorrowListFragment extends Fragment {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                 .title("Gia hạn sách")
                 .content(message)
+                .canceledOnTouchOutside(true)
                 .onPositive((dialog1, which) -> getBorrowedBook(true))
                 .positiveText("OK");
         dialog = builder.build();

@@ -11,6 +11,9 @@
         <item
             android:id="@+id/borrow_list"
             android:title="Borrow List" />
+        <item
+            android:id="@+id/borrowed_list"
+            android:title="Borrowed List"/>
     </group>
     <group
         android:id="@+id/menu_navigation"
