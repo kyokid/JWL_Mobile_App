@@ -50,27 +50,29 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
     private void sendNotification(RemoteMessage remoteMessage) throws UnsupportedEncodingException {
         int notiID = 0;
         String message = URLDecoder.decode(remoteMessage.getData().get("body"), "UTF-8");
+        Log.d("NOTIMESSAGE", "message: " + message);
         Intent intent = new Intent(this, BorrowCartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.ic_movie_black_24dp)
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.ic_launcher_ver2)
                 .setContentTitle(getString(R.string.app_name))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent);
 
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.bigText(message);
-        notificationBuilder.setStyle(bigTextStyle);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
 
         notificationManager.notify(notiID++ /* ID of notification */, notificationBuilder.build());
 

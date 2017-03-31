@@ -65,6 +65,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.R.attr.fragment;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
 import static java.security.AccessController.getContext;
 
@@ -86,11 +87,13 @@ public class BarCodeActivity extends AppCompatActivity {
     private final String SEARCH_FRAGMENT_TAG = "search_fragment";
     private String userId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_code);
         ButterKnife.bind(this);
+        Log.d("LIFE", "Barcode CREATE");
         userId = SaveSharedPreference.getUsername(getBaseContext());
         NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
@@ -108,8 +111,6 @@ public class BarCodeActivity extends AppCompatActivity {
                     Log.d("Push notification:", message);
                     Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
                     SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-                    int status = SaveSharedPreference.getStatusUser(getApplicationContext());
-                    Log.d("BEACON", "STATUS AFTER SET: " + status);
                     startActivity(intentLibrary);
                 }
             }
@@ -120,13 +121,16 @@ public class BarCodeActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
-        fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment).commit();
+        fragmentManager.beginTransaction().add(R.id.flBarcodeActivity, fragment).commit();
 
         initView(SaveSharedPreference.getUsername(getBaseContext()));
     }
 
 
+
+
     private void initView(String userId) {
+        Log.d("LIFE", "Barcode init view");
         tabTitle = getResources().getStringArray(R.array.tab_title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -138,27 +142,17 @@ public class BarCodeActivity extends AppCompatActivity {
             selectDrawerItem(item);
             return true;
         });
-    }
-
-    private Bitmap fromStringToBitmap(String content) throws WriterException {
-        QRCodeWriter writer = new QRCodeWriter();
-        BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 1000, 1000);
-        int width = bitMatrix.getWidth();
-        int height = bitMatrix.getHeight();
-        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-            }
-        }
-        return bmp;
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
     public static Intent getIntentNewTask(Context context) {
         Intent intent = new Intent(context, BarCodeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
+
 
     @Override
     protected void onDestroy() {
@@ -169,22 +163,24 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
 
     private void selectDrawerItem(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.barCodePage:
-                startActivity(BarCodeActivity.getIntentNewTask(this));
+                intent = new Intent(this, BarCodeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
             case R.id.your_profile:
-                startActivity(ProfileActivity.getIntentNewTask(this));
+                intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
                 break;
             case R.id.borrow_list:
-                startActivity(BorrowCartActivity.getIntentNewTask(this));
+                intent = new Intent(this, BorrowCartActivity.class);
+                startActivity(intent);
                 break;
             case R.id.sign_out:
                 SaveSharedPreference.clearAll(this);
