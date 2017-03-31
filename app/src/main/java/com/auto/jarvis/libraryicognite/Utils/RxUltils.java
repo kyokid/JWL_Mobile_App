@@ -17,4 +17,12 @@ public class RxUltils {
                 .doOnSubscribe(() -> handler.post(() -> loadingView.setVisibility(View.VISIBLE)))
                 .doOnTerminate(() -> handler.post(() -> loadingView.setVisibility(View.INVISIBLE)));
     }
+
+    public static Observable<Boolean> checkConnectToServer() {
+        return Observable.create(subscriber -> {
+            Boolean isOnline = NetworkUtils.isOnline();
+            subscriber.onNext(isOnline);
+            subscriber.onCompleted();
+        });
+    }
 }

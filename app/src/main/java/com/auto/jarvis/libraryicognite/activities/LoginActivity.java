@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
         btnLogin.setOnClickListener(v -> {
-            checkConnectToServer()
+            RxUltils.checkConnectToServer()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(isOnline -> {
@@ -246,14 +246,5 @@ public class LoginActivity extends AppCompatActivity
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-    private Observable<Boolean> checkConnectToServer() {
-        return Observable.create(subscriber -> {
-            Boolean isOnline = NetworkUtils.isOnline();
-            subscriber.onNext(isOnline);
-            subscriber.onCompleted();
-        });
-    }
-
 
 }

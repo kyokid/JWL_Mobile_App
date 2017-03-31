@@ -55,7 +55,6 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
         if (position == mBooks.size() - 1) {
             holder.view.setVisibility(View.GONE);
         }
-
     }
 
     @Override
