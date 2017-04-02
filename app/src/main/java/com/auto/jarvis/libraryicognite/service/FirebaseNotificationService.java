@@ -75,6 +75,5 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
 
         notificationManager.notify(notiID++ /* ID of notification */, notificationBuilder.build());
-
     }
 }

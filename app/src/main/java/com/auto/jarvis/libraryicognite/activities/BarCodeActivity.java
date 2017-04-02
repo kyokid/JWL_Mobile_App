@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -20,7 +21,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -108,10 +111,21 @@ public class BarCodeActivity extends AppCompatActivity {
                     NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
                 } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                     String message = intent.getStringExtra("message");
-                    Log.d("Push notification:", message);
-                    Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
-                    SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-                    startActivity(intentLibrary);
+                    if (message.equals("true")){
+                        Log.d("Current thread:", Thread.currentThread().getName());
+                        Log.d("Push notification:", message);
+                        Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
+                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+                        startActivity(intentLibrary);
+                    }
+                    else {
+                        new AlertDialog.Builder(new ContextThemeWrapper(BarCodeActivity.this, R.style.myDialog))
+                                .setTitle("Check-in Fail")
+                                .setMessage("Please restart your QR Code")
+                                .setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
                 }
             }
         };
