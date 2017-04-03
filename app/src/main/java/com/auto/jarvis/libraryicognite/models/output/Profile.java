@@ -19,6 +19,18 @@ public class Profile {
     private String mPlaceOfWork;
     @SerializedName("userId")
     private String mUserId;
+    @SerializedName("totalBalance")
+    private int totalBalance;
+    @SerializedName("usableBalance")
+    private int usableBalance;
+
+    public int getTotalBalance() {
+        return totalBalance;
+    }
+
+    public int getUsableBalance() {
+        return usableBalance;
+    }
 
     public String getAddress() {
         return mAddress;

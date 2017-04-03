@@ -51,7 +51,11 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.tvPhoneNo)
     TextView tvPhoneNo;
 
+    @BindView(R.id.tvBalance)
+    TextView tvBalance;
+
     private String fullName, email, address, placeOfWork, birthday, phoneNo;
+    private int totalBalance, usableBalance;
 
 
 
@@ -96,7 +100,8 @@ public class ProfileActivity extends AppCompatActivity {
                     placeOfWork = profile.getPlaceOfWork();
                     birthday = profile.getDateOfBirth();
                     phoneNo = profile.getPhoneNo();
-
+                    usableBalance = profile.getUsableBalance();
+                    totalBalance = profile.getTotalBalance();
                     if (!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) &&
                             !TextUtils.isEmpty(address) && !TextUtils.isEmpty(placeOfWork) &&
                             !TextUtils.isEmpty(birthday) && !TextUtils.isEmpty(phoneNo)) {
@@ -106,6 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
 //                    tvPlaceOfWork.setText(placeOfWork);
 //                    tvBirthday.setText(birthday);
                         tvPhoneNo.setText(phoneNo);
+                        tvBalance.setText(usableBalance + "/" + totalBalance);
                     }
                 }else {
                     Toast.makeText(getBaseContext(), "Vui lòng thêm profile vào DB", Toast.LENGTH_SHORT).show();
