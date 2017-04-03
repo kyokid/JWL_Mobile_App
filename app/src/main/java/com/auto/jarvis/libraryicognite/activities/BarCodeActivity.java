@@ -98,7 +98,9 @@ public class BarCodeActivity extends AppCompatActivity {
             }
         };
 
-        IntentFilter filter = new IntentFilter(Constant.PUSH_NOTIFICATION);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.PUSH_NOTIFICATION);
+        filter.addAction(Constant.REGISTRATION_COMPLETE);
         registerReceiver(mRegistrationBroadcastReceiver, filter);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -164,10 +166,10 @@ public class BarCodeActivity extends AppCompatActivity {
                 intent = new Intent(this, BorrowCartActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.borrowed_list:
-                intent = new Intent(this, HistoryActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.borrowed_list:
+//                intent = new Intent(this, HistoryActivity.class);
+//                startActivity(intent);
+//                break;
             case R.id.sign_out:
                 SaveSharedPreference.clearAll(this);
                 Intent loginIntent = new Intent(this, LoginActivity.class);

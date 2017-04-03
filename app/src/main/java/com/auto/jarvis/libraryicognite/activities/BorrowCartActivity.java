@@ -1,27 +1,35 @@
 package com.auto.jarvis.libraryicognite.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.auto.jarvis.libraryicognite.Utils.Constant;
+import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.fragments.BorrowListFragment;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.fragments.RecentBooksFragment;
+import com.auto.jarvis.libraryicognite.fragments.SearchFragment;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 
 import butterknife.BindView;
@@ -52,14 +60,30 @@ public class BorrowCartActivity extends AppCompatActivity {
     Fragment recentListFragment = new RecentBooksFragment();
 
     boolean flag = false;
-
-
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private String mUserId;
+    private final String BORROWING_BOOK_FRAGMENT = "BorrowListFragment";
+    private boolean isNew = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrow_cart);
         ButterKnife.bind(this);
         Log.d("LIFE", "CART create");
+        mUserId = SaveSharedPreference.getUsername(getBaseContext());
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals(Constant.REFRESH_LIST)) {
+                    System.out.println("da bat dc event refresh");
+                    isNew = true;
+                    invalidateOptionsMenu();
+
+                }
+            }
+        };
         RxUltils.checkConnectToServer()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -73,12 +97,28 @@ public class BorrowCartActivity extends AppCompatActivity {
                         initFooter();
                     }
                 });
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.REFRESH_LIST);
+        registerReceiver(mRegistrationBroadcastReceiver, filter);
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
+//        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.REFRESH_LIST));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
     private void initFooter() {
@@ -162,10 +202,10 @@ public class BorrowCartActivity extends AppCompatActivity {
                 intent = new Intent(this, BorrowCartActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.borrowed_list:
-                intent = new Intent(this, HistoryActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.borrowed_list:
+//                intent = new Intent(this, HistoryActivity.class);
+//                startActivity(intent);
+//                break;
             case R.id.sign_out:
                 SaveSharedPreference.clearAll(this);
                 Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -176,7 +216,7 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     private void initContent(boolean flag) {
         replaceContent(borrowListFragment, false, "BorrowListFragment");
-        replaceContent(recentListFragment, false, "BorrowListFragment");
+        replaceContent(recentListFragment, false, "RecentListFragment");
         if (flag) {
             showFragment(recentListFragment);
             hideFragment(borrowListFragment);
@@ -209,16 +249,42 @@ public class BorrowCartActivity extends AppCompatActivity {
     private void showFragment(Fragment fragment) {
         if (fragment instanceof BorrowListFragment) {
             getSupportActionBar().setTitle("BORROWING BOOKS");
+            getSupportFragmentManager().beginTransaction().show(fragment).commit();
         } else {
             getSupportActionBar().setTitle("RECENT BORROWED BOOKS");
+            getSupportFragmentManager().beginTransaction().show(fragment).commit();
         }
-        getSupportFragmentManager().beginTransaction().show(fragment).commit();
+
     }
 
     private void hideFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().hide(fragment).commit();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.borrow_books_menu, menu);
+        menu.getItem(0).setVisible(isNew);
+        return true;
+    }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.newFresh){
+            showFragment(borrowListFragment);
+            isNew = false;
+            item.setVisible(isNew);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment f = fragmentManager.findFragmentByTag(BORROWING_BOOK_FRAGMENT);
+            if (f instanceof BorrowListFragment){
+                ((BorrowListFragment) f).refreshList();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    public void setIsNewFlag(boolean isNew){
+        this.isNew = isNew;
+        invalidateOptionsMenu();
+    }
 }

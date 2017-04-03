@@ -24,6 +24,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
+import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
+import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.activities.DetailBookActivity;
 import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
@@ -104,6 +106,7 @@ public class BorrowListFragment extends Fragment {
         //pull to refresh
         swipeRefreshLayout.setOnRefreshListener(() -> {
             getBorrowedBook(true);
+            ((BorrowCartActivity)getActivity()).setIsNewFlag(false);
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -330,6 +333,10 @@ public class BorrowListFragment extends Fragment {
 //            showDialogFinish(messageError);
 //        }
 
+    }
+
+    public void refreshList(){
+        getBorrowedBook(true);
     }
 
 }

@@ -38,7 +38,13 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        } else if (remoteMessage.getNotification() != null) {
+        } else if(title != null && title.equals("Refresh")){
+            Intent pushNotification = new Intent(Constant.REFRESH_LIST);
+
+//            pushNotification.putExtra("message", remoteMessage.getNotification().getBody());
+            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+        }
+        else if (remoteMessage.getNotification() != null) {
             Intent pushNotification = new Intent(Constant.PUSH_NOTIFICATION);
 
             pushNotification.putExtra("message", remoteMessage.getNotification().getBody());
@@ -55,7 +61,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
