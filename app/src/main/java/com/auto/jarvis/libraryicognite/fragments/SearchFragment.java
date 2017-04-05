@@ -52,6 +52,7 @@ public class SearchFragment extends Fragment {
     private List<Book> mBooks;
     private SearchBookListAdapter mAdapter;
     private String mUserId;
+
     public static SearchFragment newInstance(String searchKey) {
         SearchFragment searchFragment = new SearchFragment();
         Bundle bundle = new Bundle();
@@ -96,8 +97,10 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    public void resetView(){
-        mBooks.clear();
-        mAdapter.notifyDataSetChanged();
+    public void resetView() {
+        if (mBooks != null && mBooks.size() > 0) {
+            mBooks.clear();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }
