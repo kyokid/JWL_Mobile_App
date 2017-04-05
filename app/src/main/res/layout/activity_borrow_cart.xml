@@ -9,6 +9,7 @@ android:fitsSystemWindows="true">
 
 <RelativeLayout
     android:layout_width="match_parent"
+
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
@@ -27,6 +28,7 @@ android:fitsSystemWindows="true">
         android:layout_height="match_parent"
         android:layout_below="@+id/appBar"
         android:layout_above="@+id/lnBottom"
+        android:background="#E0E0E0"
         android:layout_marginBottom="4dp"/>
 
     <LinearLayout
@@ -62,7 +64,7 @@ android:fitsSystemWindows="true">
             android:src="@drawable/books"
             android:paddingEnd="-60dp"
             android:layout_gravity="center"
-            android:foreground="#90ffffff"
+            android:foreground="#80ffffff"
             />
 
         <TextView

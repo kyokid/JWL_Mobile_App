@@ -15,6 +15,7 @@
     <string name="no_internet">No Internet Connection</string>
     <string name="not_checkin">You are not check in, please go to check in or contact librarian.</string>
     <string name="no_internet_text">Không có kết nối với Server. Đảm bảo Wi-fi hoặc dữ liệu di động được bật và sau đó thử lại</string>
+    <string name="borrowed_books">Borrowed Books</string>
 
     <string-array name="url">
         <item></item>

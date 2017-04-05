@@ -105,7 +105,11 @@ public class BorrowCartActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-//        actionBarDrawerToggle.syncState();
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        if (actionBarDrawerToggle != null)
+        actionBarDrawerToggle.syncState();
     }
 
     @Override

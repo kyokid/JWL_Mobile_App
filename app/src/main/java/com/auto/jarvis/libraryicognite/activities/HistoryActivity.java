@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.RxUltils;
@@ -36,6 +37,9 @@ public class HistoryActivity extends AppCompatActivity {
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     ApiInterface apiInterface;
     BorrowedBooksAdapter adapter;
     List<InformationBookBorrowed> listBorrowed;
@@ -61,7 +65,18 @@ public class HistoryActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     private void initView() {
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.borrowed_books);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             getBorrowedBooks(true);
