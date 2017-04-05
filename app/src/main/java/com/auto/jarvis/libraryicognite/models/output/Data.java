@@ -17,6 +17,10 @@ public class Data {
     private Profile mProfile;
     @SerializedName("userId")
     private String mUserId;
+    @SerializedName("totalBalance")
+    private int totalBalance;
+    @SerializedName("usableBalance")
+    private int usableBalance;
 
     public Boolean getActivated() {
         return mActivated;
@@ -36,6 +40,14 @@ public class Data {
 
     public String getUserId() {
         return mUserId;
+    }
+
+    public int getTotalBalance() {
+        return totalBalance;
+    }
+
+    public int getUsableBalance() {
+        return usableBalance;
     }
 
     public static class Builder {

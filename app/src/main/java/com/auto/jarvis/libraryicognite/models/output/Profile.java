@@ -1,9 +1,13 @@
 
 package com.auto.jarvis.libraryicognite.models.output;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.IntegerRes;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Profile {
+public class Profile implements Parcelable{
 
     @SerializedName("address")
     private String mAddress;
@@ -19,18 +23,30 @@ public class Profile {
     private String mPlaceOfWork;
     @SerializedName("userId")
     private String mUserId;
-    @SerializedName("totalBalance")
-    private int totalBalance;
-    @SerializedName("usableBalance")
-    private int usableBalance;
 
-    public int getTotalBalance() {
-        return totalBalance;
+
+    protected Profile(Parcel in) {
+        mAddress = in.readString();
+        mDateOfBirth = in.readString();
+        mEmail = in.readString();
+        mFullname = in.readString();
+        mPhoneNo = in.readString();
+        mPlaceOfWork = in.readString();
+        mUserId = in.readString();
     }
 
-    public int getUsableBalance() {
-        return usableBalance;
-    }
+    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
+        @Override
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        @Override
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
+
 
     public String getAddress() {
         return mAddress;
@@ -60,63 +76,19 @@ public class Profile {
         return mUserId;
     }
 
-    public static class Builder {
-
-        private String mAddress;
-        private String mDateOfBirth;
-        private String mEmail;
-        private String mFullname;
-        private String mPhoneNo;
-        private String mPlaceOfWork;
-        private String mUserId;
-
-        public Profile.Builder withAddress(String address) {
-            mAddress = address;
-            return this;
-        }
-
-        public Profile.Builder withDateOfBirth(String dateOfBirth) {
-            mDateOfBirth = dateOfBirth;
-            return this;
-        }
-
-        public Profile.Builder withEmail(String email) {
-            mEmail = email;
-            return this;
-        }
-
-        public Profile.Builder withFullname(String fullname) {
-            mFullname = fullname;
-            return this;
-        }
-
-        public Profile.Builder withPhoneNo(String phoneNo) {
-            mPhoneNo = phoneNo;
-            return this;
-        }
-
-        public Profile.Builder withPlaceOfWork(String placeOfWork) {
-            mPlaceOfWork = placeOfWork;
-            return this;
-        }
-
-        public Profile.Builder withUserId(String userId) {
-            mUserId = userId;
-            return this;
-        }
-
-        public Profile build() {
-            Profile Profile = new Profile();
-            Profile.mAddress = mAddress;
-            Profile.mDateOfBirth = mDateOfBirth;
-            Profile.mEmail = mEmail;
-            Profile.mFullname = mFullname;
-            Profile.mPhoneNo = mPhoneNo;
-            Profile.mPlaceOfWork = mPlaceOfWork;
-            Profile.mUserId = mUserId;
-            return Profile;
-        }
-
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mAddress);
+        dest.writeString(mDateOfBirth);
+        dest.writeString(mEmail);
+        dest.writeString(mFullname);
+        dest.writeString(mPhoneNo);
+        dest.writeString(mPlaceOfWork);
+        dest.writeString(mUserId);
+    }
 }
