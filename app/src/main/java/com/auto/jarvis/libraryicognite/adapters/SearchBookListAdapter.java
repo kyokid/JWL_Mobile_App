@@ -73,6 +73,9 @@ public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAd
                 viewHolder.tvAvailable.setText("Available");
                 viewHolder.tvAvailable.setTextColor(ContextCompat.getColor(mContext, R.color.available));
             }
+            if (position == mBooks.size() - 1) {
+                holder.view.setVisibility(View.GONE);
+            }
             viewHolder.ivIsFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,12 +133,14 @@ public class SearchBookListAdapter extends RecyclerView.Adapter<SearchBookListAd
         TextView tvAvailable;
         TextView tvAuthor;
         ImageView ivIsFavorite;
+        View view;
         public ViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvAvailable = (TextView) itemView.findViewById(R.id.tvAvalable);
             tvAuthor = (TextView) itemView.findViewById(R.id.tvAuthor);
             ivIsFavorite = (ImageView) itemView.findViewById(R.id.ivFavorite);
+            view = itemView.findViewById(R.id.viewSeparate);
         }
     }
 }

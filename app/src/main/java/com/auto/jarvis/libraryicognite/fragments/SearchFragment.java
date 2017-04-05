@@ -103,4 +103,5 @@ public class SearchFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
     }
+
 }

@@ -166,10 +166,10 @@ public class BarCodeActivity extends AppCompatActivity {
                 intent = new Intent(this, BorrowCartActivity.class);
                 startActivity(intent);
                 break;
-//            case R.id.borrowed_list:
-//                intent = new Intent(this, HistoryActivity.class);
-//                startActivity(intent);
-//                break;
+            case R.id.borrowed_list:
+                intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
+                break;
             case R.id.sign_out:
                 SaveSharedPreference.clearAll(this);
                 Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -180,6 +180,12 @@ public class BarCodeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count != 0) {
+            getFragmentManager().popBackStack();
+        }
+
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers();
         } else {
@@ -222,7 +228,7 @@ public class BarCodeActivity extends AppCompatActivity {
                     ((SearchFragment) f).search(query, userId);
                 }else {
                     SearchFragment fragment = SearchFragment.newInstance(query);
-                    fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment, SEARCH_FRAGMENT_TAG).commit();
+                    fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment, SEARCH_FRAGMENT_TAG).addToBackStack("search").commit();
                     fragment.search(query, userId);
                 }
                 searchView.clearFocus();

@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="#E0F2F1"
     android:layout_marginLeft="10dp">
     <LinearLayout
+        android:id="@+id/llitem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="10.0">
@@ -27,24 +29,28 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    tools:text="Con Ca vangCon Ca vangCon ádfsdfsafC"
+                    tools:text="Con Ca vangCon Ca"
+                    android:maxLines="1"
                     android:maxLength="27"/>
                 <TextView
                     android:textColor="@color/not_available"
                     android:id="@+id/tvAvalable"
                     android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/tvTitle"
                     tools:text="Avalable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true" />
             </RelativeLayout>
             <TextView
                 android:id="@+id/tvAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Edogawa conan"/>
+
         </LinearLayout>
+
     </LinearLayout>
     <ImageView
         android:layout_centerVertical="true"
@@ -54,5 +60,15 @@
         android:layout_marginLeft="100dp"
         android:layout_marginRight="8dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_not_favorite" />
+        android:src="@drawable/ic_not_favorite"
+        />
+    <View
+        android:id="@+id/viewSeparate"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#585858"
+        android:layout_below="@+id/llitem"
+        android:layout_marginTop="10dp"
+        />
+
 </RelativeLayout>
