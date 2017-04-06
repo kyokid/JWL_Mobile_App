@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -85,6 +86,9 @@ public class DetailBookActivity extends AppCompatActivity {
 
     @BindView(R.id.pgLoadingRenew)
     ProgressBar pgLoadingRenew;
+
+    @BindView(R.id.rlBackground)
+    RelativeLayout rlBackground;
 
     ApiInterface apiService;
     ArrayList<BookAuthorDto> authorDtos;

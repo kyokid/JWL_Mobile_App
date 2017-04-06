@@ -34,10 +34,10 @@
 
 
         <RelativeLayout
+            android:id="@+id/rlBackground"
             android:layout_width="match_parent"
             android:layout_height="348dp"
             android:background="@color/colorDetailBook"
-
             android:layout_weight="1.08">
 
             <TextView
@@ -153,7 +153,7 @@
                 android:layout_marginBottom="26dp" />
 
             <Button
-                android:text="Renew"
+                android:text="Gia hạn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -186,7 +186,7 @@
 
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="19dp"
-                android:text="Synopsis"
+                android:text="Tóm tắt nội dung"
                 android:textSize="18sp" />
 
             <TextView
