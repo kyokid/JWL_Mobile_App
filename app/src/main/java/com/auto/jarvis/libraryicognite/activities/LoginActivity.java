@@ -10,7 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,8 +50,7 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class LoginActivity extends AppCompatActivity
-        implements InternetConnectionReceiver.ConnectivityReceiverListener {
+public class LoginActivity extends AppCompatActivity {
 
 
     @BindView(R.id.btnLogin)
@@ -68,7 +69,6 @@ public class LoginActivity extends AppCompatActivity
 
 
     ApiInterface apiService;
-    Snackbar snackbar;
 
     RadioGroup radioGroup;
     EditText editText;
@@ -82,7 +82,6 @@ public class LoginActivity extends AppCompatActivity
 
     public static final String USER_TAG = "USER_TAG";
 
-    private boolean internetConnected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,27 +94,21 @@ public class LoginActivity extends AppCompatActivity
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         initView();
-        checkConnection();
-//        checkInternetConnection();
     }
 
     private void initView() {
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
+        btnLogin.setText(R.string.login);
         btnLogin.setOnClickListener(v -> {
-            RxUltils.checkConnectToServer()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(isOnline -> {
-                        if (!isOnline) {
-                            Intent intent = new Intent(LoginActivity.this, NoInternetActivity.class);
-                            intent.putExtra("FROM", this.getClass().getCanonicalName());
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        } else {
-                            loginProcess();
-                        }
-                    });
+            loginClick();
+        });
+
+        etPassword.setOnEditorActionListener((TextView.OnEditorActionListener) (v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loginClick();
+            }
+            return false;
         });
 
         btnRegister.setOnClickListener(view -> showDialogMaterial());
@@ -165,44 +158,6 @@ public class LoginActivity extends AppCompatActivity
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MyApplication.getInstance().setConnectivityListener(this);
-    }
-
-    private void checkConnection() {
-        boolean isConnected = NetworkUtils.checkConnection(getApplicationContext());
-        showSnack(isConnected);
-    }
-
-    private void showSnack(boolean isConnected) {
-        String message;
-        int color;
-        if (isConnected) {
-            message = "Good! Connected to Internet";
-            color = Color.WHITE;
-        } else {
-            message = "Sorry! Not connected to internet";
-            color = Color.RED;
-        }
-
-        snackbar = Snackbar
-                .make(findViewById(R.id.fab), message, Snackbar.LENGTH_LONG);
-
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
-    }
-
-
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
-    }
-
-
     private void loginProcess() {
         String userId = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -211,12 +166,7 @@ public class LoginActivity extends AppCompatActivity
         User user = new User(userId, password);
         doLogin(user)
                 .doOnSubscribe(() -> handler.post(() -> progressDialog.show()))
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(LoginActivity.this, "Something error", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .doOnError(throwable -> Toast.makeText(LoginActivity.this, "Something error", Toast.LENGTH_SHORT).show())
                 .subscribe(userRestService -> {
                     if (userRestService.getCode().equals("200")) {
                         User userResult = userRestService.getData();
@@ -247,6 +197,22 @@ public class LoginActivity extends AppCompatActivity
         return apiService.loginUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private void loginClick() {
+        RxUltils.checkConnectToServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isOnline -> {
+                    if (!isOnline) {
+                        Intent intent = new Intent(LoginActivity.this, NoInternetActivity.class);
+                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        loginProcess();
+                    }
+                });
     }
 
 }

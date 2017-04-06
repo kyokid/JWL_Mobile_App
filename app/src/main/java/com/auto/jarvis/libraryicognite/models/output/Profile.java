@@ -23,6 +23,10 @@ public class Profile implements Parcelable{
     private String mPlaceOfWork;
     @SerializedName("userId")
     private String mUserId;
+    @SerializedName("totalBalance")
+    private int totalBalance;
+    @SerializedName("usableBalance")
+    private int usableBalance;
 
 
     protected Profile(Parcel in) {
@@ -33,6 +37,26 @@ public class Profile implements Parcelable{
         mPhoneNo = in.readString();
         mPlaceOfWork = in.readString();
         mUserId = in.readString();
+        totalBalance = in.readInt();
+        usableBalance = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mAddress);
+        dest.writeString(mDateOfBirth);
+        dest.writeString(mEmail);
+        dest.writeString(mFullname);
+        dest.writeString(mPhoneNo);
+        dest.writeString(mPlaceOfWork);
+        dest.writeString(mUserId);
+        dest.writeInt(totalBalance);
+        dest.writeInt(usableBalance);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Profile> CREATOR = new Creator<Profile>() {
@@ -47,6 +71,13 @@ public class Profile implements Parcelable{
         }
     };
 
+    public int getTotalBalance() {
+        return totalBalance;
+    }
+
+    public int getUsableBalance() {
+        return usableBalance;
+    }
 
     public String getAddress() {
         return mAddress;
@@ -76,19 +107,5 @@ public class Profile implements Parcelable{
         return mUserId;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mAddress);
-        dest.writeString(mDateOfBirth);
-        dest.writeString(mEmail);
-        dest.writeString(mFullname);
-        dest.writeString(mPhoneNo);
-        dest.writeString(mPlaceOfWork);
-        dest.writeString(mUserId);
-    }
 }

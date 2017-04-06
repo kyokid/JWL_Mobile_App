@@ -4,22 +4,22 @@
         android:id="@+id/menu_personal"
         android:checkableBehavior="single">
         <item android:id="@+id/barCodePage"
-            android:title="Home"/>
+            android:title="@string/home"/>
         <item
             android:id="@+id/your_profile"
-            android:title="Your Profile" />
+            android:title="@string/profile" />
         <item
             android:id="@+id/borrow_list"
-            android:title="Borrow List" />
+            android:title="@string/borrowing_book" />
         <item
             android:id="@+id/borrowed_list"
-            android:title="Borrowed List"/>
+            android:title="@string/borrowed_book"/>
     </group>
     <group
         android:id="@+id/menu_navigation"
         android:checkableBehavior="single">
         <item
             android:id="@+id/sign_out"
-            android:title="Sign out" />
+            android:title="@string/sign_out" />
     </group>
 </menu>

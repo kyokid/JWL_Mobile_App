@@ -49,7 +49,6 @@ public class BarCodeActivity extends AppCompatActivity {
     @BindView(R.id.nvView)
     NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    String[] tabTitle;
     ApiInterface apiService;
 
 
@@ -115,10 +114,10 @@ public class BarCodeActivity extends AppCompatActivity {
 
     private void initView(String userId) {
         Log.d("LIFE", "Barcode init view");
-        tabTitle = getResources().getStringArray(R.array.tab_title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(R.string.home);
         View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
         tvUsername.setText(userId);
@@ -183,7 +182,8 @@ public class BarCodeActivity extends AppCompatActivity {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
         if (count != 0) {
-            getFragmentManager().popBackStack();
+            Intent intent = new Intent(this, BarCodeActivity.class);
+            startActivity(intent);
         }
 
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

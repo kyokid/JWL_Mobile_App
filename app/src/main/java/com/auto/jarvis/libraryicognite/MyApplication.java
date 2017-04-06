@@ -17,7 +17,6 @@ import com.estimote.sdk.EstimoteSDK;
 
 public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
-    private static MyApplication instance;
 
     private String username;
 
@@ -44,7 +43,6 @@ public class MyApplication extends Application implements Application.ActivityLi
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
         registerActivityLifecycleCallbacks(this);
         EstimoteSDK.initialize(getApplicationContext(), "ibeacondemo-el5", "5111290bf074a3ff553336435d3f91bb");
     }
@@ -52,9 +50,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
 
 
-    public static synchronized MyApplication getInstance() {
-        return instance;
-    }
 
 //    public void enableBeaconNotifications() {
 //        if (beaconNotificationsEnabled) {
@@ -72,9 +67,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 //        return beaconNotificationsEnabled;
 //    }
 
-    public void setConnectivityListener(InternetConnectionReceiver.ConnectivityReceiverListener listener) {
-        InternetConnectionReceiver.connectivityReceiverListener = listener;
-    }
 
     public static boolean backgroundMode;
 

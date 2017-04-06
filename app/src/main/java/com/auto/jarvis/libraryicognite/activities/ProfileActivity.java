@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
 import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.Data;
@@ -103,8 +104,8 @@ public class ProfileActivity extends AppCompatActivity {
                     placeOfWork = profile.getPlaceOfWork();
                     birthday = profile.getDateOfBirth();
                     phoneNo = profile.getPhoneNo();
-                    usableBalance = response.body().getData().getUsableBalance();
-                    totalBalance = response.body().getData().getTotalBalance();
+                    usableBalance = profile.getUsableBalance();
+                    totalBalance = profile.getTotalBalance();
                     if (!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) &&
                             !TextUtils.isEmpty(address) && !TextUtils.isEmpty(placeOfWork) &&
                             !TextUtils.isEmpty(birthday) && !TextUtils.isEmpty(phoneNo)) {
@@ -114,8 +115,8 @@ public class ProfileActivity extends AppCompatActivity {
 //                    tvPlaceOfWork.setText(placeOfWork);
 //                    tvBirthday.setText(birthday);
                         tvPhoneNo.setText(phoneNo);
-                        tvUsableBalance.setText(usableBalance + "");
-                        tvTotalBalance.setText(totalBalance + "");
+                        tvUsableBalance.setText(ConvertUtils.convertCurrency(usableBalance));
+                        tvTotalBalance.setText(ConvertUtils.convertCurrency(totalBalance));
                     }
                 }else {
                     Toast.makeText(getBaseContext(), "Vui lòng thêm profile vào DB", Toast.LENGTH_SHORT).show();

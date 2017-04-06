@@ -73,7 +73,7 @@ public class LibraryActivity extends AppCompatActivity {
         if (onBluetooth) {
             startService(serviceIntent);
         } else {
-            tvLocation.setText("Please turn on bluetooth to use this service");
+            tvLocation.setText(R.string.turn_on_bluetooth);
         }
 
         bluetoothReceiver = new BroadcastReceiver() {
@@ -88,7 +88,7 @@ public class LibraryActivity extends AppCompatActivity {
                             break;
 
                         case BluetoothAdapter.STATE_TURNING_ON:
-                            tvLocation.setText("Turn on bluetooth already");
+                            tvLocation.setText(R.string.turn_on_bluetooth_already);
                             startService(serviceIntent);
                             break;
                     }

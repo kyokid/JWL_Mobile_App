@@ -252,10 +252,10 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     private void showFragment(Fragment fragment) {
         if (fragment instanceof BorrowListFragment) {
-            getSupportActionBar().setTitle("BORROWING BOOKS");
+            getSupportActionBar().setTitle(R.string.borrowing_book);
             getSupportFragmentManager().beginTransaction().show(fragment).commit();
         } else {
-            getSupportActionBar().setTitle("RECENT BORROWED BOOKS");
+            getSupportActionBar().setTitle(R.string.recent_borrow_book);
             getSupportFragmentManager().beginTransaction().show(fragment).commit();
         }
 

@@ -23,10 +23,14 @@ import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +39,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static com.auto.jarvis.libraryicognite.Utils.ConvertUtils.convertCurrency;
 
 public class DetailBookActivity extends AppCompatActivity {
 
@@ -125,9 +131,10 @@ public class DetailBookActivity extends AppCompatActivity {
         tvNumberOfPages.setText(String.format("Số trang: %d", bookDetail.getNumberOfPages()));
 
         tvPublished.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
-        String price = String.valueOf(bookDetail.getPrice());
+
+        String price = convertCurrency(bookDetail.getPrice());
         String thumbnail = bookDetail.getThumbnail();
-        tvPrice.setText("Giá 1 quyển: " + price + "$");
+        tvPrice.setText("Giá 1 quyển: " + price);
         if (bookDetail.getAuthors() != null) {
             authorDtos = bookDetail.getAuthors();
             for (int i = 1; i <= authorDtos.size(); i++) {
@@ -180,8 +187,8 @@ public class DetailBookActivity extends AppCompatActivity {
         Date deadline = ConvertUtils.convertStringtoDate(bookDetail.getDeadlineDate());
         Long a = deadline.getTime() + (bookDetail.getDaysPerExtend() * 86400000);
         Date b = new Date(a);
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String c = df.format(b);
+        SimpleDateFormat dfx = new SimpleDateFormat("dd/MM/yyyy");
+        String c = dfx.format(b);
         Log.d("aaa", "ngay gia han : " + c);
 
         int statusOfBook = Math.abs(bookDetail.getBookStatus());

@@ -74,7 +74,7 @@ public class HistoryActivity extends AppCompatActivity {
     private void initView() {
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.borrowed_books);
+        getSupportActionBar().setTitle(R.string.borrowed_book);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 

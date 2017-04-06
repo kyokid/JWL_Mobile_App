@@ -6,9 +6,13 @@ import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 
 import java.text.DateFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -52,6 +56,16 @@ public class ConvertUtils {
             e.printStackTrace();
         }
         return strDestination;
+    }
+
+    public static String convertCurrency(int price) {
+        Locale locale = new Locale("vi", "VN");
+        Currency currency = Currency.getInstance("VND");
+        DecimalFormatSymbols df = DecimalFormatSymbols.getInstance(locale);
+        df.setCurrency(currency);
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+        numberFormat.setCurrency(currency);
+        return numberFormat.format(price);
     }
 
 }
