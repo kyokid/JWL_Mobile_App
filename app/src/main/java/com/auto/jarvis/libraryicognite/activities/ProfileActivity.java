@@ -104,8 +104,8 @@ public class ProfileActivity extends AppCompatActivity {
                     placeOfWork = profile.getPlaceOfWork();
                     birthday = profile.getDateOfBirth();
                     phoneNo = profile.getPhoneNo();
-                    usableBalance = profile.getUsableBalance();
-                    totalBalance = profile.getTotalBalance();
+                    usableBalance = response.body().getData().getUsableBalance();
+                    totalBalance = response.body().getData().getTotalBalance();
                     if (!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) &&
                             !TextUtils.isEmpty(address) && !TextUtils.isEmpty(placeOfWork) &&
                             !TextUtils.isEmpty(birthday) && !TextUtils.isEmpty(phoneNo)) {
