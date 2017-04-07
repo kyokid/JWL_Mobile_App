@@ -143,8 +143,10 @@ public class QRCodePagerFragment extends Fragment {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            ivQrCode.setImageBitmap(bitmap);
-            pgLoading.setVisibility(View.GONE);
+            if (bitmap != null) {
+                ivQrCode.setImageBitmap(bitmap);
+                pgLoading.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
@@ -32,11 +33,17 @@ import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.fragments.QRCodePagerFragment;
 import com.auto.jarvis.libraryicognite.fragments.SearchFragment;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
+import com.auto.jarvis.libraryicognite.models.output.RestService;
+import com.auto.jarvis.libraryicognite.rest.ApiClient;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -56,7 +63,7 @@ public class BarCodeActivity extends AppCompatActivity {
     private final String BARCODE_FRAGMENT_TAG = "barcode_fragment";
     private final String SEARCH_FRAGMENT_TAG = "search_fragment";
     private String userId;
-
+    private boolean inLibrary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,8 @@ public class BarCodeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Log.d("LIFE", "Barcode CREATE");
         userId = SaveSharedPreference.getUsername(getBaseContext());
+
+
         NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
 //            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
@@ -74,18 +83,17 @@ public class BarCodeActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 // checking for type intent filter
                 if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
-                    Log.d("Registration token:" , intent.getStringExtra("token"));
+                    Log.d("Registration token:", intent.getStringExtra("token"));
                     NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
                 } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                     String message = intent.getStringExtra("message");
-                    if (message.equals("true")){
+                    if (message.equals("true")) {
                         Log.d("Current thread:", Thread.currentThread().getName());
                         Log.d("Push notification:", message);
                         Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
                         SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
                         startActivity(intentLibrary);
-                    }
-                    else {
+                    } else {
                         new AlertDialog.Builder(new ContextThemeWrapper(BarCodeActivity.this, R.style.myDialog))
                                 .setTitle("Check-in Fail")
                                 .setMessage("Please restart your QR Code")
@@ -101,19 +109,16 @@ public class BarCodeActivity extends AppCompatActivity {
         filter.addAction(Constant.PUSH_NOTIFICATION);
         filter.addAction(Constant.REGISTRATION_COMPLETE);
         registerReceiver(mRegistrationBroadcastReceiver, filter);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
-        fragmentManager.beginTransaction().add(R.id.flBarcodeActivity, fragment).commit();
-
-        initView(SaveSharedPreference.getUsername(getBaseContext()));
     }
-
-
 
 
     private void initView(String userId) {
         Log.d("LIFE", "Barcode init view");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        QRCodePagerFragment fragment = QRCodePagerFragment.newInstance();
+        fragmentManager.beginTransaction().add(R.id.flBarcodeActivity, fragment).commit();
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -125,9 +130,7 @@ public class BarCodeActivity extends AppCompatActivity {
             selectDrawerItem(item);
             return true;
         });
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
     }
 
     public static Intent getIntentNewTask(Context context) {
@@ -144,8 +147,32 @@ public class BarCodeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+        checkStatusBorrower(userId)
+                .doOnNext(booleanRestService -> {
+                    if (booleanRestService.getData()) {
+                        inLibrary = booleanRestService.getData();
+                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
+                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intentControl);
+                        finish();
+                    } else {
+                        initView(SaveSharedPreference.getUsername(getBaseContext()));
+                    }
+                })
+                .subscribe(booleanRestService -> inLibrary = booleanRestService.getData());
+    }
+
+    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        if (actionBarDrawerToggle != null)
         actionBarDrawerToggle.syncState();
     }
 
@@ -210,6 +237,7 @@ public class BarCodeActivity extends AppCompatActivity {
                 new IntentFilter(Constant.PUSH_NOTIFICATION));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constant.REGISTRATION_COMPLETE));
+
     }
 
 
@@ -224,9 +252,9 @@ public class BarCodeActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment f = fragmentManager.findFragmentByTag(SEARCH_FRAGMENT_TAG);
-                if (f instanceof SearchFragment){
+                if (f instanceof SearchFragment) {
                     ((SearchFragment) f).search(query, userId);
-                }else {
+                } else {
                     SearchFragment fragment = SearchFragment.newInstance(query);
                     fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment, SEARCH_FRAGMENT_TAG).addToBackStack("search").commit();
                     fragment.search(query, userId);
@@ -239,7 +267,7 @@ public class BarCodeActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment f = fragmentManager.findFragmentByTag(SEARCH_FRAGMENT_TAG);
-                if (f instanceof SearchFragment){
+                if (f instanceof SearchFragment) {
                     ((SearchFragment) f).resetView();
                 }
                 return false;
@@ -247,7 +275,7 @@ public class BarCodeActivity extends AppCompatActivity {
         });
         searchView.setOnCloseListener(() -> {
             Fragment f = getSupportFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_TAG);
-            if (f instanceof SearchFragment){
+            if (f instanceof SearchFragment) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 QRCodePagerFragment fragment1 = QRCodePagerFragment.newInstance();
                 fragmentManager.beginTransaction().replace(R.id.flBarcodeActivity, fragment1).commit();
@@ -255,5 +283,11 @@ public class BarCodeActivity extends AppCompatActivity {
             return false;
         });
         return true;
+    }
+
+    private Observable<RestService<Boolean>> checkStatusBorrower(String userId) {
+        return apiService.userStatus(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
