@@ -18,6 +18,10 @@
     <group
         android:id="@+id/menu_navigation"
         android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/policy"
+            android:title="@string/policy_library" />
         <item
             android:id="@+id/sign_out"
             android:title="@string/sign_out" />
