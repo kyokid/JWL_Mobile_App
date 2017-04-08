@@ -105,7 +105,6 @@
         </activity>
         <activity
             android:name=".activities.DetailBookActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.HistoryActivity"
         android:theme="@style/AppTheme.NoActionBar"

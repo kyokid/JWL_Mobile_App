@@ -2,6 +2,7 @@ package com.auto.jarvis.libraryicognite.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
 import com.auto.jarvis.libraryicognite.Utils.RxUltils;
@@ -42,6 +44,7 @@ import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.dial;
 import static com.auto.jarvis.libraryicognite.Utils.ConvertUtils.convertCurrency;
 
 public class DetailBookActivity extends AppCompatActivity {
@@ -107,6 +110,7 @@ public class DetailBookActivity extends AppCompatActivity {
     String rfid, messageRenew;
     MaterialDialog dialog;
 
+    private InformationBookBorrowed mBookDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +129,7 @@ public class DetailBookActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         final InformationBookBorrowed bookDetail = getIntent().getExtras().getParcelable("BOOK_DETAIL");
+                        mBookDetail = bookDetail;
                         initView(bookDetail);
                     }
                 });
@@ -132,8 +137,6 @@ public class DetailBookActivity extends AppCompatActivity {
         final InformationBookBorrowed bookDetail = getIntent().getExtras().getParcelable("BOOK_DETAIL");
         rfid = bookDetail.getBookCopyRfid();
         initView(bookDetail);
-
-
     }
 
     private void initView(InformationBookBorrowed bookDetail) {
@@ -225,12 +228,25 @@ public class DetailBookActivity extends AppCompatActivity {
     }
 
     private void showDialogReNew(String deadlineDate, String newDeadline) {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
-                .title("Gia hạn sách")
-                .content("Sách này sẽ được gia hạn từ ngày " + deadlineDate + " đến ngày " + newDeadline)
-                .positiveText("OK")
-                .onPositive((dialog1, which) -> renewBook())
-                .negativeText("Cancel");
+        int daysInterval = mBookDetail.getBookStatus();
+        MaterialDialog.Builder builder;
+        if (daysInterval < 0){
+            builder = new MaterialDialog.Builder(this)
+                    .title("Gia hạn sách")
+                    .content("Sách này sẽ được gia hạn từ ngày " + deadlineDate + " đến ngày " + newDeadline + "."
+                            + " Ngoài ra vì trễ deadline " + Math.abs(daysInterval) + " ngày. Bạn sẽ bị trừ "
+                            + ConvertUtils.convertCurrency(Math.abs(daysInterval)* mBookDetail.getFine_cost()) + ".")
+                    .positiveText("OK")
+                    .onPositive((dialog1, which) -> renewBook())
+                    .negativeText("Cancel");
+        }else {
+            builder = new MaterialDialog.Builder(this)
+                    .title("Gia hạn sách")
+                    .content("Sách này sẽ được gia hạn từ ngày " + deadlineDate + " đến ngày " + newDeadline)
+                    .positiveText("OK")
+                    .onPositive((dialog1, which) -> renewBook())
+                    .negativeText("Cancel");
+        }
 
         dialog = builder.build();
         dialog.show();
@@ -250,12 +266,13 @@ public class DetailBookActivity extends AppCompatActivity {
                 messageRenew = response.body().getTextMessage();
                 showDialogFinish(messageRenew);
                 if (!response.body().getCode().equals("400")) {
-                    InformationBookBorrowed newBook = response.body().getData();
-                    String strBorrowedDate = formateDate(newBook.getBorrowedDate());
-                    String strDeadlineDate = formateDate(newBook.getDeadlineDate());
-                    String duration = strBorrowedDate + " - " + strDeadlineDate;
-                    tvDuration.setText(duration);
-                    btnRenew.setEnabled(false);
+//                    InformationBookBorrowed newBook = response.body().getData();
+//                    String strBorrowedDate = formateDate(newBook.getBorrowedDate());
+//                    String strDeadlineDate = formateDate(newBook.getDeadlineDate());
+//                    String duration = strBorrowedDate + " - " + strDeadlineDate;
+//                    tvDuration.setText(duration);
+//                    btnRenew.setEnabled(false);
+
                 }
             }
 
@@ -286,10 +303,22 @@ public class DetailBookActivity extends AppCompatActivity {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title("Gia hạn sách")
                 .content(message)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent intent = new Intent(getBaseContext(), BorrowCartActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
                 .positiveText("OK");
         dialog = builder.build();
         dialog.show();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("Destroy detaillllllllll");
+    }
 }
