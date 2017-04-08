@@ -6,6 +6,7 @@ import com.auto.jarvis.libraryicognite.models.output.Data;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.auto.jarvis.libraryicognite.models.input.User;
+import com.auto.jarvis.libraryicognite.models.output.RuleDto;
 import com.auto.jarvis.libraryicognite.models.output.UserProfile;
 import com.auto.jarvis.libraryicognite.models.output.UserProfileInfo;
 
@@ -89,4 +90,6 @@ public interface ApiInterface {
     @GET("history/borrowed_books/{userId}")
     Observable<RestService<List<InformationBookBorrowed>>> getBorrowedBooksHistory(@Path("userId") String userId);
 
+    @GET("rules")
+    Call<RestService<RuleDto>> getRules();
 }

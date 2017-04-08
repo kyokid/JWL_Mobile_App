@@ -69,6 +69,12 @@ public class InformationBookBorrowed implements Parcelable {
     @SerializedName("cautionMoney")
     private int cautionMoney;
 
+    public int getFineCost() {
+        return fineCost;
+    }
+
+    @SerializedName("fineCost")
+    private int fineCost;
 
     protected InformationBookBorrowed(Parcel in) {
         id = in.readInt();
@@ -97,41 +103,7 @@ public class InformationBookBorrowed implements Parcelable {
         lateDaysLimit = in.readInt();
         bookTypeName = in.readString();
         cautionMoney = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(bookCopyRfid);
-        dest.writeString(accountUserId);
-        dest.writeInt(borrowLimitDays);
-        dest.writeInt(extendTimes);
-        dest.writeInt(extendTimesLimit);
-        dest.writeInt(daysPerExtend);
-        dest.writeString(borrowedDate);
-        dest.writeString(returnDate);
-        dest.writeString(deadlineDate);
-        dest.writeInt(extendNumber);
-        dest.writeInt(rootId);
-        dest.writeString(bookTitle);
-        dest.writeString(publisher);
-        dest.writeString(Description);
-        dest.writeInt(numberOfPages);
-        dest.writeInt(publishYear);
-        dest.writeInt(price);
-        dest.writeString(thumbnail);
-        dest.writeTypedList(authors);
-        dest.writeTypedList(categories);
-        dest.writeByte((byte) (deadline ? 1 : 0));
-        dest.writeInt(bookStatus);
-        dest.writeInt(lateDaysLimit);
-        dest.writeString(bookTypeName);
-        dest.writeInt(cautionMoney);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        fineCost = in.readInt();
     }
 
     public static final Creator<InformationBookBorrowed> CREATOR = new Creator<InformationBookBorrowed>() {
@@ -311,5 +283,39 @@ public class InformationBookBorrowed implements Parcelable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(bookCopyRfid);
+        dest.writeString(accountUserId);
+        dest.writeInt(borrowLimitDays);
+        dest.writeInt(extendTimes);
+        dest.writeInt(extendTimesLimit);
+        dest.writeInt(daysPerExtend);
+        dest.writeString(borrowedDate);
+        dest.writeString(returnDate);
+        dest.writeString(deadlineDate);
+        dest.writeInt(extendNumber);
+        dest.writeInt(rootId);
+        dest.writeString(bookTitle);
+        dest.writeString(publisher);
+        dest.writeString(Description);
+        dest.writeInt(numberOfPages);
+        dest.writeInt(publishYear);
+        dest.writeInt(price);
+        dest.writeString(thumbnail);
+        dest.writeTypedList(authors);
+        dest.writeTypedList(categories);
+        dest.writeByte((byte) (deadline ? 1 : 0));
+        dest.writeInt(bookStatus);
+        dest.writeInt(lateDaysLimit);
+        dest.writeString(bookTypeName);
+        dest.writeInt(cautionMoney);
+        dest.writeInt(fineCost);
+    }
 }

@@ -90,6 +90,7 @@ public class BorrowCartActivity extends AppCompatActivity {
                 .subscribe(isOnline -> {
                     if (!isOnline) {
                         Intent intent = new Intent(BorrowCartActivity.this, NoInternetActivity.class);
+                        intent.putExtra("FROM", this.getClass().getCanonicalName());
                         startActivity(intent);
                         finish();
                     } else {
@@ -214,6 +215,11 @@ public class BorrowCartActivity extends AppCompatActivity {
                 SaveSharedPreference.clearAll(this);
                 Intent loginIntent = new Intent(this, LoginActivity.class);
                 startActivity(loginIntent);
+                break;
+            case R.id.policy:
+                Intent ruleIntent = new Intent(this, RuleActivity.class);
+                startActivity(ruleIntent);
+                break;
         }
         drawerLayout.closeDrawers();
     }

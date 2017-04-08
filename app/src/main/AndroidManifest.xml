@@ -105,12 +105,13 @@
         </activity>
         <activity
             android:name=".activities.DetailBookActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.HistoryActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+        android:theme="@style/AppTheme.NoActionBar"
+        />
         <activity android:name=".activities.NoInternetActivity"></activity>
+        <activity android:name=".activities.RuleActivity"></activity>
+
     </application>
 
 </manifest>
