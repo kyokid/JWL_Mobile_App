@@ -46,6 +46,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.auto.jarvis.libraryicognite.R.id.tvUsername;
 
 public class BarCodeActivity extends AppCompatActivity {
 
@@ -73,7 +74,19 @@ public class BarCodeActivity extends AppCompatActivity {
         Log.d("LIFE", "Barcode CREATE");
         userId = SaveSharedPreference.getUsername(getBaseContext());
 
-
+        if (actionBarDrawerToggle != null){
+            actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                    R.string.open, R.string.close);
+            drawerLayout.addDrawerListener(actionBarDrawerToggle);
+            actionBarDrawerToggle.syncState();
+        }
+        View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
+        TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
+        tvUsername.setText(userId);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            selectDrawerItem(item);
+            return true;
+        });
         NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
 //            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
@@ -123,13 +136,7 @@ public class BarCodeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle(R.string.home);
-        View headerLayout = navigationView.inflateHeaderView(R.layout.drawer_header);
-        TextView tvUsername = (TextView) headerLayout.findViewById(R.id.tvUsername);
-        tvUsername.setText(userId);
-        navigationView.setNavigationItemSelectedListener(item -> {
-            selectDrawerItem(item);
-            return true;
-        });
+
 
     }
 
@@ -169,12 +176,6 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (actionBarDrawerToggle != null){
-            actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                    R.string.open, R.string.close);
-            drawerLayout.addDrawerListener(actionBarDrawerToggle);
-            actionBarDrawerToggle.syncState();
-        }
 
     }
 
@@ -240,10 +241,16 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Toast.makeText(this, "Onresume", Toast.LENGTH_SHORT).show();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constant.PUSH_NOTIFICATION));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constant.REGISTRATION_COMPLETE));
+//        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+//                R.string.open, R.string.close);
+//        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+//        if (actionBarDrawerToggle != null)
+//            actionBarDrawerToggle.syncState();
 
     }
 

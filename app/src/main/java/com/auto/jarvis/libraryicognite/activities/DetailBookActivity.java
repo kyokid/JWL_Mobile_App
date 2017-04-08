@@ -234,7 +234,7 @@ public class DetailBookActivity extends AppCompatActivity {
             builder = new MaterialDialog.Builder(this)
                     .title("Gia hạn sách")
                     .content("Sách này sẽ được gia hạn từ ngày " + deadlineDate + " đến ngày " + newDeadline + "."
-                            + " Ngoài ra vì trễ deadline " + Math.abs(daysInterval) + " ngày. Bạn sẽ bị trừ "
+                            + " Ngoài ra vì trễ deadline " + Math.abs(daysInterval) + " ngày. Bạn đã bị trừ "
                             + ConvertUtils.convertCurrency(Math.abs(daysInterval)* mBookDetail.getFineCost()) + ".")
                     .positiveText("OK")
                     .onPositive((dialog1, which) -> renewBook())
