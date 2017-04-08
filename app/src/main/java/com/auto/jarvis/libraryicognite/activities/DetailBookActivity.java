@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.R;
@@ -84,6 +85,15 @@ public class DetailBookActivity extends AppCompatActivity {
     @BindView(R.id.tvDuration)
     TextView tvDuration;
 
+    @BindView(R.id.tvBookType)
+    TextView tvBookType;
+
+    @BindView(R.id.tvLateDaysLimit)
+    TextView tvLateDaysLimit;
+
+    @BindView(R.id.tvCautionMoney)
+    TextView tvCautionMoney;
+
     @BindView(R.id.pgLoadingRenew)
     ProgressBar pgLoadingRenew;
 
@@ -132,6 +142,7 @@ public class DetailBookActivity extends AppCompatActivity {
         StringBuilder author = new StringBuilder();
         tvBookTitle.setText(bookDetail.getBookTitle());
         tvDescription.setText(bookDetail.getDescription());
+        tvBookTitle.setText("Loại sách: " + bookDetail.getBookTypeName());
         tvNumberOfPages.setText(String.format("Số trang: %d", bookDetail.getNumberOfPages()));
 
         tvPublished.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
@@ -196,6 +207,7 @@ public class DetailBookActivity extends AppCompatActivity {
         Log.d("aaa", "ngay gia han : " + c);
 
         int statusOfBook = Math.abs(bookDetail.getBookStatus());
+        Toast.makeText(this, "book status " + statusOfBook, Toast.LENGTH_SHORT).show();
 
         if (!bookDetail.isDeadline() || statusOfBook > bookDetail.getLateDaysLimit()) {
             btnRenew.setEnabled(false);

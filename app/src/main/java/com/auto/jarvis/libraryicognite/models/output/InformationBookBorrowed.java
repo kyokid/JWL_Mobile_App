@@ -63,6 +63,9 @@ public class InformationBookBorrowed implements Parcelable {
     @SerializedName("bookCopyBookBookTypeLateDaysLimit")
     private int lateDaysLimit;
 
+    @SerializedName("bookCopyBookBookTypeName")
+    private String bookTypeName;
+
 
     protected InformationBookBorrowed(Parcel in) {
         id = in.readInt();
@@ -89,6 +92,7 @@ public class InformationBookBorrowed implements Parcelable {
         deadline = in.readByte() != 0;
         bookStatus = in.readInt();
         lateDaysLimit = in.readInt();
+        bookTypeName = in.readString();
     }
 
     @Override
@@ -117,6 +121,7 @@ public class InformationBookBorrowed implements Parcelable {
         dest.writeByte((byte) (deadline ? 1 : 0));
         dest.writeInt(bookStatus);
         dest.writeInt(lateDaysLimit);
+        dest.writeString(bookTypeName);
     }
 
     @Override
@@ -135,6 +140,10 @@ public class InformationBookBorrowed implements Parcelable {
             return new InformationBookBorrowed[size];
         }
     };
+
+    public String getBookTypeName() {
+        return bookTypeName;
+    }
 
     public int getLateDaysLimit() {
         return lateDaysLimit;
