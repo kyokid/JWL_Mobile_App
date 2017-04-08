@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
 import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
+import com.auto.jarvis.libraryicognite.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,8 +64,8 @@ public class DetailBookActivity extends AppCompatActivity {
     @BindView(R.id.tvNumberOfPages)
     TextView tvNumberOfPages;
 
-    @BindView(R.id.tvPublished)
-    TextView tvPublished;
+    @BindView(R.id.tvPublisher)
+    TextView tvPublisher;
 
     @BindView(R.id.tvPrice)
     TextView tvPrice;
@@ -142,10 +142,12 @@ public class DetailBookActivity extends AppCompatActivity {
         StringBuilder author = new StringBuilder();
         tvBookTitle.setText(bookDetail.getBookTitle());
         tvDescription.setText(bookDetail.getDescription());
-        tvBookTitle.setText("Loại sách: " + bookDetail.getBookTypeName());
+        tvLateDaysLimit.setText("Số ngày mượn trễ tối đa: " + bookDetail.getLateDaysLimit());
+        tvBookType.setText("Loại sách: " + bookDetail.getBookTypeName());
         tvNumberOfPages.setText(String.format("Số trang: %d", bookDetail.getNumberOfPages()));
+        tvCautionMoney.setText("Tiền cọc 1 quyển: "+ bookDetail.getCautionMoney());
 
-        tvPublished.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
+        tvPublisher.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
 
         String price = convertCurrency(bookDetail.getPrice());
         String thumbnail = bookDetail.getThumbnail();
@@ -176,7 +178,7 @@ public class DetailBookActivity extends AppCompatActivity {
         String strDeadlineDate = formateDate(bookDetail.getDeadlineDate());
 
 
-        tvCategories.setText(categories);
+        tvCategories.setText("Thể loại: " + categories);
         tvAuthor.setText("Tác giả: " + author);
         tvPublishedYear.setText("Năm xuất bản: " + bookDetail.getPublishYear());
         tvDuration.setText(strBorrowedDate + " - " + strDeadlineDate);
@@ -185,6 +187,7 @@ public class DetailBookActivity extends AppCompatActivity {
         if (thumbnail != null) {
             Picasso.with(DetailBookActivity.this)
                     .load(thumbnail)
+                    .placeholder(R.drawable.placeholder_book)
                     .fit()
                     .into(imgThumbnail);
         }
