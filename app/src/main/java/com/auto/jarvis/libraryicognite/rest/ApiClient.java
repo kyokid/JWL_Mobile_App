@@ -14,8 +14,8 @@ public class ApiClient {
 //    public static String BASE_URL = "https://jwl-api-v0.herokuapp.com/";
 //    public static String BASE_URL = "http://172.20.10.5:8080/";
 
-    public static String BASE_URL = "http://192.168.1.163:8080/";
-    public static String URL_CONNECTION = "192.168.1.163";
+    public static String BASE_URL = "http://192.168.1.156:8080/";
+    public static String URL_CONNECTION = "192.168.1.156";
 //    public static String BASE_URL = "http://192.168.0.100:8080/"; //thiendn ip wfchuane
 
     public static Retrofit retrofit = null;

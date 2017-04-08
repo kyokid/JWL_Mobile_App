@@ -170,6 +170,11 @@ public class LibraryActivity extends AppCompatActivity {
                 SaveSharedPreference.clearAll(this);
                 Intent loginIntent = new Intent(this, LoginActivity.class);
                 startActivity(loginIntent);
+                break;
+            case R.id.policy:
+                Intent ruleIntent = new Intent(this, RuleActivity.class);
+                startActivity(ruleIntent);
+                break;
         }
         drawerLayout.closeDrawers();
     }
