@@ -212,7 +212,7 @@ public class QRCodePagerFragment extends Fragment {
             @Override
             public void onFailure(Call<RestService<String>> call, Throwable t) {
                 Toast.makeText(getContext(), "Fail to call requestPrivateKey", Toast.LENGTH_LONG).show();
-                Log.d("BarCodeActivity", t.getMessage());
+                Log.d("BarCodeActivity", t.getMessage() + "");
             }
         });
     }

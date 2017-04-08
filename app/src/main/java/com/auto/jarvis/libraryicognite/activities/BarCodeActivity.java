@@ -169,11 +169,13 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        if (actionBarDrawerToggle != null)
-        actionBarDrawerToggle.syncState();
+        if (actionBarDrawerToggle != null){
+            actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                    R.string.open, R.string.close);
+            drawerLayout.addDrawerListener(actionBarDrawerToggle);
+            actionBarDrawerToggle.syncState();
+        }
+
     }
 
     private void selectDrawerItem(MenuItem item) {

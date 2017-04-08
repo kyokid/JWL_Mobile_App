@@ -69,6 +69,10 @@ public class InformationBookBorrowed implements Parcelable {
     @SerializedName("cautionMoney")
     private int cautionMoney;
 
+    public int getFineCost() {
+        return fineCost;
+    }
+
     @SerializedName("fineCost")
     private int fineCost;
 

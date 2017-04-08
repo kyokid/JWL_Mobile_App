@@ -80,9 +80,9 @@ public class BackGroundService extends Service {
         beaconManager = new BeaconManager(this);
         beaconManager.setBackgroundScanPeriod(5000, 5000);
         beaconManager.setRangingListener((region, list) -> {
-            Log.d("BEACON", "Found beacons: " + list.size());
+//            Log.d("BEACON", "Found beacons: " + list.size());
             status = SaveSharedPreference.getStatusUser(getApplicationContext());
-            Log.d("BEACON", "status of user: " + status);
+//            Log.d("BEACON", "status of user: " + status);
             for (Beacon beacon : list) {
                 if (status == Constant.CHECK_IN && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
                     initCheckout();

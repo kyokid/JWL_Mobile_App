@@ -235,7 +235,7 @@ public class DetailBookActivity extends AppCompatActivity {
                     .title("Gia hạn sách")
                     .content("Sách này sẽ được gia hạn từ ngày " + deadlineDate + " đến ngày " + newDeadline + "."
                             + " Ngoài ra vì trễ deadline " + Math.abs(daysInterval) + " ngày. Bạn sẽ bị trừ "
-                            + ConvertUtils.convertCurrency(Math.abs(daysInterval)* mBookDetail.getFine_cost()) + ".")
+                            + ConvertUtils.convertCurrency(Math.abs(daysInterval)* mBookDetail.getFineCost()) + ".")
                     .positiveText("OK")
                     .onPositive((dialog1, which) -> renewBook())
                     .negativeText("Cancel");
