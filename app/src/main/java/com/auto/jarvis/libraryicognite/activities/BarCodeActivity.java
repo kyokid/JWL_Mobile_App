@@ -100,13 +100,20 @@ public class BarCodeActivity extends AppCompatActivity {
                     NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
                 } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                     String message = intent.getStringExtra("message");
-                    if (message.equals("true")) {
+                    if (message.equals("1")) {
                         Log.d("Current thread:", Thread.currentThread().getName());
                         Log.d("Push notification:", message);
                         Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
                         SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
                         startActivity(intentLibrary);
-                    } else {
+                    } else if (message.equals("0")){
+                        new AlertDialog.Builder(new ContextThemeWrapper(BarCodeActivity.this, R.style.myDialog))
+                                .setTitle("Check-in Fail")
+                                .setMessage("Your account has been banned, please contact to the librarian.")
+                                .setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    } else if (message.equals("-1")){
                         new AlertDialog.Builder(new ContextThemeWrapper(BarCodeActivity.this, R.style.myDialog))
                                 .setTitle("Check-in Fail")
                                 .setMessage("Please restart your QR Code")
