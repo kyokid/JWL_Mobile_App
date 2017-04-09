@@ -53,6 +53,8 @@ public class InformationBookBorrowed implements Parcelable {
     @SerializedName("bookCopyBookBookCategories")
     private ArrayList<BookCategoryDto> categories;
 
+    private boolean deadline;
+
 
     protected InformationBookBorrowed(Parcel in) {
         id = in.readInt();
@@ -119,6 +121,14 @@ public class InformationBookBorrowed implements Parcelable {
             return new InformationBookBorrowed[size];
         }
     };
+
+    public boolean isDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(boolean deadline) {
+        this.deadline = deadline;
+    }
 
     public ArrayList<BookAuthorDto> getAuthors() {
         return authors;

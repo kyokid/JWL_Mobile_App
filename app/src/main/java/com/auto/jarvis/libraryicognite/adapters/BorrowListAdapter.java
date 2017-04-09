@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
+import com.auto.jarvis.libraryicognite.fragments.BorrowListFragment;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.models.output.RestService;
@@ -87,6 +88,7 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
                             Date deadLine = ConvertUtils.convertStringtoDate(book.getDeadlineDate());
                             boolean isAfter = deadLine.after(currentDate);
                             if (!isAfter) {
+                                mBooks.get(position).setDeadline(true);
                                 distanceDate = (currentDate.getTime() - deadLine.getTime()) / 86400000;
                                 holder.tvDeadLine.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
                                 if (distanceDate == 0L) {
@@ -99,6 +101,7 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
                                 distanceDate = (deadLine.getTime() - currentDate.getTime()) / 86400000;
                                 Log.d("DATE-CONVERT", "overdude: " + distanceDate);
                                 if (distanceDate <= 3L) {
+                                    mBooks.get(position).setDeadline(true);
                                     holder.tvDeadLine.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
                                     holder.overdue.setText("Còn " + distanceDate + " ngày là phải trả sách");
                                     holder.overdue.setVisibility(View.VISIBLE);
