@@ -1,25 +1,19 @@
 package com.auto.jarvis.libraryicognite.activities;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
-import com.auto.jarvis.libraryicognite.models.Book;
 import com.auto.jarvis.libraryicognite.models.output.BookAuthorDto;
 import com.auto.jarvis.libraryicognite.models.output.BookCategoryDto;
 import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
@@ -160,30 +154,33 @@ public class DetailBookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
+        String strDeadlineDate = formateDate(book.getDeadlineDate());
+        Date deadline = ConvertUtils.convertStringtoDate(book.getDeadlineDate());
+        Long a = deadline.getTime() + (book.getDaysPerExtend() * 86400000);
+        Date b = new Date(a);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String c = df.format(b);
+        Log.d("aaa", "ngay gia han : " + c);
+
+
         if (!book.isDeadline()) {
             btnRenew.setEnabled(false);
         }
 
         btnRenew.setOnClickListener(v -> {
             //show dialog
-            showDialogReNew();
+            showDialogReNew(strDeadlineDate, c);
         });
 
 
     }
 
-    private void showDialogReNew() {
+    private void showDialogReNew(String deadlineDate, String newDeadline) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title("Gia hạn sách")
-                .content("Bạn muốn gia hạn cuốn sách này?")
+                .content("Sách này sẽ được gia hạn từ ngày " + deadlineDate + " đến ngày " + newDeadline)
                 .positiveText("OK")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        renewBook();
-
-                    }
-                })
+                .onPositive((dialog1, which) -> renewBook())
                 .negativeText("Cancel");
 
         dialog = builder.build();
@@ -209,6 +206,7 @@ public class DetailBookActivity extends AppCompatActivity {
                     String strDeadlineDate = formateDate(newBook.getDeadlineDate());
                     String duration = strBorrowedDate + " - " + strDeadlineDate;
                     tvDuration.setText(duration);
+                    btnRenew.setEnabled(false);
                 }
             }
 

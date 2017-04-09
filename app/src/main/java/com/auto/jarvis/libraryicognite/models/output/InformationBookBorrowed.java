@@ -18,7 +18,9 @@ public class InformationBookBorrowed implements Parcelable {
     private int borrowLimitDays;
     private int extendTimes;
     private int extendTimesLimit;
+    @SerializedName("bookCopyBookBookTypeDaysPerExtend")
     private int daysPerExtend;
+
     private String borrowedDate;
 
     private String returnDate;

@@ -105,6 +105,9 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
                                     holder.tvDeadLine.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
                                     holder.overdue.setText("Còn " + distanceDate + " ngày là phải trả sách");
                                     holder.overdue.setVisibility(View.VISIBLE);
+                                } else {
+                                    holder.overdue.setVisibility(View.GONE);
+                                    holder.tvDeadLine.setTextColor(holder.itemView.getResources().getColor(R.color.cardview_dark_background));
                                 }
                             }
                         }
