@@ -160,6 +160,9 @@ public class DetailBookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
+        if (!book.isDeadline()) {
+            btnRenew.setEnabled(false);
+        }
 
         btnRenew.setOnClickListener(v -> {
             //show dialog

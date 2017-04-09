@@ -78,6 +78,7 @@ public class InformationBookBorrowed implements Parcelable {
         thumbnail = in.readString();
         authors = in.createTypedArrayList(BookAuthorDto.CREATOR);
         categories = in.createTypedArrayList(BookCategoryDto.CREATOR);
+        deadline = in.readByte() != 0;
     }
 
     @Override
@@ -103,6 +104,7 @@ public class InformationBookBorrowed implements Parcelable {
         dest.writeString(thumbnail);
         dest.writeTypedList(authors);
         dest.writeTypedList(categories);
+        dest.writeByte((byte) (deadline ? 1 : 0));
     }
 
     @Override
