@@ -6,6 +6,8 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.auto.jarvis.libraryicognite.R;
@@ -34,30 +36,34 @@ public class RuleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rule);
         TextView tvRule = (TextView) findViewById(R.id.tvRule);
+        ProgressBar pbLoading = (ProgressBar) findViewById(R.id.pbLoadingRule);
         ApiInterface apiService;
         apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<RestService<RuleDto>> getRule = apiService.getRules();
         getRule.enqueue(new Callback<RestService<RuleDto>>() {
             @Override
             public void onResponse(Call<RestService<RuleDto>> call, Response<RestService<RuleDto>> response) {
+                pbLoading.setVisibility(View.GONE);
                 RuleDto ruleDto = response.body().getData();
                 List<BookTypeDto> bookTypeDtos = ruleDto.getListTypeBook();
                 List<String> listTypeBook = new ArrayList<String>();
-                String rule = "";
+                String rule = "Để thuận tiện cho việc quản lý, và tối ưu quy trình mượn sách, thư viện sẽ thu tiền 'tạm ứng' cho mỗi cuốn sách được mượn. Cách tính tiền cho từng loại sách như sau: \n" ;
                 for (int i = 0; i < bookTypeDtos.size(); i++){
-                    String a = "•\tĐối với " + bookTypeDtos.get(i).getName() + ":\n"
-                            + "•\tThời gian mượn tối đa là " + bookTypeDtos.get(i).getBorrowLimitDays() + "ngày.\n"
-                            + "•\tSố lần được phép gia hạn " + bookTypeDtos.get(i).getExtendTimesLimit() + "ngày.\n"
-                            + "•\tSau khi hết thời gian, nếu không hoàn trả hoặc gia hạn, thư viện sẽ trừ tiền " + ConvertUtils.convertCurrency(ruleDto.getFine_cost()) + " cho từng ngày trễ.\n"
-                            + "•\tSau " + bookTypeDtos.get(i).getLateDaysLimit() + " nếu vẫn không hoàn trả sách cho thư viện, chúng tôi sẽ xem như bạn mua sách và tiến hành trừ số tiền bạn ứng trước khỏi tài khoản của bạn.\n";
+                    String a = "- Đối với " + bookTypeDtos.get(i).getName() + ":\n"
+                            + "\t• Thời gian mượn tối đa: " + bookTypeDtos.get(i).getBorrowLimitDays() + " ngày.\n"
+                            + "\t• Số lần được phép gia hạn: " + bookTypeDtos.get(i).getExtendTimesLimit() + " lần.\n"
+                            + "\t• Thời gian được phép trễ sách: " + bookTypeDtos.get(i).getLateDaysLimit() + " ngày.\n";
                     listTypeBook.add(a);
                     rule += a;
                 }
+                rule += "- Sau khi hết thời gian, nếu không hoàn trả hoặc gia hạn, thư viện sẽ trừ " + ConvertUtils.convertCurrency(ruleDto.getFine_cost()) + " cho từng ngày trễ.\n";
+                rule += "- Sau thời gian được phép trễ nếu vẫn không hoàn trả sách cho thư viện, chúng tôi sẽ hiểu rằng bạn mua sách và tiến hành trừ tất cả số tiền bạn ứng trước khỏi tài khoản của bạn.\n";
                 tvRule.setText(rule);
             }
 
             @Override
             public void onFailure(Call<RestService<RuleDto>> call, Throwable t) {
+                pbLoading.setVisibility(View.GONE);
                 tvRule.setText("Can not connect to server!");
             }
         });

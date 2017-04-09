@@ -248,7 +248,7 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "Onresume", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Onresume", Toast.LENGTH_SHORT).show();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constant.PUSH_NOTIFICATION));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,

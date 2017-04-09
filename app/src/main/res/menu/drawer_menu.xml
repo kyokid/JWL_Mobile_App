@@ -3,27 +3,33 @@
     <group
         android:id="@+id/menu_personal"
         android:checkableBehavior="single">
+
         <item android:id="@+id/barCodePage"
-            android:title="@string/home"/>
+            android:icon="@drawable/ic_trang_chu_24px"
+            android:title="@string/home" />
         <item
             android:id="@+id/your_profile"
+            android:icon="@drawable/ic_person_black_24px"
             android:title="@string/profile" />
         <item
             android:id="@+id/borrow_list"
+            android:icon="@drawable/ic_book_black_24px"
             android:title="@string/borrowing_book" />
         <item
             android:id="@+id/borrowed_list"
+            android:icon="@drawable/ic_watch_later_black_24px"
             android:title="@string/borrowed_book"/>
     </group>
     <group
         android:id="@+id/menu_navigation"
         android:checkableBehavior="single">
-
         <item
             android:id="@+id/policy"
+            android:icon="@drawable/ic_padlock"
             android:title="@string/policy_library" />
         <item
             android:id="@+id/sign_out"
+            android:icon="@drawable/ic_exit_to_app_black_24px"
             android:title="@string/sign_out" />
     </group>
 </menu>
