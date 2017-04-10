@@ -84,6 +84,14 @@ public class BorrowListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getBorrowedBook(true);
+        }
+        Log.d("VISIBLE", "status " + hidden);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,8 +103,14 @@ public class BorrowListFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        getBorrowedBook(true);
+    }
 
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -106,7 +120,7 @@ public class BorrowListFragment extends Fragment {
         //pull to refresh
         swipeRefreshLayout.setOnRefreshListener(() -> {
             getBorrowedBook(true);
-            ((BorrowCartActivity)getActivity()).setIsNewFlag(false);
+            ((BorrowCartActivity) getActivity()).setIsNewFlag(false);
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -158,9 +172,7 @@ public class BorrowListFragment extends Fragment {
         }));
 
 
-
-
-        getBorrowedBook(false);
+//        getBorrowedBook(false);
 
         Intent intent = getActivity().getIntent();
         if (intent == null) {
@@ -176,7 +188,7 @@ public class BorrowListFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void getBorrowedBook(final boolean isRefreshing) {
+    public void getBorrowedBook(final boolean isRefreshing) {
 
         String username = SaveSharedPreference.getUsername(getActivity());
         User user = new User(username);
@@ -188,9 +200,12 @@ public class BorrowListFragment extends Fragment {
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         swipeRefreshLayout.setRefreshing(false);
-                       if (isRefreshing){
+                        if (isRefreshing) {
                             multiSelectedBook.clear();
+//                            adapter.clear();
+                            listBorrowed.clear();
                             adapter.clear();
+                            adapter.notifyDataSetChanged();
                         }
                         List<InformationBookBorrowed> listBorrowed = response.body().getData();
                         adapter.addAll(listBorrowed);
@@ -338,7 +353,7 @@ public class BorrowListFragment extends Fragment {
 
     }
 
-    public void refreshList(){
+    public void refreshList() {
         getBorrowedBook(true);
     }
 

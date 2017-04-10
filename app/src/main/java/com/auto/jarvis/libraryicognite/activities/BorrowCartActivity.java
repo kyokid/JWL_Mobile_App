@@ -21,17 +21,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
-import com.auto.jarvis.libraryicognite.Utils.NotificationUtils;
 import com.auto.jarvis.libraryicognite.Utils.RxUltils;
 import com.auto.jarvis.libraryicognite.fragments.BorrowListFragment;
-import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.fragments.RecentBooksFragment;
-import com.auto.jarvis.libraryicognite.fragments.SearchFragment;
+import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
 import com.auto.jarvis.libraryicognite.stores.SaveSharedPreference;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,11 +60,15 @@ public class BorrowCartActivity extends AppCompatActivity {
     Fragment borrowListFragment = new BorrowListFragment();
     Fragment recentListFragment = new RecentBooksFragment();
 
+    public ArrayList<InformationBookBorrowed> listRecent;
+
     boolean flag = false;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private String mUserId;
     private final String BORROWING_BOOK_FRAGMENT = "BorrowListFragment";
+    private final String RECENT_BOOK_FRAGMENT = "RecentListFragment";
     private boolean isNew = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +82,8 @@ public class BorrowCartActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 // checking for type intent filter
                 if (intent.getAction().equals(Constant.REFRESH_LIST)) {
-                    System.out.println("da bat dc event refresh");
+                    listRecent = intent.getParcelableArrayListExtra("LIST_RECENT");
+
                     isNew = true;
                     invalidateOptionsMenu();
 
@@ -111,7 +116,7 @@ public class BorrowCartActivity extends AppCompatActivity {
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         if (actionBarDrawerToggle != null)
-        actionBarDrawerToggle.syncState();
+            actionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -284,19 +289,30 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.newFresh){
-            showFragment(borrowListFragment);
+        if (item.getItemId() == R.id.newFresh) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
             isNew = false;
             item.setVisible(isNew);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment f = fragmentManager.findFragmentByTag(BORROWING_BOOK_FRAGMENT);
-            if (f instanceof BorrowListFragment){
-                ((BorrowListFragment) f).refreshList();
+            flag = true;
+            if (recentListFragment.isVisible()) {
+                showFragment(recentListFragment);
+                Fragment f = fragmentManager.findFragmentByTag(RECENT_BOOK_FRAGMENT);
+                if (f instanceof RecentBooksFragment) {
+                    ((RecentBooksFragment) f).refreshList(listRecent);
+                }
+            } else {
+                showFragment(borrowListFragment);
+                Fragment f = fragmentManager.findFragmentByTag(BORROWING_BOOK_FRAGMENT);
+                if (f instanceof BorrowListFragment) {
+                    ((BorrowListFragment) f).refreshList();
+                }
             }
         }
-        return super.onOptionsItemSelected(item);
-    }
-    public void setIsNewFlag(boolean isNew){
+            return super.onOptionsItemSelected(item);
+        }
+
+
+    public void setIsNewFlag(boolean isNew) {
         this.isNew = isNew;
         invalidateOptionsMenu();
     }

@@ -133,7 +133,7 @@ public class BackGroundService extends Service {
                     @Override
                     public void onError(Throwable e) {
                         message = e.getMessage();
-                        if (message != null)
+                        if (message != null && LibraryActivity.getInstance() != null)
                         LibraryActivity.getInstance().updateTextView(message);
                     }
 

@@ -14,11 +14,18 @@ import android.widget.Toast;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.Constant;
 import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
+import com.auto.jarvis.libraryicognite.models.output.InformationBookBorrowed;
+import com.auto.jarvis.libraryicognite.models.output.RestService;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,8 +47,12 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             }
         } else if(title != null && title.equals("Refresh")){
             Intent pushNotification = new Intent(Constant.REFRESH_LIST);
-
-//            pushNotification.putExtra("message", remoteMessage.getNotification().getBody());
+            String listRecent = remoteMessage.getData().get("list");
+            Gson gson = new Gson();
+            ArrayList<InformationBookBorrowed> list =
+                    gson.fromJson(listRecent, new TypeToken<List<InformationBookBorrowed>>() {}.getType());
+    //            pushNotification.putExtra("message", remoteMessage.getNotification().getBody());
+            pushNotification.putParcelableArrayListExtra("LIST_RECENT", list);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
         }
         else if (remoteMessage.getNotification() != null) {

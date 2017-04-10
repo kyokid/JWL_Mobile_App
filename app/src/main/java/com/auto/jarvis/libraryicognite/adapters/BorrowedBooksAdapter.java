@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by HaVH on 3/31/17.
  */
 
-public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdapter.BookViewHolder>{
+public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdapter.BookViewHolder> {
 
 
     public List<InformationBookBorrowed> mBooks;
@@ -49,7 +49,7 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
             holder.tvStatus.setText("Trạng thái: Tốt");
             holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(R.color.colorPrimary));
         } else {
-            holder.tvStatus.setText("Trạng thái: quá hạn "+ bookStatus + " ngày");
+            holder.tvStatus.setText("Trạng thái: quá hạn " + bookStatus + " ngày");
             holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
         }
         if (position == mBooks.size() - 1) {
@@ -73,7 +73,6 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
         TextView tvStatus;
 
 
-
         BookViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -88,7 +87,8 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
 
     public void addAll(List<InformationBookBorrowed> books) {
         mBooks.addAll(books);
-        this.notifyDataSetChanged();
+        if (books.size() > 0)
+            notifyItemRangeInserted(books.size() + 1, books.size());
     }
 
 }

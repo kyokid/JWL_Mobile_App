@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.auto.jarvis.libraryicognite.R;
+import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
 import com.auto.jarvis.libraryicognite.interfaces.ApiInterface;
 import com.auto.jarvis.libraryicognite.models.Book;
@@ -53,6 +54,15 @@ public class RecentBooksFragment extends Fragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && ((BorrowCartActivity)getActivity()).listRecent != null &&
+                ((BorrowCartActivity)getActivity()).listRecent.size() > 0) {
+            refreshList(((BorrowCartActivity)getActivity()).listRecent);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recent, container, false);
@@ -70,12 +80,6 @@ public class RecentBooksFragment extends Fragment {
 
 
         String username = SaveSharedPreference.getUsername(getActivity());
-        List<Book> book1 = new ArrayList<>();
-        if (listRecent != null &&listRecent.size() > 0) {
-            for (InformationBookBorrowed bookBorrowed : listRecent) {
-                book1.add(Book.fromBorrowedList(bookBorrowed));
-            }
-        }
         BorrowListAdapter adapter = new BorrowListAdapter(listRecent, getActivity(), multiSelectedBook);
 
         rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -87,6 +91,13 @@ public class RecentBooksFragment extends Fragment {
             return;
         }
 
+    }
+
+    public void refreshList(ArrayList<InformationBookBorrowed> listRecent) {
+        BorrowListAdapter adapter = new BorrowListAdapter(listRecent, getActivity(), multiSelectedBook);
+
+        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rvBooks.setAdapter(adapter);
     }
 
 
