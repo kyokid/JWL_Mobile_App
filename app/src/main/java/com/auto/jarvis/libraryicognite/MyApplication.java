@@ -4,11 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.util.Log;
 
-import com.auto.jarvis.libraryicognite.Utils.InternetConnectionReceiver;
-import com.auto.jarvis.libraryicognite.estimote.BeaconID;
-import com.auto.jarvis.libraryicognite.estimote.BeaconNotificationManager;
 import com.estimote.sdk.EstimoteSDK;
 
 /**
@@ -46,27 +42,6 @@ public class MyApplication extends Application implements Application.ActivityLi
         registerActivityLifecycleCallbacks(this);
         EstimoteSDK.initialize(getApplicationContext(), "ibeacondemo-el5", "5111290bf074a3ff553336435d3f91bb");
     }
-
-
-
-
-
-//    public void enableBeaconNotifications() {
-//        if (beaconNotificationsEnabled) {
-//            return;
-//        }
-//
-//        BeaconNotificationManager beaconNotificationsManager = new BeaconNotificationManager(this);
-//
-//        beaconNotificationsManager.addNotification(new BeaconID("B9407F30-F5F8-466E-AFF9-25556B57FEED", 1, 1), "Init Checkout", "Success, Thank you");
-//        beaconNotificationsManager.startMonitoring();
-//        beaconNotificationsEnabled = true;
-//    }
-
-//    public boolean isBeaconNotificationsEnabled() {
-//        return beaconNotificationsEnabled;
-//    }
-
 
     public static boolean backgroundMode;
 

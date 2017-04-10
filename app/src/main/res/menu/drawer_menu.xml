@@ -7,10 +7,7 @@
         <item android:id="@+id/barCodePage"
             android:icon="@drawable/ic_trang_chu_24px"
             android:title="@string/home" />
-        <item
-            android:id="@+id/your_profile"
-            android:icon="@drawable/ic_person_black_24px"
-            android:title="@string/profile" />
+
         <item
             android:id="@+id/borrow_list"
             android:icon="@drawable/ic_book_black_24px"
@@ -23,6 +20,10 @@
     <group
         android:id="@+id/menu_navigation"
         android:checkableBehavior="single">
+        <item
+            android:id="@+id/your_profile"
+            android:icon="@drawable/ic_person_black_24px"
+            android:title="@string/profile" />
         <item
             android:id="@+id/policy"
             android:icon="@drawable/ic_padlock"

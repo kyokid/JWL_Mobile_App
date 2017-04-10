@@ -38,10 +38,10 @@ android:fitsSystemWindows="true">
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:paddingBottom="6dp"
-
+        android:background="#E0E0E0"
         >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/ivBorrowedList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@ android:fitsSystemWindows="true">
             android:background="#50000000"
             />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/ivRecentBooks"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,7 +64,6 @@ android:fitsSystemWindows="true">
             android:src="@drawable/books"
             android:paddingEnd="-60dp"
             android:layout_gravity="center"
-            android:foreground="#80ffffff"
             />
 
         <TextView

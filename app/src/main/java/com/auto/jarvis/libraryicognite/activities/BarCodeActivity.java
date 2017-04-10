@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -74,7 +75,7 @@ public class BarCodeActivity extends AppCompatActivity {
         Log.d("LIFE", "Barcode CREATE");
         userId = SaveSharedPreference.getUsername(getBaseContext());
 
-        if (actionBarDrawerToggle != null){
+        if (actionBarDrawerToggle == null){
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                     R.string.open, R.string.close);
             drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -87,6 +88,7 @@ public class BarCodeActivity extends AppCompatActivity {
             selectDrawerItem(item);
             return true;
         });
+        navigationView.setItemIconTintList(null);
         NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
 //            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
@@ -131,6 +133,11 @@ public class BarCodeActivity extends AppCompatActivity {
         registerReceiver(mRegistrationBroadcastReceiver, filter);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     private void initView(String userId) {
         Log.d("LIFE", "Barcode init view");

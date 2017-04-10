@@ -47,9 +47,6 @@
             android:name=".activities.BorrowCartActivity"
             android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
-            android:name=".activities.InsideLibraryActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.LibraryActivity"
             android:theme="@style/AppTheme.TransparentStatusBar" />
         <!-- BEGIN_INCLUDE(CardEmulationManifest) -->

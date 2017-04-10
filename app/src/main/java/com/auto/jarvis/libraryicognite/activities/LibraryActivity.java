@@ -145,6 +145,7 @@ public class LibraryActivity extends AppCompatActivity {
             selectDrawerItem(item);
             return true;
         });
+        navigationView.setItemIconTintList(null);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);

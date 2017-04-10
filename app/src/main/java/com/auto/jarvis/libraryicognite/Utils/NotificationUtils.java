@@ -62,6 +62,7 @@ public class NotificationUtils {
                 .setSmallIcon(R.mipmap.ic_launcher_ver2)
                 .setContentTitle("The Library")
                 .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(resultPendingIntent);

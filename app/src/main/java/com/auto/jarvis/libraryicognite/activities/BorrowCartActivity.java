@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,10 +49,10 @@ public class BorrowCartActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     @BindView(R.id.ivBorrowedList)
-    ImageView ivBorrowedList;
+    ImageButton ivBorrowedList;
 
     @BindView(R.id.ivRecentBooks)
-    ImageView ivRecentBooks;
+    ImageButton ivRecentBooks;
 
     @BindView(R.id.tvNewBooks)
     TextView tvNewBooks;
@@ -128,7 +129,7 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     private void initFooter() {
         if (!flag) {
-            ivRecentBooks.setEnabled(false);
+//            ivRecentBooks.setEnabled(false);
             tvNewBooks.setEnabled(false);
         } else {
             ivRecentBooks.setEnabled(true);
@@ -176,6 +177,7 @@ public class BorrowCartActivity extends AppCompatActivity {
             selectDrawerItem(item);
             return true;
         });
+        navigationView.setItemIconTintList(null);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
