@@ -129,7 +129,7 @@ public class BorrowCartActivity extends AppCompatActivity {
 
     private void initFooter() {
         if (!flag) {
-//            ivRecentBooks.setEnabled(false);
+            ivRecentBooks.setEnabled(false);
             tvNewBooks.setEnabled(false);
         } else {
             ivRecentBooks.setEnabled(true);
@@ -150,6 +150,7 @@ public class BorrowCartActivity extends AppCompatActivity {
         tvNewBooks.setOnClickListener(view -> {
             showFragment(recentListFragment);
             hideFragment(borrowListFragment);
+            tvNewBooks.setVisibility(View.INVISIBLE);
         });
     }
 
