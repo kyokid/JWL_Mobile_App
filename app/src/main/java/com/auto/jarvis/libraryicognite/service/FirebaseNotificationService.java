@@ -55,10 +55,10 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             pushNotification.putParcelableArrayListExtra("LIST_RECENT", list);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
         }
-        else if (remoteMessage.getNotification() != null) {
+        else if (remoteMessage.getData() != null) {
             Intent pushNotification = new Intent(Constant.PUSH_NOTIFICATION);
 
-            pushNotification.putExtra("message", remoteMessage.getNotification().getBody());
+            pushNotification.putExtra("message", remoteMessage.getData().get("body"));
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
         }

@@ -113,10 +113,6 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
                         }
                         String deadline = ConvertUtils.formateDate(book.getDeadlineDate());
                         holder.tvDeadLine.setText(deadline);
-
-//                        if (position == mBooks.size() - 1) {
-//                            holder.view.setVisibility(View.GONE);
-//                        }
                     }
                 });
 
@@ -142,8 +138,6 @@ public class BorrowListAdapter extends RecyclerView.Adapter<BorrowListAdapter.Bo
         TextView tvTitle;
         @BindView(R.id.tvDeadline)
         TextView tvDeadLine;
-//        @BindView(R.id.viewSeparate)
-//        View view;
         @BindView(R.id.tvOverdue)
         TextView overdue;
 

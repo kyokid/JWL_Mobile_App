@@ -62,7 +62,6 @@ public class BackGroundService extends Service {
 
     @Override
     public void onRebind(Intent intent) {
-        Log.d("BEACON", "REBIND");
         super.onRebind(intent);
     }
 

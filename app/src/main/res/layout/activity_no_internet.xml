@@ -29,4 +29,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp" />
 
+    <Button
+        android:id="@+id/btnURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnRetry"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFF"
+        android:layout_marginTop="33dp" />
+
 </RelativeLayout>

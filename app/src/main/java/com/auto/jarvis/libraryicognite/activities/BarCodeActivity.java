@@ -90,6 +90,7 @@ public class BarCodeActivity extends AppCompatActivity {
         });
         navigationView.setItemIconTintList(null);
         NotificationUtils.sendNewIdToServer(userId, FirebaseInstanceId.getInstance().getToken());
+        System.out.println("token: " + FirebaseInstanceId.getInstance().getToken());
 //            String userId = SaveSharedPreference.getUsername(BarCodeActivity.this);
 //            Intent service = new Intent(BarCodeActivity.this, IntanceNotificationIDService.class);
 //            this.startService(service);

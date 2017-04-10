@@ -86,7 +86,9 @@ public class BorrowCartActivity extends AppCompatActivity {
 
                     isNew = true;
                     invalidateOptionsMenu();
-
+                    tvNewBooks.setEnabled(true);
+                    ivRecentBooks.setEnabled(true);
+                    tvNewBooks.setVisibility(View.VISIBLE);
                 }
             }
         };
