@@ -213,7 +213,7 @@ public class DetailBookActivity extends AppCompatActivity {
         Log.d("aaa", "ngay gia han : " + c);
 
         int statusOfBook = Math.abs(bookDetail.getBookStatus());
-        Toast.makeText(this, "book status " + statusOfBook, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "book status " + statusOfBook, Toast.LENGTH_SHORT).show();
 
         if (!bookDetail.isDeadline() || statusOfBook > bookDetail.getLateDaysLimit()) {
             btnRenew.setEnabled(false);

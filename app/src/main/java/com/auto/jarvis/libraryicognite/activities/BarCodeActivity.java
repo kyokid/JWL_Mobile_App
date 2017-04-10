@@ -109,14 +109,14 @@ public class BarCodeActivity extends AppCompatActivity {
                     } else if (message.equals("0")){
                         new AlertDialog.Builder(new ContextThemeWrapper(BarCodeActivity.this, R.style.myDialog))
                                 .setTitle("Check-in Fail")
-                                .setMessage("Your account has been banned, please contact to the librarian.")
+                                .setMessage("Tài khoản của bạn hiện đang bị khóa, vui lòng liên hệ thủ thư")
                                 .setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                     } else if (message.equals("-1")){
                         new AlertDialog.Builder(new ContextThemeWrapper(BarCodeActivity.this, R.style.myDialog))
                                 .setTitle("Check-in Fail")
-                                .setMessage("Please restart your QR Code")
+                                .setMessage("Check-in không thành công, vui lòng làm mới mã vạch và thử lại")
                                 .setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
@@ -248,7 +248,7 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "Onresume", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Onresume", Toast.LENGTH_SHORT).show();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constant.PUSH_NOTIFICATION));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
