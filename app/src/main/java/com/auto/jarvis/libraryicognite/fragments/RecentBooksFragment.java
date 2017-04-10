@@ -4,6 +4,7 @@ package com.auto.jarvis.libraryicognite.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -81,8 +82,12 @@ public class RecentBooksFragment extends Fragment {
 
         String username = SaveSharedPreference.getUsername(getActivity());
         BorrowListAdapter adapter = new BorrowListAdapter(listRecent, getActivity(), multiSelectedBook);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        rvBooks.setLayoutManager(layoutManager);
+        DividerItemDecoration divider = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
+        rvBooks.addItemDecoration(divider);
         rvBooks.setAdapter(adapter);
 
 

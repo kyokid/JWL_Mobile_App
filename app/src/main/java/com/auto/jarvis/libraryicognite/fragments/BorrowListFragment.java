@@ -3,7 +3,6 @@ package com.auto.jarvis.libraryicognite.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,11 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auto.jarvis.libraryicognite.R;
 import com.auto.jarvis.libraryicognite.Utils.ConvertUtils;
-import com.auto.jarvis.libraryicognite.activities.BarCodeActivity;
 import com.auto.jarvis.libraryicognite.activities.BorrowCartActivity;
 import com.auto.jarvis.libraryicognite.activities.DetailBookActivity;
 import com.auto.jarvis.libraryicognite.adapters.BorrowListAdapter;
@@ -128,9 +125,13 @@ public class BorrowListFragment extends Fragment {
                 android.R.color.holo_red_light);
 
         adapter = new BorrowListAdapter(listBorrowed, getActivity(), multiSelectedBook);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        rvBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rvBooks.setLayoutManager(layoutManager);
         rvBooks.setItemAnimator(new DefaultItemAnimator());
+        android.support.v7.widget.DividerItemDecoration divider =
+                new android.support.v7.widget.DividerItemDecoration(getActivity(), layoutManager.getOrientation());
+        rvBooks.addItemDecoration(divider);
         rvBooks.setAdapter(adapter);
         rvBooks.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), rvBooks, new RecyclerItemClickListener.OnItemClickListener() {
             @Override

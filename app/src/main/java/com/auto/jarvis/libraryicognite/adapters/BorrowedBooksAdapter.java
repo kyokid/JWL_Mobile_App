@@ -52,9 +52,6 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
             holder.tvStatus.setText("Trạng thái: quá hạn " + bookStatus + " ngày");
             holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(R.color.colorLateDeadline));
         }
-        if (position == mBooks.size() - 1) {
-            holder.view.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -67,8 +64,6 @@ public class BorrowedBooksAdapter extends RecyclerView.Adapter<BorrowedBooksAdap
         TextView tvTitle;
         @BindView(R.id.tvReturnDate)
         TextView tvReturnDate;
-        @BindView(R.id.viewSeparate)
-        View view;
         @BindView(R.id.tvStatus)
         TextView tvStatus;
 
