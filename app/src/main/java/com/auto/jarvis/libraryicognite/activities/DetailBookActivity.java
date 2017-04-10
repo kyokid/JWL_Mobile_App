@@ -41,7 +41,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.R.attr.dial;
@@ -107,8 +109,10 @@ public class DetailBookActivity extends AppCompatActivity {
     ArrayList<BookAuthorDto> authorDtos;
     ArrayList<BookCategoryDto> bookCategoryDtos;
 
-    String rfid, messageRenew;
+    String rfid, messageRenew, currentDate;
     MaterialDialog dialog;
+
+    String strDeadline;
 
     private InformationBookBorrowed mBookDetail;
 
@@ -204,24 +208,32 @@ public class DetailBookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        String dl = formateDate(bookDetail.getDeadlineDate());
+
+        Observable<RestService<String>> currentDateServer = apiService.getCurrentDate();
+        currentDateServer.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(stringRestService -> currentDate = stringRestService.getData());
+
+        strDeadline = formateDate(bookDetail.getDeadlineDate());
         Date deadline = ConvertUtils.convertStringtoDate(bookDetail.getDeadlineDate());
         Long a = deadline.getTime() + (bookDetail.getDaysPerExtend() * 86400000);
         Date b = new Date(a);
         SimpleDateFormat dfx = new SimpleDateFormat("dd/MM/yyyy");
-        String c = dfx.format(b);
-        Log.d("aaa", "ngay gia han : " + c);
+        String strNewDeadline = dfx.format(b);
 
         int statusOfBook = Math.abs(bookDetail.getBookStatus());
-//        Toast.makeText(this, "book status " + statusOfBook, Toast.LENGTH_SHORT).show();
 
         if (!bookDetail.isDeadline() || statusOfBook > bookDetail.getLateDaysLimit()) {
             btnRenew.setEnabled(false);
         }
 
         btnRenew.setOnClickListener(v -> {
+            if (bookDetail.getBookStatus() < 0) {
+                currentDate = formateDate(currentDate);
+                strDeadline =  currentDate;
+            }
             //show dialog
-            showDialogReNew(dl, c);
+            showDialogReNew(strDeadline, strNewDeadline);
         });
 
 
@@ -303,22 +315,13 @@ public class DetailBookActivity extends AppCompatActivity {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title("Gia hạn sách")
                 .content(message)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent intent = new Intent(getBaseContext(), BorrowCartActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+                .onPositive((dialog1, which) -> {
+                    Intent intent = new Intent(getBaseContext(), BorrowCartActivity.class);
+                    startActivity(intent);
+                    finish();
                 })
                 .positiveText("OK");
         dialog = builder.build();
         dialog.show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        System.out.println("Destroy detaillllllllll");
     }
 }

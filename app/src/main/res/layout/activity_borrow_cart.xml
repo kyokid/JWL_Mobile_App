@@ -46,7 +46,10 @@ android:fitsSystemWindows="true">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:background="#E0E0E0"
+
             android:src="@drawable/ic_history_black_24px"
+
             />
 
         <View
@@ -63,6 +66,8 @@ android:fitsSystemWindows="true">
             android:layout_weight="0.29"
             android:src="@drawable/books"
             android:paddingEnd="-60dp"
+            android:background="#E0E0E0"
+
             android:layout_gravity="center"
             />
 
