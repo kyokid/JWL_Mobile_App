@@ -83,12 +83,13 @@ public class BorrowCartActivity extends AppCompatActivity {
                 // checking for type intent filter
                 if (intent.getAction().equals(Constant.REFRESH_LIST)) {
                     listRecent = intent.getParcelableArrayListExtra("LIST_RECENT");
-
-                    isNew = true;
-                    invalidateOptionsMenu();
-                    tvNewBooks.setEnabled(true);
-                    ivRecentBooks.setEnabled(true);
-                    tvNewBooks.setVisibility(View.VISIBLE);
+                    if (listRecent.size() > 0){
+                        isNew = true;
+                        invalidateOptionsMenu();
+                        tvNewBooks.setEnabled(true);
+                        ivRecentBooks.setEnabled(true);
+                        tvNewBooks.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
