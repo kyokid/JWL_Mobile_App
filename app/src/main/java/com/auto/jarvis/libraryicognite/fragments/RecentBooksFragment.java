@@ -60,6 +60,7 @@ public class RecentBooksFragment extends Fragment {
         if (!hidden && ((BorrowCartActivity)getActivity()).listRecent != null &&
                 ((BorrowCartActivity)getActivity()).listRecent.size() > 0) {
             refreshList(((BorrowCartActivity)getActivity()).listRecent);
+            ((BorrowCartActivity)getActivity()).setIsNewFlag(false);
         }
     }
 
