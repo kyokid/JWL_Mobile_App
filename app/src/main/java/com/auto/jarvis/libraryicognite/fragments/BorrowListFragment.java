@@ -86,6 +86,7 @@ public class BorrowListFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             getBorrowedBook(true);
+            ((BorrowCartActivity)getActivity()).setIsNewFlag(false);
         }
         Log.d("VISIBLE", "status " + hidden);
     }

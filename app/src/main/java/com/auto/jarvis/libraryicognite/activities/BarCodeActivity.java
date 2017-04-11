@@ -99,13 +99,13 @@ public class BarCodeActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 // checking for type intent filter
                 if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
-                    Log.d("Registration token:", intent.getStringExtra("token"));
+//                    Log.d("Registration token:", intent.getStringExtra("token"));
                     NotificationUtils.sendNewIdToServer(userId, intent.getStringExtra("token"));
                 } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
                     String message = intent.getStringExtra("message");
                     if (message.equals("1")) {
-                        Log.d("Current thread:", Thread.currentThread().getName());
-                        Log.d("Push notification:", message);
+//                        Log.d("Current thread:", Thread.currentThread().getName());
+//                        Log.d("Push notification:", message);
                         Intent intentLibrary = new Intent(getBaseContext(), LibraryActivity.class);
                         SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
                         startActivity(intentLibrary);
@@ -132,6 +132,25 @@ public class BarCodeActivity extends AppCompatActivity {
         filter.addAction(Constant.PUSH_NOTIFICATION);
         filter.addAction(Constant.REGISTRATION_COMPLETE);
         registerReceiver(mRegistrationBroadcastReceiver, filter);
+        setUp();
+    }
+
+    private void setUp(){
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+        checkStatusBorrower(userId)
+                .doOnNext(booleanRestService -> {
+                    if (booleanRestService.getData()) {
+                        inLibrary = booleanRestService.getData();
+                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
+                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intentControl);
+                        finish();
+                    } else {
+                        initView(SaveSharedPreference.getUsername(getBaseContext()));
+                    }
+                })
+                .subscribe(booleanRestService -> inLibrary = booleanRestService.getData());
     }
 
     @Override
@@ -171,21 +190,21 @@ public class BarCodeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        apiService = ApiClient.getClient().create(ApiInterface.class);
-        checkStatusBorrower(userId)
-                .doOnNext(booleanRestService -> {
-                    if (booleanRestService.getData()) {
-                        inLibrary = booleanRestService.getData();
-                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
-                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intentControl);
-                        finish();
-                    } else {
-                        initView(SaveSharedPreference.getUsername(getBaseContext()));
-                    }
-                })
-                .subscribe(booleanRestService -> inLibrary = booleanRestService.getData());
+//        apiService = ApiClient.getClient().create(ApiInterface.class);
+//        checkStatusBorrower(userId)
+//                .doOnNext(booleanRestService -> {
+//                    if (booleanRestService.getData()) {
+//                        inLibrary = booleanRestService.getData();
+//                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
+//                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+//                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(intentControl);
+//                        finish();
+//                    } else {
+//                        initView(SaveSharedPreference.getUsername(getBaseContext()));
+//                    }
+//                })
+//                .subscribe(booleanRestService -> inLibrary = booleanRestService.getData());
     }
 
     @Override
