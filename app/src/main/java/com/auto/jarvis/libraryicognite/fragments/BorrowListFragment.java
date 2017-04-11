@@ -234,7 +234,7 @@ public class BorrowListFragment extends Fragment {
             }
 
             if (multiSelectedBook.size() > 0) {
-                actionMode.setTitle("Selected " + multiSelectedBook.size() + " book(s)");
+                actionMode.setTitle("Đang chọn " + multiSelectedBook.size() + " cuốn");
             } else {
                 actionMode.finish();
             }
@@ -318,6 +318,8 @@ public class BorrowListFragment extends Fragment {
                     Log.d("RENEW", "FAIL" + response.body().getTextMessage());
                     messageError = response.body().getTextMessage();
                     showDialogFinish(messageError);
+                } else {
+                    getBorrowedBook(true);
                 }
             }
 
@@ -349,9 +351,6 @@ public class BorrowListFragment extends Fragment {
         actionMode.finish();
         multiSelectedBook.clear();
         Log.d("RENEW", "DIALOG" + messageError);
-//        if (messageError != null) {
-//            showDialogFinish(messageError);
-//        }
 
     }
 
