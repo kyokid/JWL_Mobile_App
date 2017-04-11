@@ -152,7 +152,8 @@ public class DetailBookActivity extends AppCompatActivity {
         tvLateDaysLimit.setText("Số ngày mượn trễ tối đa: " + bookDetail.getLateDaysLimit());
         tvBookType.setText("Loại sách: " + bookDetail.getBookTypeName());
         tvNumberOfPages.setText(String.format("Số trang: %d", bookDetail.getNumberOfPages()));
-        tvCautionMoney.setText("Tiền cọc 1 quyển: "+ bookDetail.getCautionMoney());
+        String cautionMoney = convertCurrency(bookDetail.getCautionMoney());
+        tvCautionMoney.setText("Tiền cọc 1 quyển: "+ cautionMoney);
 
         tvPublisher.setText(String.format("Nhà xuất bản: %s" , bookDetail.getPublisher()));
 
