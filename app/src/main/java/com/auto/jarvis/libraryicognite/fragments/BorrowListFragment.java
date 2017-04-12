@@ -122,7 +122,9 @@ public class BorrowListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("new_adapter", "one click");
-                if (isMultiSelect && !listBorrowed.get(position).isDeadline()) {
+                if (isMultiSelect && (!listBorrowed.get(position).isDeadline() ||
+                        listBorrowed.get(position).getBookStatus() >
+                                listBorrowed.get(position).getLateDaysLimit())) {
                     return;
                 }
                 if (isMultiSelect && listBorrowed.get(position).isDeadline()) {
@@ -138,7 +140,8 @@ public class BorrowListFragment extends Fragment {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if (!listBorrowed.get(position).isDeadline()) {
+                if (!listBorrowed.get(position).isDeadline() ||
+                        listBorrowed.get(position).getBookStatus() > listBorrowed.get(position).getLateDaysLimit()) {
                     return;
                 }
                 Log.d("new_adapter", "long click");

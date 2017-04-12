@@ -10,6 +10,6 @@
     <color name="colorDetailBook">#8DC3E0</color>
     <color name="available">#64dd17</color>
     <color name="not_available"> #f44336</color>
-    <color name="list_item_selected_state">#f44336</color>
+    <color name="list_item_selected_state">#B2FF59</color>
     <color name="list_item_normal_state">#FFFFFF</color>
 </resources>

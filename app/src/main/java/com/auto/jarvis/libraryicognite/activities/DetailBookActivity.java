@@ -184,8 +184,9 @@ public class DetailBookActivity extends AppCompatActivity {
         String c = df.format(b);
         Log.d("aaa", "ngay gia han : " + c);
 
+        int statusOfBook = Math.abs(bookDetail.getBookStatus());
 
-        if (!bookDetail.isDeadline()) {
+        if (!bookDetail.isDeadline() || statusOfBook > bookDetail.getLateDaysLimit()) {
             btnRenew.setEnabled(false);
         }
 

@@ -85,14 +85,7 @@ public class BackGroundService extends Service {
             Log.d("BEACON", "status of user: " + status);
             for (Beacon beacon : list) {
                 if (status == Constant.CHECK_IN && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_INIT_CHECKOUT_ADDRESS)) {
-
                     initCheckout();
-
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
                 if (status == Constant.INIT_CHECKOUT && beacon.getMacAddress().toStandardString().equals(Constant.IBEACON_CHECKOUT_COMPLETE_ADDRESS)) {
                     status = Constant.LOGIN;
