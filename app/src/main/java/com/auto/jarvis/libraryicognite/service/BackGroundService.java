@@ -1,6 +1,9 @@
 package com.auto.jarvis.libraryicognite.service;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -79,7 +82,9 @@ public class BackGroundService extends Service {
         initBorrow = new InitBorrow(userId, "1");
         beaconManager = new BeaconManager(this);
         running = false;
-        beaconManager.setBackgroundScanPeriod(5000, 5000);
+        beaconManager.setBackgroundScanPeriod(5000, 10000);
+        beaconManager.setForegroundScanPeriod(5000, 10000);
+
         beaconManager.setRangingListener((region, list) -> {
 //            Log.d("BEACON", "Found beacons: " + list.size());
             status = SaveSharedPreference.getStatusUser(getApplicationContext());

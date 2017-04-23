@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.util.Log;
 
 import com.estimote.sdk.EstimoteSDK;
+
+import rx.plugins.RxJavaErrorHandler;
+import rx.plugins.RxJavaPlugins;
 
 /**
  * Created by HaVH on 2/4/17.
@@ -41,6 +45,8 @@ public class MyApplication extends Application implements Application.ActivityLi
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
         EstimoteSDK.initialize(getApplicationContext(), "ibeacondemo-el5", "5111290bf074a3ff553336435d3f91bb");
+
+
     }
 
     public static boolean backgroundMode;

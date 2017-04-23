@@ -33,7 +33,7 @@ public class HomeControllerActivity extends AppCompatActivity {
         userId = SaveSharedPreference.getUsername(getBaseContext());
         Log.d("START_ACTIVITY", "HOMECONTROLLER");
         checkStatusBorrower(userId)
-                .delay(3, TimeUnit.SECONDS)
+                .delay(1, TimeUnit.SECONDS)
                 .subscribe(booleanRestService -> {
                     Intent intentController;
                     if (booleanRestService.getData()) {
