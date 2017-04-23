@@ -42,8 +42,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.plugins.RxJavaErrorHandler;
+import rx.plugins.RxJavaPlugins;
 import rx.schedulers.Schedulers;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -74,6 +77,7 @@ public class BarCodeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Log.d("LIFE", "Barcode CREATE");
         userId = SaveSharedPreference.getUsername(getBaseContext());
+
 
         if (actionBarDrawerToggle == null){
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -135,9 +139,12 @@ public class BarCodeActivity extends AppCompatActivity {
         setUp();
     }
 
+
+
     private void setUp(){
         apiService = ApiClient.getClient().create(ApiInterface.class);
         checkStatusBorrower(userId)
+                .retry(5)
                 .doOnNext(booleanRestService -> {
                     if (booleanRestService.getData()) {
                         inLibrary = booleanRestService.getData();
@@ -150,7 +157,29 @@ public class BarCodeActivity extends AppCompatActivity {
                         initView(SaveSharedPreference.getUsername(getBaseContext()));
                     }
                 })
-                .subscribe(booleanRestService -> inLibrary = booleanRestService.getData());
+                .subscribe(new Observer<RestService<Boolean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+//                        Intent intent = new Intent(BarCodeActivity.this, NoInternetActivity.class);
+//                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(intent);
+//                        finish();
+                    }
+
+                    @Override
+                    public void onNext(RestService<Boolean> booleanRestService) {
+                        inLibrary = booleanRestService.getData();
+                    }
+                });
+//                .subscribe(booleanRestService -> {
+//                    inLibrary = booleanRestService.getData();
+//                });
     }
 
     @Override
@@ -187,30 +216,10 @@ public class BarCodeActivity extends AppCompatActivity {
         unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        apiService = ApiClient.getClient().create(ApiInterface.class);
-//        checkStatusBorrower(userId)
-//                .doOnNext(booleanRestService -> {
-//                    if (booleanRestService.getData()) {
-//                        inLibrary = booleanRestService.getData();
-//                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
-//                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-//                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startActivity(intentControl);
-//                        finish();
-//                    } else {
-//                        initView(SaveSharedPreference.getUsername(getBaseContext()));
-//                    }
-//                })
-//                .subscribe(booleanRestService -> inLibrary = booleanRestService.getData());
-    }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
     }
 
     private void selectDrawerItem(MenuItem item) {
