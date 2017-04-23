@@ -70,7 +70,7 @@ public class LibraryActivity extends AppCompatActivity {
         serviceIntent = new Intent(this, BackGroundService.class);
 
         boolean onBluetooth = !NetworkUtils.checkBluetoothConnection(LibraryActivity.this);
-        if (onBluetooth) {
+        if (onBluetooth && serviceIntent != null) {
             startService(serviceIntent);
         } else {
             tvLocation.setText(R.string.turn_on_bluetooth);
@@ -125,7 +125,6 @@ public class LibraryActivity extends AppCompatActivity {
         deviceScanner = new ConfigurableDevicesScanner(getApplicationContext());
         deviceScanner.setOwnDevicesFiltering(true);
         deviceScanner.setDeviceTypes(DeviceType.PROXIMITY_BEACON);
-
         apiService = ApiClient.getClient().create(ApiInterface.class);
 
         // Toolbar
@@ -155,7 +154,9 @@ public class LibraryActivity extends AppCompatActivity {
     private void selectDrawerItem(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.barCodePage:
-                startActivity(BarCodeActivity.getIntentNewTask(this));
+                Intent intenta = new Intent(this, HomeControllerActivity.class);
+                intenta.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intenta);
                 break;
             case R.id.your_profile:
                 startActivity(ProfileActivity.getIntentNewTask(this));
@@ -182,7 +183,9 @@ public class LibraryActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        stopService(serviceIntent);
+        if (serviceIntent != null) {
+            stopService(serviceIntent);
+        }
         unregisterReceiver(bluetoothReceiver);
         super.onDestroy();
     }
@@ -191,6 +194,8 @@ public class LibraryActivity extends AppCompatActivity {
     public void updateTextView(final String t) {
         LibraryActivity.this.runOnUiThread(() -> tvLocation.setText(t));
     }
+
+
 
 
 }

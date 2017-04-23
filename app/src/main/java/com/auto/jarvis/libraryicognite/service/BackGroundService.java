@@ -52,6 +52,7 @@ public class BackGroundService extends Service {
     String message;
     ArrayList<InformationBookBorrowed> recentList;
     Intent borrowIntent;
+    boolean running = false;
 
 
     @Nullable
@@ -77,6 +78,7 @@ public class BackGroundService extends Service {
         userId = SaveSharedPreference.getUsername(getBaseContext());
         initBorrow = new InitBorrow(userId, "1");
         beaconManager = new BeaconManager(this);
+        running = false;
         beaconManager.setBackgroundScanPeriod(5000, 5000);
         beaconManager.setRangingListener((region, list) -> {
 //            Log.d("BEACON", "Found beacons: " + list.size());
@@ -107,6 +109,9 @@ public class BackGroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!running) {
+            running = true;
+        }
         if (beaconManager != null) {
             beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS_REGION);
         }

@@ -143,40 +143,41 @@ public class BarCodeActivity extends AppCompatActivity {
 
     private void setUp(){
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        checkStatusBorrower(userId)
-                .retry(5)
-                .doOnNext(booleanRestService -> {
-                    if (booleanRestService.getData()) {
-                        inLibrary = booleanRestService.getData();
-                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
-                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
-                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intentControl);
-                        finish();
-                    } else {
-                        initView(SaveSharedPreference.getUsername(getBaseContext()));
-                    }
-                })
-                .subscribe(new Observer<RestService<Boolean>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-//                        Intent intent = new Intent(BarCodeActivity.this, NoInternetActivity.class);
-//                        intent.putExtra("FROM", this.getClass().getCanonicalName());
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startActivity(intent);
+        initView(SaveSharedPreference.getUsername(getBaseContext()));
+//        checkStatusBorrower(userId)
+//                .retry(5)
+//                .doOnNext(booleanRestService -> {
+//                    if (booleanRestService.getData()) {
+//                        inLibrary = booleanRestService.getData();
+//                        Intent intentControl = new Intent(BarCodeActivity.this, LibraryActivity.class);
+//                        SaveSharedPreference.setStatusUser(getApplicationContext(), Constant.CHECK_IN);
+//                        intentControl.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(intentControl);
 //                        finish();
-                    }
-
-                    @Override
-                    public void onNext(RestService<Boolean> booleanRestService) {
-                        inLibrary = booleanRestService.getData();
-                    }
-                });
+//                    } else {
+//                        initView(SaveSharedPreference.getUsername(getBaseContext()));
+//                    }
+//                })
+//                .subscribe(new Observer<RestService<Boolean>>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+////                        Intent intent = new Intent(BarCodeActivity.this, NoInternetActivity.class);
+////                        intent.putExtra("FROM", this.getClass().getCanonicalName());
+////                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+////                        startActivity(intent);
+////                        finish();
+//                    }
+//
+//                    @Override
+//                    public void onNext(RestService<Boolean> booleanRestService) {
+//                        inLibrary = booleanRestService.getData();
+//                    }
+//                });
 //                .subscribe(booleanRestService -> {
 //                    inLibrary = booleanRestService.getData();
 //                });
@@ -226,7 +227,7 @@ public class BarCodeActivity extends AppCompatActivity {
         Intent intent;
         switch (item.getItemId()) {
             case R.id.barCodePage:
-                intent = new Intent(this, BarCodeActivity.class);
+                intent = new Intent(this, HomeControllerActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
@@ -342,9 +343,9 @@ public class BarCodeActivity extends AppCompatActivity {
         return true;
     }
 
-    private Observable<RestService<Boolean>> checkStatusBorrower(String userId) {
-        return apiService.userStatus(userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+//    private Observable<RestService<Boolean>> checkStatusBorrower(String userId) {
+//        return apiService.userStatus(userId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//    }
 }
